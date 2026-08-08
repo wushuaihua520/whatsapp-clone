@@ -168,10 +168,10 @@ class ArchiveTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
+    return const ListTile(
       minLeadingWidth: 56,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 2),
-      leading: const SizedBox(
+      contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 2),
+      leading: SizedBox(
         width: 56,
         child: Icon(
           Icons.archive_outlined,
@@ -179,7 +179,7 @@ class ArchiveTile extends StatelessWidget {
           size: 24,
         ),
       ),
-      title: const Text(
+      title: Text(
         'Archived',
         style: TextStyle(
           fontSize: 16,
@@ -187,7 +187,7 @@ class ArchiveTile extends StatelessWidget {
           color: textColor,
         ),
       ),
-      trailing: const Text(
+      trailing: Text(
         '5',
         style: TextStyle(
           fontSize: 12,

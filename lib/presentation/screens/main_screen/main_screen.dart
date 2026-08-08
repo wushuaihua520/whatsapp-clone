@@ -107,10 +107,10 @@ class _MainScreenState extends State<MainScreen> {
 
     if (selectedTab == 0 || selectedTab == 1) {
       actions.add(
-        IconButton(
+        const IconButton(
           tooltip: 'Camera',
           onPressed: Utils.openCamera,
-          icon: const Icon(Icons.photo_camera_outlined),
+          icon: Icon(Icons.photo_camera_outlined),
         ),
       );
     }
@@ -215,11 +215,11 @@ class _MainScreenState extends State<MainScreen> {
               child: const Icon(Icons.edit_rounded),
             ),
             const SizedBox(height: 12),
-            FloatingActionButton(
+            const FloatingActionButton(
               heroTag: 'camera-status',
               tooltip: 'Camera status',
               onPressed: Utils.openCamera,
-              child: const Icon(Icons.photo_camera_rounded),
+              child: Icon(Icons.photo_camera_rounded),
             ),
           ],
         );

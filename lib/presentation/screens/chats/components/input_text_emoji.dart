@@ -155,14 +155,14 @@ class _TextEmojiInputFieldState extends State<TextEmojiInputField> {
                   setState(() => isTyping = true);
                 }
               },
-              config: Config(
+              config: const Config(
                 columns: 7,
                 emojiSizeMax: 24,
                 verticalSpacing: 0,
                 horizontalSpacing: 0,
                 gridPadding: EdgeInsets.zero,
                 initCategory: Category.RECENT,
-                bgColor: const Color(0xFFF7F8FA),
+                bgColor: Color(0xFFF7F8FA),
                 indicatorColor: primaryColor,
                 iconColor: subTitleTextColor,
                 iconColorSelected: primaryColor,
@@ -172,14 +172,14 @@ class _TextEmojiInputFieldState extends State<TextEmojiInputField> {
                 enableSkinTones: true,
                 recentTabBehavior: RecentTabBehavior.RECENT,
                 recentsLimit: 28,
-                noRecents: const Text(
+                noRecents: Text(
                   'No Recents',
                   style: TextStyle(fontSize: 20, color: Colors.black26),
                   textAlign: TextAlign.center,
                 ),
-                loadingIndicator: const SizedBox.shrink(),
+                loadingIndicator: SizedBox.shrink(),
                 tabIndicatorAnimDuration: kTabScrollDuration,
-                categoryIcons: const CategoryIcons(),
+                categoryIcons: CategoryIcons(),
                 buttonMode: ButtonMode.MATERIAL,
               ),
             ),

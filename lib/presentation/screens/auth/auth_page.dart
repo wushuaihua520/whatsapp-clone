@@ -109,12 +109,12 @@ class AuthPage extends StatelessWidget {
                 constraints: const BoxConstraints(maxWidth: 310),
                 child: Row(
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       width: 74,
                       child: TextField(
                         keyboardType: TextInputType.phone,
                         textAlign: TextAlign.center,
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                           filled: false,
                           hintText: '+880',
                           enabledBorder: UnderlineInputBorder(

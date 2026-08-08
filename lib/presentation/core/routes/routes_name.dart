@@ -35,15 +35,15 @@ class RouteNames {
 
       case RouteNames.contactPage:
         return MaterialPageRoute(
-            settings: settings, builder: (_) => ContactPage());
+            settings: settings, builder: (_) => const ContactPage());
 
       case RouteNames.welcome:
         return MaterialPageRoute(
-            settings: settings, builder: (_) => WelcomeScreen());
+            settings: settings, builder: (_) => const WelcomeScreen());
 
       case RouteNames.auth:
         return MaterialPageRoute(
-            settings: settings, builder: (_) => AuthPage());
+            settings: settings, builder: (_) => const AuthPage());
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(

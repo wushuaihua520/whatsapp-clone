@@ -32,35 +32,35 @@ class MyStoryPage extends StatelessWidget {
         leadingWidth: 76,
         leading: GestureDetector(
           onTap: () => Navigator.pop(context),
-          child: Row(
+          child: const Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const SizedBox(width: 8),
-              const Icon(Icons.arrow_back_rounded, color: Colors.white),
-              const SizedBox(width: 7),
-              const CircleAvatar(
+              SizedBox(width: 8),
+              Icon(Icons.arrow_back_rounded, color: Colors.white),
+              SizedBox(width: 7),
+              CircleAvatar(
                 radius: 17,
                 backgroundImage: AssetImage(KImages.chatAvatar1),
               ),
             ],
           ),
         ),
-        title: Column(
+        title: const Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               "Martin Luther",
-              style: const TextStyle(
+              style: TextStyle(
                 color: Colors.white,
                 fontSize: 15,
                 fontWeight: FontWeight.w600,
               ),
             ),
-            const SizedBox(height: 2),
+            SizedBox(height: 2),
             Text(
               "Yesterday, 2:44 PM",
-              style: const TextStyle(
+              style: TextStyle(
                 color: Colors.white70,
                 fontSize: 11,
                 fontWeight: FontWeight.w400,
