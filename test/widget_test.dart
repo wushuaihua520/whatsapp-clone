@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:whatsapp_clone/main.dart';
+import 'package:whatsapp_clone/presentation/core/routes/routes_name.dart';
 import 'package:whatsapp_clone/presentation/screens/main_screen/main_screen.dart';
 import 'package:whatsapp_clone/widgets/custom_theme.dart';
 
@@ -25,6 +26,7 @@ void main() {
         debugShowCheckedModeBanner: false,
         theme: MyTheme.theme,
         home: const MainScreen(),
+        onGenerateRoute: RouteNames.generateRoutes,
       ),
     );
 
