@@ -2,18 +2,18 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 
 class Utils {
-  static double kDefaultSpace = 20.h;
-  static double kDefaultBorderRadius = 12.h;
+  static const double kDefaultSpace = 20;
+  static const double kDefaultBorderRadius = 12;
+
   static Widget verticalSpace(double size) {
-    return SizedBox(height: size.h);
+    return SizedBox(height: size);
   }
 
   static Widget horizontalSpace(double size) {
-    return SizedBox(width: size.h);
+    return SizedBox(width: size);
   }
 
   static double edgePadding(double hValue, double vValue) {

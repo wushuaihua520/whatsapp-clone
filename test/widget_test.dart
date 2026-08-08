@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:whatsapp_clone/main.dart';
@@ -21,13 +20,10 @@ void main() {
   testWidgets('uses Android bottom navigation and chat filters',
       (tester) async {
     await tester.pumpWidget(
-      ScreenUtilInit(
-        designSize: const Size(375, 812),
-        builder: (context, child) => MaterialApp(
-          debugShowCheckedModeBanner: false,
-          theme: MyTheme.theme,
-          home: const MainScreen(),
-        ),
+      MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: MyTheme.theme,
+        home: const MainScreen(),
       ),
     );
 

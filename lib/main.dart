@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'presentation/core/routes/routes_name.dart';
 import 'utils/strings.dart';
@@ -15,20 +14,12 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ScreenUtilInit(
-      designSize: const Size(375.0, 812.0),
-      minTextAdapt: true,
-      splitScreenMode: true,
-      useInheritedMediaQuery: true,
-      builder: (BuildContext context, child) {
-        return MaterialApp(
-          title: KStrings.appName,
-          debugShowCheckedModeBanner: false,
-          initialRoute: RouteNames.splashScreen,
-          onGenerateRoute: RouteNames.generateRoutes,
-          theme: MyTheme.theme,
-        );
-      },
+    return MaterialApp(
+      title: KStrings.appName,
+      debugShowCheckedModeBanner: false,
+      initialRoute: RouteNames.splashScreen,
+      onGenerateRoute: RouteNames.generateRoutes,
+      theme: MyTheme.theme,
     );
   }
 }
