@@ -13,6 +13,7 @@ void main() {
     expect(find.text('Meta'), findsOneWidget);
 
     await tester.pump(const Duration(milliseconds: 1600));
+    await tester.pumpAndSettle();
     expect(find.text('Welcome to WhatsApp'), findsOneWidget);
     expect(find.text('Agree and continue'), findsOneWidget);
   });
