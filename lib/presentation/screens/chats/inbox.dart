@@ -70,7 +70,7 @@ class Inbox extends StatelessWidget {
   AppBar _buildAppBar(ParticipantsChat user) {
     return AppBar(
       toolbarHeight: 62,
-      leadingWidth: 76,
+      leadingWidth: 88,
       leading: AvatarAndBackNavigate(user: user),
       title: UserAndStatus(user: user),
       titleSpacing: 4,
