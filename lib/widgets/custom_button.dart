@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../utils/constants.dart';
 
@@ -27,21 +26,26 @@ class CustomButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: height.h,
+      height: height,
       child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-              elevation: 0,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(40))),
-          onPressed: press,
-          child: Text(
-            text,
-            style: TextStyle(
-              fontSize: textSize,
-              color: textColor,
-              fontWeight: fontWeight,
-            ),
-          )),
+        style: ElevatedButton.styleFrom(
+          elevation: 0,
+          backgroundColor: bgColor,
+          foregroundColor: textColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(radius),
+          ),
+        ),
+        onPressed: press,
+        child: Text(
+          text,
+          style: TextStyle(
+            fontSize: textSize,
+            color: textColor,
+            fontWeight: fontWeight,
+          ),
+        ),
+      ),
     );
   }
 }

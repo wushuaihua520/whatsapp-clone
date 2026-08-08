@@ -10,33 +10,29 @@ class InboxPopup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton(
-      icon: Icon(Icons.more_vert),
-      offset: Offset(0, 50),
-      color: scaffoldBgColor,
-      elevation: 1,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
+      tooltip: 'More options',
+      icon: const Icon(Icons.more_vert_rounded, color: textColor),
+      offset: const Offset(0, 50),
       padding: EdgeInsets.zero,
       itemBuilder: (context) {
-        return <PopupMenuEntry>[
+        return const <PopupMenuEntry>[
           PopupMenuItem(
-            child: Text("View contact"),
+            child: Text('View contact'),
           ),
           PopupMenuItem(
-            child: Text("Media, links, and docs"),
+            child: Text('Media, links, and docs'),
           ),
           PopupMenuItem(
-            child: Text("Search"),
+            child: Text('Search'),
           ),
           PopupMenuItem(
-            child: Text("Disappearing messages"),
+            child: Text('Disappearing messages'),
           ),
           PopupMenuItem(
-            child: Text("Wallpapers"),
+            child: Text('Wallpaper'),
           ),
           PopupMenuItem(
-            child: Text("More"),
+            child: Text('More'),
           ),
         ];
       },

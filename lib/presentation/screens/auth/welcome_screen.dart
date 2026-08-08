@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
+
 import 'package:whatsapp_clone/presentation/core/routes/routes_name.dart';
-import '../../../utils/utils.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/k_images.dart';
 import '../../../utils/strings.dart';
@@ -16,94 +14,95 @@ class WelcomeScreen extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          padding: const EdgeInsets.fromLTRB(24, 20, 24, 18),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Image.asset(KImages.whatsappWelcome),
+              Expanded(
+                child: Center(
+                  child: Image.asset(
+                    KImages.whatsappWelcome,
+                    width: 286,
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              ),
               Text(
                 KStrings.welcomeTitle,
-                style: TextStyle(
-                  fontSize: 22.sp,
+                style: const TextStyle(
+                  color: textColor,
+                  fontSize: 24,
                   fontWeight: FontWeight.w600,
+                  letterSpacing: -0.4,
                 ),
               ),
-              Utils.verticalSpace(20),
+              const SizedBox(height: 16),
               Text.rich(
-                  textAlign: TextAlign.center,
-                  selectionColor: Colors.blue,
-                  TextSpan(
-                      text: KStrings.read,
-                      style: TextStyle(
-                        fontSize: 14.sp,
-                        color: subTitleTextColor,
-                      ),
-                      children: [
-                        TextSpan(
-                          text: KStrings.privacyPolicy,
-                          style: TextStyle(
-                            color: Colors.blue,
-                            fontSize: 14.sp,
-                          ),
-                        ),
-                        TextSpan(
-                          text: KStrings.tapAgree,
-                          style: TextStyle(
-                            color: subTitleTextColor,
-                            fontSize: 14.sp,
-                          ),
-                        ),
-                        TextSpan(
-                          text: KStrings.termsService,
-                          style: TextStyle(
-                            color: Colors.blue,
-                            fontSize: 14.sp,
-                          ),
-                        )
-                      ])),
-              Utils.verticalSpace(30),
-              GestureDetector(
-                onTap: () {
-                  openBottomSheet(context);
-                },
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(40),
+                textAlign: TextAlign.center,
+                TextSpan(
+                  text: KStrings.read,
+                  style: const TextStyle(
+                    color: subTitleTextColor,
+                    fontSize: 13,
+                    height: 1.45,
                   ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SvgPicture.asset(
-                        KImages.world,
-                        color: primaryColor,
-                        height: 24,
-                      ),
-                      Utils.horizontalSpace(16),
-                      Text(
-                        "English",
-                        style: TextStyle(
+                  children: [
+                    TextSpan(
+                      text: KStrings.privacyPolicy,
+                      style: const TextStyle(color: Color(0xFF027EB5)),
+                    ),
+                    TextSpan(text: KStrings.tapAgree),
+                    TextSpan(
+                      text: KStrings.termsService,
+                      style: const TextStyle(color: Color(0xFF027EB5)),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 24),
+              Material(
+                color: searchFieldColor,
+                borderRadius: BorderRadius.circular(24),
+                clipBehavior: Clip.antiAlias,
+                child: InkWell(
+                  onTap: () => openBottomSheet(context),
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.language_rounded,
                           color: primaryColor,
-                          fontSize: 16.sp,
+                          size: 21,
                         ),
-                      ),
-                      Utils.horizontalSpace(10),
-                      Icon(
-                        Icons.expand_more,
-                        color: primaryColor,
-                      ),
-                    ],
+                        SizedBox(width: 10),
+                        Text(
+                          'English',
+                          style: TextStyle(
+                            color: primaryColor,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        SizedBox(width: 8),
+                        Icon(
+                          Icons.expand_more_rounded,
+                          color: primaryColor,
+                          size: 20,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-              Spacer(),
+              const SizedBox(height: 32),
               CustomButton(
                 text: KStrings.agreeContinue,
+                height: 48,
                 press: () {
                   Navigator.pushNamed(context, RouteNames.auth);
                 },
-              )
+              ),
             ],
           ),
         ),
@@ -112,60 +111,71 @@ class WelcomeScreen extends StatelessWidget {
   }
 
   void openBottomSheet(BuildContext context) {
-    showModalBottomSheet(
-        context: context,
-        showDragHandle: true,
-        isScrollControlled: true,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
-        enableDrag: true,
-        builder: (context) {
-          return StatefulBuilder(
-            builder: (BuildContext context,
-                StateSetter setState /*You can rename this!*/) {
-              return Container(
-                height: MediaQuery.of(context).size.height * 0.5,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                ),
-                width: double.infinity,
-                child: SingleChildScrollView(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.clear,
-                            color: subTitleTextColor,
-                          ),
-                          Utils.horizontalSpace(20),
-                          Text(
-                            "App language",
-                            style: TextStyle(
-                              color: textColor,
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ],
+    const languages = [
+      'English',
+      'Español',
+      'हिन्दी',
+      'Português',
+      'العربية',
+      '中文',
+    ];
+
+    showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        return SafeArea(
+          top: false,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(16, 4, 16, 20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    IconButton(
+                      tooltip: 'Close',
+                      onPressed: () => Navigator.pop(context),
+                      icon: const Icon(Icons.close_rounded),
+                    ),
+                    const SizedBox(width: 4),
+                    const Text(
+                      'App language',
+                      style: TextStyle(
+                        color: textColor,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
                       ),
-                      Utils.verticalSpace(10),
-                      ...List.generate(
-                          10,
-                          (index) => RadioListTile(
-                                value: 1,
-                                groupValue: "groupValue",
-                                onChanged: (v) {},
-                                title: Text("English"),
-                                subtitle: Text("(Device language)"),
-                              )),
-                    ],
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                ...languages.map(
+                  (language) => ListTile(
+                    onTap: () => Navigator.pop(context),
+                    leading: Icon(
+                      language == 'English'
+                          ? Icons.radio_button_checked_rounded
+                          : Icons.radio_button_off_rounded,
+                      color: language == 'English'
+                          ? primaryColor
+                          : subTitleTextColor,
+                    ),
+                    title: Text(
+                      language,
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                    subtitle: language == 'English'
+                        ? const Text('Device language')
+                        : null,
                   ),
                 ),
-              );
-            },
-          );
-        });
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 }

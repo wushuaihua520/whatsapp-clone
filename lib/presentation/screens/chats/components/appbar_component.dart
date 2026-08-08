@@ -1,10 +1,7 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../data/model/participants_chat_model.dart';
-import '../../../../utils/utils.dart';
+import '../../../../utils/constants.dart';
 
 class AvatarAndBackNavigate extends StatelessWidget {
   const AvatarAndBackNavigate({
@@ -16,18 +13,20 @@ class AvatarAndBackNavigate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.pop(context);
-      },
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Utils.horizontalSpace(6.w),
-          Icon(Platform.isAndroid ? Icons.arrow_back : Icons.arrow_back_ios),
-          CircleAvatar(backgroundImage: AssetImage(user.avatar)),
-        ],
-      ),
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        IconButton(
+          tooltip: 'Back',
+          onPressed: () => Navigator.pop(context),
+          icon: const Icon(Icons.arrow_back_rounded),
+        ),
+        CircleAvatar(
+          radius: 18,
+          backgroundColor: searchFieldColor,
+          backgroundImage: AssetImage(user.avatar),
+        ),
+      ],
     );
   }
 }
@@ -46,13 +45,25 @@ class UserAndStatus extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(user.participant),
+        Text(
+          user.participant,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: const TextStyle(
+            color: textColor,
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
         Text(
           user.status,
-          style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                color: Colors.white,
-                fontWeight: FontWeight.w300,
-              ),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: const TextStyle(
+            color: subTitleTextColor,
+            fontSize: 12,
+            fontWeight: FontWeight.w400,
+          ),
         ),
       ],
     );

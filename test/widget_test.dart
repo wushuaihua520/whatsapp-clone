@@ -1,30 +1,51 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:whatsapp_clone/main.dart';
+import 'package:whatsapp_clone/presentation/screens/main_screen/main_screen.dart';
+import 'package:whatsapp_clone/widgets/custom_theme.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
+  testWidgets('shows the current Meta-branded welcome flow', (tester) async {
     await tester.pumpWidget(const MyApp());
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    expect(find.text('from'), findsOneWidget);
+    expect(find.text('Meta'), findsOneWidget);
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
+    await tester.pump(const Duration(milliseconds: 1600));
+    expect(find.text('Welcome to WhatsApp'), findsOneWidget);
+    expect(find.text('Agree and continue'), findsOneWidget);
+  });
+
+  testWidgets('uses Android bottom navigation and chat filters',
+      (tester) async {
+    await tester.pumpWidget(
+      ScreenUtilInit(
+        designSize: const Size(375, 812),
+        builder: (context, child) => MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: MyTheme.theme,
+          home: const MainScreen(),
+        ),
+      ),
+    );
+
+    expect(find.text('WhatsApp'), findsOneWidget);
+    expect(find.text('Ask Meta AI or Search'), findsOneWidget);
+    expect(find.text('Chats'), findsOneWidget);
+    expect(find.text('Updates'), findsOneWidget);
+    expect(find.text('Communities'), findsOneWidget);
+    expect(find.text('Calls'), findsOneWidget);
+
+    await tester.tap(find.byKey(const Key('filter-Unread')));
     await tester.pump();
+    expect(find.text('Weekend Crew'), findsOneWidget);
+    expect(find.text('Martin Troff'), findsNothing);
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    await tester.tap(find.text('Updates'));
+    await tester.pumpAndSettle();
+    expect(find.text('Status'), findsOneWidget);
+    expect(find.text('Channels'), findsOneWidget);
   });
 }

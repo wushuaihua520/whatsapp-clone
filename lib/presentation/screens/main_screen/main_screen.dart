@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
+
 import '../../core/routes/routes_name.dart';
 import '../calls/call_logs.dart';
 import '../../../utils/constants.dart';
-import '../../../utils/k_images.dart';
 import '../../../utils/utils.dart';
 import '../chats/controller/message_controller.dart';
 import '../chats/participants_list.dart';
@@ -18,221 +16,266 @@ class MainScreen extends StatefulWidget {
   State<MainScreen> createState() => _MainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
-  late TabController tabController;
+class _MainScreenState extends State<MainScreen> {
   int selectedTab = 0;
+
+  static const _pages = <Widget>[
+    ConversationList(),
+    UpdatesPage(),
+    CommunityPage(),
+    CallLogs(),
+  ];
 
   @override
   void initState() {
-    tabController = TabController(length: 4, vsync: this);
     MessageController.init();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    return DefaultTabController(
-      length: 4,
-      initialIndex: 1,
-      child: Scaffold(
-        appBar: AppBar(
-          toolbarHeight: 60.h,
-          backgroundColor: primaryColor,
-          leading: SizedBox(),
-          leadingWidth: Utils.kDefaultSpace,
-          title: Text(
-            "WhatsApp",
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.w400,
-            ),
+    return Scaffold(
+      appBar: _buildAppBar(),
+      body: IndexedStack(index: selectedTab, children: _pages),
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: selectedTab,
+        labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
+        onDestinationSelected: (index) {
+          setState(() => selectedTab = index);
+        },
+        destinations: [
+          NavigationDestination(
+            icon: _navIcon(Icons.chat_bubble_outline_rounded, showBadge: true),
+            selectedIcon: _navIcon(Icons.chat_bubble_rounded, showBadge: true),
+            label: 'Chats',
           ),
-          titleSpacing: 0,
-          actions: [
-            IconButton(
-                onPressed: () {
-                  Utils.openCamera();
-                },
-                icon: SvgPicture.asset(KImages.camera)),
-            if (selectedTab != 2)
-              IconButton(
-                  onPressed: () {}, icon: SvgPicture.asset(KImages.search)),
-            PopupMenuButton(
-                icon: Icon(Icons.more_vert),
-                offset: Offset(0, 60),
-                color: scaffoldBgColor,
-                elevation: 1,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                itemBuilder: (context) {
-                  return <PopupMenuEntry>[
-                    PopupMenuItem(
-                      child: Text("New Group "),
-                    ),
-                    PopupMenuItem(
-                      child: Text("New boradcast"),
-                    ),
-                    PopupMenuItem(
-                      child: Text("Linked devices"),
-                    ),
-                    PopupMenuItem(
-                      child: Text("Starred messages"),
-                    ),
-                    PopupMenuItem(
-                      child: Text("Settins"),
-                    ),
-                  ];
-                })
-          ],
-          bottom: TabBar(
-              controller: tabController,
-              onTap: (v) {
-                setState(() {
-                  selectedTab = v;
-                });
-              },
-              padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-              indicatorColor: Colors.white,
-              indicatorWeight: 3,
-              isScrollable: true,
-              indicatorSize: TabBarIndicatorSize.tab,
-              indicatorPadding: EdgeInsets.only(top: Utils.kDefaultSpace / 20),
-              unselectedLabelStyle: TextStyle(
-                  fontSize: 14.sp,
-                  color: subTitleTextColor,
-                  fontWeight: FontWeight.w600),
-              labelPadding: EdgeInsets.only(bottom: 0),
-              labelStyle: TextStyle(
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w600,
-              ),
-              tabs: [
-                SizedBox(
-                    width: size.width * 0.1,
-                    child: Tab(child: Icon(Icons.groups_2_rounded))),
-                SizedBox(
-                    width: size.width * 0.3,
-                    child: Tab(
-                        child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text("Chats"),
-                        Utils.horizontalSpace(6),
-                        CircleAvatar(
-                          backgroundColor: Colors.white,
-                          radius: 12,
-                          child: Text(
-                            "6",
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: primaryColor,
-                            ),
-                          ),
-                        )
-                      ],
-                    ))),
-                SizedBox(
-                    width: size.width * 0.3,
-                    child: Tab(child: Text("Updates"))),
-                SizedBox(
-                    width: size.width * 0.3, child: Tab(child: Text("Calls"))),
-              ]),
-        ),
-        body: TabBarView(controller: tabController, children: [
-          CommunityPage(),
-          ConversationList(),
-          UpdatesPage(),
-          CallLogs(),
-        ]),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-        floatingActionButton: selectedTab == 0
-            ? SizedBox()
-            : Stack(
-                // mainAxisSize: MainAxisSize.min,
-                clipBehavior: Clip.none,
-                children: [
-                  // if (selectedTab == 2)
-                  Positioned(
-                    bottom: selectedTab == 2 ? 70 : 0,
-                    child: FloatingActionButton(
-                      onPressed: () {
-                        press(selectedTab);
-                      },
-                      elevation: 0,
-                      hoverElevation: 2,
-                      child: AnimatedContainer(
-                        duration: Duration(milliseconds: 500),
-                        curve: Curves.ease,
-                        height: 40.h,
-                        width: 40.w,
-                        padding: EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                            color: Colors.green[100],
-                            borderRadius: BorderRadius.circular(8)),
-                        child: Icon(
-                          Icons.edit,
-                          color: primaryColor,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Utils.verticalSpace(10),
-                  FloatingActionButton(
-                    onPressed: () {
-                      press(selectedTab);
-                    },
-                    child: Container(
-                      height: 50.h,
-                      width: 50.w,
-                      padding: EdgeInsets.all(14),
-                      decoration: BoxDecoration(
-                          color: primaryColor,
-                          borderRadius: BorderRadius.circular(12)),
-                      child: getIcon(selectedTab),
-                    ),
-                  ),
-                ],
-              ),
+          const NavigationDestination(
+            icon: Icon(Icons.update_outlined),
+            selectedIcon: Icon(Icons.update_rounded),
+            label: 'Updates',
+          ),
+          const NavigationDestination(
+            icon: Icon(Icons.groups_outlined),
+            selectedIcon: Icon(Icons.groups_rounded),
+            label: 'Communities',
+          ),
+          const NavigationDestination(
+            icon: Icon(Icons.call_outlined),
+            selectedIcon: Icon(Icons.call_rounded),
+            label: 'Calls',
+          ),
+        ],
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButton: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 180),
+        child: _buildFloatingActions(),
       ),
     );
   }
 
-  Widget getIcon(int index) {
-    switch (index) {
+  AppBar _buildAppBar() {
+    const titles = ['WhatsApp', 'Updates', 'Communities', 'Calls'];
+    return AppBar(
+      toolbarHeight: 64,
+      titleSpacing: 20,
+      title: Text(
+        titles[selectedTab],
+        style: TextStyle(
+          color: selectedTab == 0 ? primaryColor : textColor,
+          fontSize: selectedTab == 0 ? 26 : 22,
+          fontWeight: FontWeight.w600,
+          letterSpacing: selectedTab == 0 ? -0.8 : -0.3,
+        ),
+      ),
+      actions: _buildTopActions(),
+    );
+  }
+
+  List<Widget> _buildTopActions() {
+    final actions = <Widget>[];
+
+    if (selectedTab == 0) {
+      actions.add(
+        IconButton(
+          tooltip: 'Linked devices',
+          onPressed: () => _showMessage('QR scanner'),
+          icon: const Icon(Icons.qr_code_scanner_rounded),
+        ),
+      );
+    }
+
+    if (selectedTab == 0 || selectedTab == 1) {
+      actions.add(
+        IconButton(
+          tooltip: 'Camera',
+          onPressed: Utils.openCamera,
+          icon: const Icon(Icons.photo_camera_outlined),
+        ),
+      );
+    }
+
+    if (selectedTab == 1 || selectedTab == 3) {
+      actions.add(
+        IconButton(
+          tooltip: 'Search',
+          onPressed: () => _showMessage('Search'),
+          icon: const Icon(Icons.search_rounded),
+        ),
+      );
+    }
+
+    actions.add(
+      PopupMenuButton<String>(
+        tooltip: 'More options',
+        icon: const Icon(Icons.more_vert_rounded),
+        offset: const Offset(0, 52),
+        onSelected: _showMessage,
+        itemBuilder: (context) {
+          return _menuItems
+              .map(
+                (item) => PopupMenuItem<String>(
+                  value: item,
+                  child: Text(item),
+                ),
+              )
+              .toList();
+        },
+      ),
+    );
+
+    actions.add(const SizedBox(width: 6));
+    return actions;
+  }
+
+  List<String> get _menuItems {
+    switch (selectedTab) {
       case 1:
-        return SvgPicture.asset(
-          KImages.message,
-        );
+        return const ['Status privacy', 'Create channel', 'Settings'];
       case 2:
-        return SvgPicture.asset(
-          KImages.cameraFillWhite,
-        );
+        return const ['New community', 'Settings'];
       case 3:
-        return SvgPicture.asset(
-          KImages.phone,
-        );
+        return const ['Clear call log', 'Settings'];
       default:
-        return SizedBox();
+        return const [
+          'New group',
+          'New broadcast',
+          'Linked devices',
+          'Starred messages',
+          'Settings',
+        ];
     }
   }
 
-  press(int index) {
-    switch (index) {
+  Widget _buildFloatingActions() {
+    switch (selectedTab) {
+      case 0:
+        return Column(
+          key: const ValueKey('chat-actions'),
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            FloatingActionButton.small(
+              heroTag: 'meta-ai',
+              tooltip: 'Meta AI',
+              backgroundColor: Colors.white,
+              foregroundColor: primaryColor,
+              onPressed: () => _showMessage('Meta AI'),
+              shape: const CircleBorder(),
+              child: ShaderMask(
+                shaderCallback: (bounds) => const LinearGradient(
+                  colors: [Color(0xFF635BFF), Color(0xFF00AEEF)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ).createShader(bounds),
+                child:
+                    const Icon(Icons.auto_awesome_rounded, color: Colors.white),
+              ),
+            ),
+            const SizedBox(height: 12),
+            FloatingActionButton(
+              heroTag: 'new-chat',
+              tooltip: 'New chat',
+              onPressed: () =>
+                  Navigator.pushNamed(context, RouteNames.contactPage),
+              child: const Icon(Icons.add_comment_rounded),
+            ),
+          ],
+        );
       case 1:
-        Navigator.pushNamed(context, RouteNames.contactPage);
-        break;
-      case 2:
-        Utils.openCamera();
-        break;
+        return Column(
+          key: const ValueKey('update-actions'),
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            FloatingActionButton.small(
+              heroTag: 'text-status',
+              tooltip: 'Text status',
+              backgroundColor: Colors.white,
+              foregroundColor: textColor,
+              onPressed: () => _showMessage('Create text status'),
+              child: const Icon(Icons.edit_rounded),
+            ),
+            const SizedBox(height: 12),
+            FloatingActionButton(
+              heroTag: 'camera-status',
+              tooltip: 'Camera status',
+              onPressed: Utils.openCamera,
+              child: const Icon(Icons.photo_camera_rounded),
+            ),
+          ],
+        );
       case 3:
-        Navigator.pushNamed(context, RouteNames.contactPage);
-        break;
+        return FloatingActionButton(
+          key: const ValueKey('call-action'),
+          heroTag: 'new-call',
+          tooltip: 'New call',
+          onPressed: () => Navigator.pushNamed(context, RouteNames.contactPage),
+          child: const Icon(Icons.add_call),
+        );
       default:
-        null;
-        break;
+        return const SizedBox(key: ValueKey('no-action'));
     }
+  }
+
+  Widget _navIcon(IconData icon, {bool showBadge = false}) {
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Icon(icon),
+        if (showBadge)
+          Positioned(
+            right: -7,
+            top: -5,
+            child: Container(
+              constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+              decoration: const BoxDecoration(
+                color: actionGreen,
+                shape: BoxShape.circle,
+              ),
+              alignment: Alignment.center,
+              child: const Text(
+                '6',
+                style: TextStyle(
+                  color: blackColor,
+                  fontSize: 9,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+
+  void _showMessage(String message) {
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(
+          content: Text('$message selected'),
+          duration: const Duration(seconds: 1),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
   }
 }

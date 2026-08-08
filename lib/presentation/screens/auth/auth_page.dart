@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../utils/utils.dart';
+
 import '../../../widgets/custom_button.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/strings.dart';
@@ -11,121 +10,169 @@ class AuthPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        leading: SizedBox(),
-        backgroundColor: scaffoldBgColor,
+        automaticallyImplyLeading: false,
         centerTitle: true,
-        elevation: 0,
         title: Text(
           KStrings.enterPhoneTitle,
-          style: TextStyle(
-            fontSize: 16.sp,
+          style: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
             color: primaryColor,
           ),
         ),
         actions: [
-          PopupMenuButton(
-              icon: Icon(Icons.more_vert, color: subTitleTextColor),
-              color: scaffoldBgColor,
-              elevation: 1,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
+          PopupMenuButton<String>(
+              tooltip: 'More options',
+              icon: const Icon(Icons.more_vert_rounded, color: textColor),
               itemBuilder: (context) {
-                return <PopupMenuEntry>[
-                  PopupMenuItem(
-                    child: Text("Link as companion device"),
+                return const <PopupMenuEntry<String>>[
+                  PopupMenuItem<String>(
+                    value: 'companion',
+                    child: Text('Link as companion device'),
                   ),
-                  PopupMenuItem(
-                    child: Text("Help"),
+                  PopupMenuItem<String>(
+                    value: 'help',
+                    child: Text('Help'),
                   ),
                 ];
-              })
+              }),
+          const SizedBox(width: 4),
         ],
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+          padding: const EdgeInsets.fromLTRB(28, 12, 28, 20),
           child: Column(
             children: [
               Text.rich(
-                  textAlign: TextAlign.center,
-                  selectionColor: Colors.blue,
-                  TextSpan(
-                      text: KStrings.verifyAccountText,
-                      style: TextStyle(
-                        fontSize: 14.sp,
-                        color: textColor,
-                      ),
-                      children: [
-                        TextSpan(
-                          text: KStrings.myNumber,
-                          style: TextStyle(
-                            color: Colors.blue,
-                            fontSize: 14.sp,
-                          ),
-                        ),
-                      ])),
-              Utils.verticalSpace(10),
-              SizedBox(
-                width: size.width * 0.7,
-                child: DropdownButton<String>(
-                    hint: Text("Bangladesh"),
-                    isExpanded: true,
-                    alignment: Alignment.center,
-                    items: [
-                      DropdownMenuItem(
-                        child: Text("Bangladesh"),
-                        value: "bangladesh",
-                      )
-                    ],
-                    onChanged: (v) {}),
-              ),
-              SizedBox(
-                width: size.width * 0.7,
-                child: Row(
+                textAlign: TextAlign.center,
+                TextSpan(
+                  text: KStrings.verifyAccountText,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    height: 1.45,
+                    color: textColor,
+                  ),
                   children: [
-                    Expanded(
-                        child: TextField(
-                      decoration: InputDecoration(
-                        contentPadding: EdgeInsets.zero,
-                        // prefixIcon: Icon(
-                        //   Icons.add,
-                        //   size: 20,
-                        // ),
-                        hintText: "+880",
-                      ),
-                    )),
-                    Utils.horizontalSpace(10),
-                    Expanded(
-                        flex: 3,
-                        child: TextField(
-                          keyboardType: TextInputType.number,
-                          decoration: InputDecoration(
-                            hintText: KStrings.phontHint,
-                          ),
-                        ))
+                    TextSpan(
+                      text: KStrings.myNumber,
+                      style: const TextStyle(color: Color(0xFF027EB5)),
+                    ),
                   ],
                 ),
               ),
-              Utils.verticalSpace(20),
-              Text(
-                KStrings.carrierCharge,
-                style: TextStyle(
-                  color: subTitleTextColor,
+              const SizedBox(height: 28),
+              ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 310),
+                child: DropdownButtonFormField<String>(
+                  value: 'Bangladesh',
+                  isExpanded: true,
+                  alignment: Alignment.center,
+                  icon: const Icon(
+                    Icons.arrow_drop_down_rounded,
+                    color: primaryColor,
+                  ),
+                  decoration: const InputDecoration(
+                    filled: false,
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 10,
+                    ),
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: primaryColor, width: 1.5),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: primaryColor, width: 2),
+                    ),
+                  ),
+                  items: const [
+                    DropdownMenuItem(
+                      value: 'Bangladesh',
+                      child: Center(child: Text('Bangladesh')),
+                    ),
+                    DropdownMenuItem(
+                      value: 'United States',
+                      child: Center(child: Text('United States')),
+                    ),
+                    DropdownMenuItem(
+                      value: 'United Kingdom',
+                      child: Center(child: Text('United Kingdom')),
+                    ),
+                  ],
+                  onChanged: (_) {},
                 ),
               ),
-              Spacer(),
+              const SizedBox(height: 12),
+              ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 310),
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: 74,
+                      child: TextField(
+                        keyboardType: TextInputType.phone,
+                        textAlign: TextAlign.center,
+                        decoration: const InputDecoration(
+                          filled: false,
+                          hintText: '+880',
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide:
+                                BorderSide(color: primaryColor, width: 1.5),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide:
+                                BorderSide(color: primaryColor, width: 2),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: TextField(
+                        keyboardType: TextInputType.phone,
+                        autofocus: false,
+                        decoration: InputDecoration(
+                          filled: false,
+                          hintText: KStrings.phontHint,
+                          enabledBorder: const UnderlineInputBorder(
+                            borderSide:
+                                BorderSide(color: primaryColor, width: 1.5),
+                          ),
+                          focusedBorder: const UnderlineInputBorder(
+                            borderSide:
+                                BorderSide(color: primaryColor, width: 2),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 18),
+              Text(
+                KStrings.carrierCharge,
+                style: const TextStyle(
+                  color: subTitleTextColor,
+                  fontSize: 12,
+                ),
+              ),
+              const Spacer(),
               SizedBox(
-                  width: 100,
-                  child: CustomButton(
-                      text: "Next",
-                      textSize: 16,
-                      press: () {
-                        Navigator.pushNamed(context, RouteNames.mainScreen);
-                      })),
+                width: 96,
+                child: CustomButton(
+                  text: 'Next',
+                  textSize: 15,
+                  height: 46,
+                  press: () {
+                    Navigator.pushReplacementNamed(
+                      context,
+                      RouteNames.mainScreen,
+                    );
+                  },
+                ),
+              ),
             ],
           ),
         ),

@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 
 import '../../../data/dummy_data.dart';
 import '../../../utils/constants.dart';
-import '../../../utils/k_images.dart';
-import '../../../utils/utils.dart';
 
 class ContactPage extends StatelessWidget {
   const ContactPage({super.key});
@@ -15,82 +11,96 @@ class ContactPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("Select contact",
-                  style: TextStyle(
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w400,
-                  )),
-              Text("299 contacts",
-                  style: TextStyle(
-                    fontSize: 12.sp,
-                  )),
-            ]),
-        actions: [
-          IconButton(onPressed: () {}, icon: SvgPicture.asset(KImages.search)),
-          PopupMenuButton(
-              icon: Icon(Icons.more_vert),
-              offset: Offset(0, 60),
-              color: scaffoldBgColor,
-              elevation: 1,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              itemBuilder: (context) {
-                return <PopupMenuEntry>[
-                  PopupMenuItem(
-                    child: Text("New Group "),
-                  ),
-                  PopupMenuItem(
-                    child: Text("New boradcast"),
-                  ),
-                  PopupMenuItem(
-                    child: Text("Linked devices"),
-                  ),
-                  PopupMenuItem(
-                    child: Text("Starred messages"),
-                  ),
-                  PopupMenuItem(
-                    child: Text("Settins"),
-                  ),
-                ];
-              })
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Utils.verticalSpace(20),
-            NewOption(
-              icon: Icons.link,
-              title: "New call link",
-            ),
-            Utils.verticalSpace(20),
-            NewOption(
-              icon: Icons.group,
-              title: "New group call",
-            ),
-            Utils.verticalSpace(20),
-            NewOption(
-              icon: Icons.person_add,
-              title: "New contact",
-              trail: Icon(
-                Icons.qr_code_outlined,
-                size: 28,
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: const [
+            Text(
+              'Select contact',
+              style: TextStyle(
+                color: textColor,
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
               ),
             ),
-            Utils.verticalSpace(20),
-            ...List.generate(
-                KDummyData.contacts.length,
-                (index) => ContactTile(
-                      title: KDummyData.contacts[index]['user']!,
-                      subtitle: KDummyData.contacts[index]['status']!,
-                      avatar: KDummyData.contacts[index]['avatar']!,
-                    )),
+            Text(
+              '299 contacts',
+              style: TextStyle(
+                color: subTitleTextColor,
+                fontSize: 12,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
           ],
         ),
+        actions: [
+          IconButton(
+            tooltip: 'Search',
+            onPressed: () {},
+            icon: const Icon(Icons.search_rounded),
+          ),
+          PopupMenuButton<String>(
+              tooltip: 'More options',
+              icon: const Icon(Icons.more_vert_rounded),
+              offset: const Offset(0, 60),
+              itemBuilder: (context) {
+                return const <PopupMenuEntry<String>>[
+                  PopupMenuItem<String>(
+                    value: 'invite',
+                    child: Text('Invite a friend'),
+                  ),
+                  PopupMenuItem<String>(
+                    value: 'contacts',
+                    child: Text('Contacts'),
+                  ),
+                  PopupMenuItem<String>(
+                    value: 'refresh',
+                    child: Text('Refresh'),
+                  ),
+                  PopupMenuItem<String>(value: 'help', child: Text('Help')),
+                ];
+              }),
+          const SizedBox(width: 4),
+        ],
+      ),
+      body: ListView(
+        padding: const EdgeInsets.only(top: 6, bottom: 24),
+        children: [
+          const NewOption(
+            icon: Icons.group_add_rounded,
+            title: 'New group',
+          ),
+          const NewOption(
+            icon: Icons.person_add_alt_1_rounded,
+            title: 'New contact',
+            trail: Icon(
+              Icons.qr_code_rounded,
+              color: textColor,
+              size: 24,
+            ),
+          ),
+          const NewOption(
+            icon: Icons.groups_rounded,
+            title: 'New community',
+          ),
+          const Padding(
+            padding: EdgeInsets.fromLTRB(20, 18, 20, 8),
+            child: Text(
+              'Contacts on WhatsApp',
+              style: TextStyle(
+                color: subTitleTextColor,
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+          ...KDummyData.contacts.map(
+            (contact) => ContactTile(
+              title: contact['user']!,
+              subtitle: contact['status']!,
+              avatar: contact['avatar']!,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -110,19 +120,23 @@ class NewOption extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      onTap: () {},
+      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 2),
       leading: CircleAvatar(
-        radius: 35,
-        backgroundColor: primaryColor,
+        radius: 24,
+        backgroundColor: actionGreen,
         child: Icon(
           icon,
-          color: Colors.white,
+          color: blackColor,
+          size: 23,
         ),
       ),
       title: Text(
         title,
-        style: TextStyle(
+        style: const TextStyle(
+          color: textColor,
           fontWeight: FontWeight.w600,
-          fontSize: 16.sp,
+          fontSize: 16,
         ),
       ),
       trailing: trail,
@@ -144,43 +158,35 @@ class ContactTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      onTap: () {},
+      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 3),
       leading: CircleAvatar(
-        radius: 35,
-        backgroundColor: primaryColor,
+        radius: 24,
+        backgroundColor: searchFieldColor,
         backgroundImage: AssetImage(avatar),
       ),
       title: Text(
         title,
-        style: TextStyle(
+        style: const TextStyle(
+          color: textColor,
           fontWeight: FontWeight.w600,
-          fontSize: 16.sp,
+          fontSize: 15,
         ),
       ),
       subtitle: Text(
         subtitle,
-        style: TextStyle(
-          fontWeight: FontWeight.w600,
-          fontSize: 12.sp,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: const TextStyle(
+          color: subTitleTextColor,
+          fontWeight: FontWeight.w400,
+          fontSize: 12,
         ),
       ),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          IconButton(
-            onPressed: () {},
-            icon: SvgPicture.asset(
-              KImages.phone,
-              color: primaryColor,
-            ),
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: SvgPicture.asset(
-              KImages.video,
-              color: primaryColor,
-            ),
-          )
-        ],
+      trailing: IconButton(
+        tooltip: 'Voice call',
+        onPressed: () {},
+        icon: const Icon(Icons.call_outlined, color: primaryColor),
       ),
     );
   }
