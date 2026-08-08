@@ -77,6 +77,7 @@ class _MainScreenState extends State<MainScreen> {
   AppBar _buildAppBar() {
     const titles = ['WhatsApp', 'Updates', 'Communities', 'Calls'];
     return AppBar(
+      automaticallyImplyLeading: false,
       toolbarHeight: 64,
       titleSpacing: 20,
       title: Text(

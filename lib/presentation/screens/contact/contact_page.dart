@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../data/dummy_data.dart';
 import '../../../utils/constants.dart';
+import '../../core/routes/routes_name.dart';
 
 class ContactPage extends StatelessWidget {
   const ContactPage({super.key});
@@ -158,7 +159,7 @@ class ContactTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      onTap: () {},
+      onTap: () => Navigator.pushNamed(context, RouteNames.inbox),
       contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 3),
       leading: CircleAvatar(
         radius: 24,

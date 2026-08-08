@@ -44,5 +44,16 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Status'), findsOneWidget);
     expect(find.text('Channels'), findsOneWidget);
+
+    await tester.tap(find.text('Chats'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byIcon(Icons.add_comment_rounded));
+    await tester.pumpAndSettle();
+    expect(find.text('Select contact'), findsOneWidget);
+
+    await tester.tap(find.text('Martin Luther'));
+    await tester.pumpAndSettle();
+    expect(find.text('Martin Troff'), findsOneWidget);
+    expect(find.text('Message'), findsOneWidget);
   });
 }

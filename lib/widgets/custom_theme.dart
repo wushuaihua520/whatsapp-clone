@@ -9,7 +9,7 @@ class MyTheme {
     brightness: Brightness.light,
     primaryColor: primaryColor,
     scaffoldBackgroundColor: scaffoldBgColor,
-    splashFactory: InkSparkle.splashFactory,
+    splashFactory: InkRipple.splashFactory,
     colorScheme: const ColorScheme.light(
       primary: primaryColor,
       onPrimary: Colors.white,
