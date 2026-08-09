@@ -14,7 +14,7 @@ class SettingsPage extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(16, 0, 16, 116),
         children: const [
           _ProfileHero(),
-          SizedBox(height: 15),
+          SizedBox(height: 8),
           _SettingsSection(
             rows: [
               _SettingsRowData(
@@ -89,17 +89,17 @@ class _ProfileHero extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(height: 5),
+        SizedBox(height: 3),
         CircleAvatar(
-          radius: 45,
+          radius: 37,
           backgroundColor: Color(0xFF91DCD6),
           child: Icon(
             Icons.person_rounded,
             color: Color(0xFF137D78),
-            size: 44,
+            size: 37,
           ),
         ),
-        SizedBox(height: 9),
+        SizedBox(height: 6),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -107,7 +107,7 @@ class _ProfileHero extends StatelessWidget {
               '心如止水',
               style: TextStyle(
                 color: textColor,
-                fontSize: 21,
+                fontSize: 19,
                 fontWeight: FontWeight.w600,
                 letterSpacing: -0.3,
               ),

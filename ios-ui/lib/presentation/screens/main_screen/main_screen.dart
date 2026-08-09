@@ -336,7 +336,12 @@ class _IosTabButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = selected ? textColor : iosSecondaryLabel;
+    final isSettings = destination.label == '设置';
+    final color = selected
+        ? (isSettings ? primaryColor : textColor)
+        : iosSecondaryLabel;
+    final selectedBackground =
+        isSettings ? const Color(0x80D9FDD3) : const Color(0x247A7A7A);
     return Semantics(
       selected: selected,
       button: true,
@@ -351,7 +356,7 @@ class _IosTabButton extends StatelessWidget {
             duration: const Duration(milliseconds: 220),
             curve: Curves.easeOutCubic,
             decoration: BoxDecoration(
-              color: selected ? const Color(0x73FFFFFF) : Colors.transparent,
+              color: selected ? selectedBackground : Colors.transparent,
               borderRadius: BorderRadius.circular(27),
               border: selected
                   ? Border.all(color: const Color(0x99FFFFFF), width: 0.7)

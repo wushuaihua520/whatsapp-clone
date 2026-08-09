@@ -39,7 +39,7 @@ class MessageComponent extends StatelessWidget {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(11),
             child: AspectRatio(
-              aspectRatio: 0.72,
+              aspectRatio: 0.8,
               child: Stack(
                 fit: StackFit.expand,
                 children: [
@@ -89,22 +89,21 @@ class MessageComponent extends StatelessWidget {
             ),
           ],
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
+        child: Wrap(
+          alignment: WrapAlignment.end,
+          crossAxisAlignment: WrapCrossAlignment.end,
+          spacing: 6,
+          runSpacing: 2,
           children: [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                element.message,
-                style: const TextStyle(
-                  fontSize: 16,
-                  height: 1.25,
-                  fontWeight: FontWeight.w400,
-                  color: blackColor,
-                ),
+            Text(
+              element.message,
+              style: const TextStyle(
+                fontSize: 16,
+                height: 1.25,
+                fontWeight: FontWeight.w400,
+                color: blackColor,
               ),
             ),
-            const SizedBox(height: 2),
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
