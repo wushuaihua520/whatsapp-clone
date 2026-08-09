@@ -109,7 +109,7 @@ class _ConversationListState extends State<ConversationList> {
           ),
           SliverToBoxAdapter(
             child: Padding(
-              padding: EdgeInsets.only(bottom: 24.h, top: 4.h),
+              padding: EdgeInsets.only(bottom: 100.h, top: 4.h),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

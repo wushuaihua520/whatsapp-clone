@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../utils/constants.dart';
+import '../../../widgets/ios_glass.dart';
 import '../../core/routes/routes_name.dart';
 import '../calls/call_logs.dart';
 import '../chats/controller/message_controller.dart';
@@ -47,9 +48,11 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     final bottomInset = MediaQuery.of(context).padding.bottom;
+    final isProfile = _selectedIndex == 4;
     return Scaffold(
-      backgroundColor:
-          _selectedIndex == 4 ? settingsBgColor : scaffoldBgColor,
+      backgroundColor: isProfile ? settingsBgColor : scaffoldBgColor,
+      // Let body paint under the glass tab bar so blur is visible.
+      extendBody: true,
       body: IndexedStack(
         index: _selectedIndex,
         children: _pages,
@@ -57,32 +60,23 @@ class _MainScreenState extends State<MainScreen> {
       bottomNavigationBar: _IosTabBar(
         selectedIndex: _selectedIndex,
         bottomInset: bottomInset,
-        onTap: (i) {
-          setState(() => _selectedIndex = i);
-          if (i == 3) {
-            // ensure chat data ready
-          }
-        },
+        onTap: (i) => setState(() => _selectedIndex = i),
       ),
-      floatingActionButton: _selectedIndex == 3
-          ? null
-          : _selectedIndex == 1 || _selectedIndex == 0
-              ? FloatingActionButton(
-                  onPressed: () {
-                    if (_selectedIndex == 1 || _selectedIndex == 0) {
-                      Navigator.pushNamed(context, RouteNames.contactPage);
-                    }
-                  },
-                  backgroundColor: primaryColor,
-                  elevation: 2,
-                  child: Icon(
-                    _selectedIndex == 1
-                        ? CupertinoIcons.phone_fill
-                        : CupertinoIcons.camera_fill,
-                    color: Colors.white,
-                  ),
-                )
-              : null,
+      floatingActionButton: (_selectedIndex == 1 || _selectedIndex == 0)
+          ? FloatingActionButton(
+              onPressed: () {
+                Navigator.pushNamed(context, RouteNames.contactPage);
+              },
+              backgroundColor: primaryColor,
+              elevation: 2,
+              child: Icon(
+                _selectedIndex == 1
+                    ? CupertinoIcons.phone_fill
+                    : CupertinoIcons.camera_fill,
+                color: Colors.white,
+              ),
+            )
+          : null,
     );
   }
 }
@@ -101,44 +95,48 @@ class _IosTabBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isProfile = selectedIndex == 4;
-    return Container(
-      decoration: BoxDecoration(
-        color: isProfile ? Colors.transparent : tabBarBg,
-        border: isProfile
-            ? null
-            : const Border(
-                top: BorderSide(color: Color(0xFFE5E5EA), width: 0.5),
-              ),
+    if (isProfile) {
+      return Padding(
+        padding: EdgeInsets.fromLTRB(
+          16,
+          0,
+          16,
+          bottomInset > 0 ? bottomInset : 10,
+        ),
+        child: _FloatingTabBar(
+          selectedIndex: selectedIndex,
+          onTap: onTap,
+        ),
+      );
+    }
+
+    return IosGlass(
+      sigma: 40,
+      tint: const Color(0x99F2F2F7),
+      border: Border(
+        top: BorderSide(
+          color: Colors.white.withValues(alpha: 0.55),
+          width: 0.6,
+        ),
       ),
-      padding: EdgeInsets.only(
-        left: isProfile ? 16 : 0,
-        right: isProfile ? 16 : 0,
-        bottom: isProfile ? (bottomInset > 0 ? bottomInset : 8) : 0,
-        top: isProfile ? 0 : 0,
-      ),
-      child: isProfile
-          ? _FloatingTabBar(
-              selectedIndex: selectedIndex,
-              onTap: onTap,
-            )
-          : SafeArea(
-              top: false,
-              child: SizedBox(
-                height: 54.h,
-                child: Row(
-                  children: List.generate(5, (i) {
-                    return Expanded(
-                      child: _TabItem(
-                        index: i,
-                        selected: selectedIndex == i,
-                        floating: false,
-                        onTap: () => onTap(i),
-                      ),
-                    );
-                  }),
+      child: SafeArea(
+        top: false,
+        child: SizedBox(
+          height: 54.h,
+          child: Row(
+            children: List.generate(5, (i) {
+              return Expanded(
+                child: _TabItem(
+                  index: i,
+                  selected: selectedIndex == i,
+                  floating: false,
+                  onTap: () => onTap(i),
                 ),
-              ),
-            ),
+              );
+            }),
+          ),
+        ),
+      ),
     );
   }
 }
@@ -154,31 +152,35 @@ class _FloatingTabBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 64,
-      margin: const EdgeInsets.only(bottom: 4),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(28),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
-            blurRadius: 20,
-            offset: const Offset(0, 4),
-          ),
-        ],
+    return IosGlass(
+      sigma: 42,
+      tint: const Color(0xA8FFFFFF),
+      borderRadius: BorderRadius.circular(28),
+      border: Border.all(
+        color: Colors.white.withValues(alpha: 0.65),
+        width: 0.9,
       ),
-      child: Row(
-        children: List.generate(5, (i) {
-          return Expanded(
-            child: _TabItem(
-              index: i,
-              selected: selectedIndex == i,
-              floating: true,
-              onTap: () => onTap(i),
-            ),
-          );
-        }),
+      shadows: [
+        BoxShadow(
+          color: Colors.black.withValues(alpha: 0.12),
+          blurRadius: 28,
+          offset: const Offset(0, 10),
+        ),
+      ],
+      child: SizedBox(
+        height: 64,
+        child: Row(
+          children: List.generate(5, (i) {
+            return Expanded(
+              child: _TabItem(
+                index: i,
+                selected: selectedIndex == i,
+                floating: true,
+                onTap: () => onTap(i),
+              ),
+            );
+          }),
+        ),
       ),
     );
   }
@@ -208,9 +210,7 @@ class _TabItem extends StatelessWidget {
   IconData _icon(bool filled) {
     switch (index) {
       case 0:
-        return filled
-            ? CupertinoIcons.arrow_2_circlepath
-            : CupertinoIcons.arrow_2_circlepath;
+        return CupertinoIcons.arrow_2_circlepath;
       case 1:
         return filled ? CupertinoIcons.phone_fill : CupertinoIcons.phone;
       case 2:
@@ -232,9 +232,8 @@ class _TabItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color activeColor =
-        floating ? const Color(0xFF1C1C1E) : const Color(0xFF1C1C1E);
-    final Color inactiveColor = const Color(0xFF8E8E93);
+    const activeColor = Color(0xFF1C1C1E);
+    const inactiveColor = Color(0xFF8E8E93);
 
     return GestureDetector(
       behavior: HitTestBehavior.opaque,

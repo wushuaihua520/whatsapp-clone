@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../utils/constants.dart';
 import '../../../utils/strings.dart';
+import '../../../widgets/ios_glass.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -99,59 +100,61 @@ class _ProfileTopActions extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 16.w),
       child: Row(
         children: [
-          _RoundAction(
-            child: Icon(CupertinoIcons.search, size: 20.sp),
+          IosGlass(
+            sigma: 26,
+            tint: const Color(0xB8FFFFFF),
+            borderRadius: BorderRadius.circular(18),
+            border: Border.all(
+              color: Colors.white.withValues(alpha: 0.7),
+              width: 0.6,
+            ),
+            shadows: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.08),
+                blurRadius: 12,
+                offset: const Offset(0, 2),
+              ),
+            ],
+            child: SizedBox(
+              width: 36,
+              height: 36,
+              child: Center(
+                child: Icon(CupertinoIcons.search, size: 20.sp),
+              ),
+            ),
           ),
           const Spacer(),
-          Container(
-            height: 36,
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.06),
-                  blurRadius: 10,
-                  offset: const Offset(0, 2),
+          IosGlass(
+            sigma: 26,
+            tint: const Color(0xB8FFFFFF),
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+              color: Colors.white.withValues(alpha: 0.7),
+              width: 0.6,
+            ),
+            shadows: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.08),
+                blurRadius: 12,
+                offset: const Offset(0, 2),
+              ),
+            ],
+            child: SizedBox(
+              height: 36,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Row(
+                  children: [
+                    Icon(CupertinoIcons.qrcode, size: 18.sp),
+                    SizedBox(width: 14.w),
+                    Icon(CupertinoIcons.pencil, size: 18.sp),
+                  ],
                 ),
-              ],
-            ),
-            child: Row(
-              children: [
-                Icon(CupertinoIcons.qrcode, size: 18.sp),
-                SizedBox(width: 14.w),
-                Icon(CupertinoIcons.pencil, size: 18.sp),
-              ],
+              ),
             ),
           ),
         ],
       ),
-    );
-  }
-}
-
-class _RoundAction extends StatelessWidget {
-  const _RoundAction({required this.child});
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 36,
-      height: 36,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        shape: BoxShape.circle,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.06),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Center(child: child),
     );
   }
 }
