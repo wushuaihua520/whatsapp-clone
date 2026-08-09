@@ -377,13 +377,13 @@ class _IosTabButton extends StatelessWidget {
                               const BoxConstraints(minWidth: 17, minHeight: 17),
                           padding: const EdgeInsets.symmetric(horizontal: 4),
                           alignment: Alignment.center,
-                          decoration: const BoxDecoration(
+                          decoration: BoxDecoration(
                             color: destination.badgeColor,
                             shape: BoxShape.circle,
                           ),
                           child: Text(
                             destination.badge.toString(),
-                            style: const TextStyle(
+                            style: TextStyle(
                               color: destination.badgeTextColor,
                               fontSize: 9,
                               fontWeight: FontWeight.w700,

@@ -54,7 +54,7 @@ class ParticipateTile extends StatelessWidget {
                       const SizedBox(width: 8),
                       Text(
                         _formattedTime,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontWeight: FontWeight.w400,
                           fontSize: 10.5,
                           color: iosSecondaryLabel,
