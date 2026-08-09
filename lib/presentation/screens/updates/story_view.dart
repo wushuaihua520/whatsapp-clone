@@ -1,5 +1,4 @@
-import 'dart:io';
-
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:story_view/story_view.dart';
@@ -9,6 +8,8 @@ import '../../../utils/k_images.dart';
 import '../../../utils/utils.dart';
 
 class MyStoryPage extends StatelessWidget {
+  MyStoryPage({super.key});
+
   final storyController = StoryController();
 
   @override
@@ -23,9 +24,12 @@ class MyStoryPage extends StatelessWidget {
       StoryItem.pageImage(
           url:
               "https://www.itl.cat/pngfile/big/54-545287_beautiful-landscape-backgrounds-landscape-wallpapers-british-columbia.jpg",
-          caption: "Beautiful lake view",
+          caption: const Text(
+            "Beautiful lake view",
+            style: TextStyle(color: Colors.white),
+          ),
           controller: storyController),
-    ]; //
+    ];
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -38,8 +42,7 @@ class MyStoryPage extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Utils.horizontalSpace(6.w),
-              Icon(
-                  Platform.isAndroid ? Icons.arrow_back : Icons.arrow_back_ios),
+              Icon(kIsWeb ? Icons.arrow_back_ios : Icons.arrow_back_ios),
               Utils.horizontalSpace(6.w),
               CircleAvatar(backgroundImage: AssetImage(KImages.chatAvatar1)),
             ],
@@ -68,8 +71,8 @@ class MyStoryPage extends StatelessWidget {
         ),
         actions: [
           PopupMenuButton(
-              icon: Icon(Icons.more_vert),
-              offset: Offset(0, 50),
+              icon: const Icon(Icons.more_vert),
+              offset: const Offset(0, 50),
               color: scaffoldBgColor,
               elevation: 1,
               shape: RoundedRectangleBorder(
@@ -78,21 +81,11 @@ class MyStoryPage extends StatelessWidget {
               padding: EdgeInsets.zero,
               itemBuilder: (context) {
                 return <PopupMenuEntry>[
-                  PopupMenuItem(
-                    child: Text("Mute"),
-                  ),
-                  PopupMenuItem(
-                    child: Text("Message"),
-                  ),
-                  PopupMenuItem(
-                    child: Text("Voice call"),
-                  ),
-                  PopupMenuItem(
-                    child: Text("View contact"),
-                  ),
-                  PopupMenuItem(
-                    child: Text("Report"),
-                  ),
+                  const PopupMenuItem(child: Text("Mute")),
+                  const PopupMenuItem(child: Text("Message")),
+                  const PopupMenuItem(child: Text("Voice call")),
+                  const PopupMenuItem(child: Text("View contact")),
+                  const PopupMenuItem(child: Text("Report")),
                 ];
               })
         ],
@@ -100,12 +93,11 @@ class MyStoryPage extends StatelessWidget {
       extendBodyBehindAppBar: true,
       extendBody: true,
       body: StoryView(
-        controller: storyController, // pass controller here too
-        repeat: true, // should the stories be slid forever
-        onStoryShow: (s) {},
+        controller: storyController,
+        repeat: true,
+        onStoryShow: (s, _) {},
         inline: true,
         progressPosition: ProgressPosition.top,
-
         onComplete: () {},
         onVerticalSwipeComplete: (direction) {
           if (direction == Direction.down) {

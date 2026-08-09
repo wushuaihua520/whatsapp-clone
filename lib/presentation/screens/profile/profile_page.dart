@@ -43,7 +43,7 @@ class ProfilePage extends StatelessWidget {
                 ),
                 _SettingItem(
                   icon: CupertinoIcons.desktopcomputer,
-                  iconBg: Color(0xFF007AFF),
+                  iconBg: Color(0xFF5AC8FA),
                   labelKey: 'linked',
                 ),
               ],
@@ -54,13 +54,13 @@ class ProfilePage extends StatelessWidget {
             child: _SettingsGroup(
               items: const [
                 _SettingItem(
-                  icon: CupertinoIcons.tornado,
+                  icon: Icons.vpn_key_rounded,
                   iconBg: Color(0xFF007AFF),
                   labelKey: 'account',
                   useKeyIcon: true,
                 ),
                 _SettingItem(
-                  icon: CupertinoIcons.lock_shield_fill,
+                  icon: CupertinoIcons.lock_fill,
                   iconBg: Color(0xFF34C759),
                   labelKey: 'privacy',
                 ),
@@ -75,14 +75,15 @@ class ProfilePage extends StatelessWidget {
                   labelKey: 'notifications',
                 ),
                 _SettingItem(
-                  icon: CupertinoIcons.arrow_up_arrow_down,
+                  icon: CupertinoIcons.arrow_up_arrow_down_circle_fill,
                   iconBg: Color(0xFF007AFF),
                   labelKey: 'storage',
                 ),
               ],
             ),
           ),
-          SliverToBoxAdapter(child: SizedBox(height: 40.h)),
+          // Extra space so last group clears floating tab bar
+          SliverToBoxAdapter(child: SizedBox(height: 100.h)),
         ],
       ),
     );
@@ -228,14 +229,18 @@ class _ProfileHero extends StatelessWidget {
             Container(
               width: 18,
               height: 18,
+              alignment: Alignment.center,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(color: secondaryLabel, width: 1.2),
               ),
-              child: Icon(
-                Icons.male,
-                size: 12.sp,
-                color: secondaryLabel,
+              child: Text(
+                '♂',
+                style: TextStyle(
+                  fontSize: 11.sp,
+                  color: secondaryLabel,
+                  height: 1,
+                ),
               ),
             ),
           ],
@@ -295,7 +300,14 @@ class _SettingsGroup extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.04),
+              blurRadius: 8,
+              offset: const Offset(0, 1),
+            ),
+          ],
         ),
         child: Column(
           children: List.generate(items.length, (i) {

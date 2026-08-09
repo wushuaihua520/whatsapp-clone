@@ -242,15 +242,13 @@ class _TabItem extends StatelessWidget {
             ),
             decoration: BoxDecoration(
               color: selected
-                  ? (floating
-                      ? accentMint
-                      : const Color(0xFF3A3A3C))
+                  ? (floating ? accentMint : const Color(0xFF3A3A3C))
                   : Colors.transparent,
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(18),
             ),
             child: Icon(
               _icon(selected),
-              size: floating ? 22 : 22,
+              size: 22,
               color: selected
                   ? (floating ? const Color(0xFF1C1C1E) : Colors.white)
                   : inactiveColor,

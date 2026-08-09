@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 const Color primaryColor = Color(0xFF25D366);
 const Color primaryDark = Color(0xFF1DAA61);
 const Color waTeal = Color(0xFF00A884);
-const Color accentMint = Color(0xFFAEF0D0);
+const Color accentMint = Color(0xFFB8F0D4);
 const Color avatarMint = Color(0xFFB8EBD0);
 
 const Color titleTextColor = Color(0xFF000000);

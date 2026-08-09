@@ -17,18 +17,18 @@ class MessageComponent extends StatelessWidget {
 
   bool get isMe => element.sender == 'user';
 
+  int get _index => messages.indexWhere((m) => m.id == element.id);
+
   bool get _isFirstInCluster {
-    final idx = messages.indexOf(element);
+    final idx = _index;
     if (idx <= 0) return true;
-    final prev = messages[idx - 1];
-    return prev.sender != element.sender;
+    return messages[idx - 1].sender != element.sender;
   }
 
   bool get _isLastInCluster {
-    final idx = messages.indexOf(element);
+    final idx = _index;
     if (idx < 0 || idx >= messages.length - 1) return true;
-    final next = messages[idx + 1];
-    return next.sender != element.sender;
+    return messages[idx + 1].sender != element.sender;
   }
 
   @override
@@ -37,70 +37,73 @@ class MessageComponent extends StatelessWidget {
       return _StickerMessage(element: element, isMe: isMe);
     }
     if (element.image != null && element.image!.isNotEmpty) {
-      return _ImageMessage(
-        element: element,
-        isMe: isMe,
-        showTail: _isLastInCluster,
-      );
+      return _ImageMessage(element: element, isMe: isMe);
     }
     return Align(
       alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
         constraints: BoxConstraints(maxWidth: 0.78.sw),
         margin: EdgeInsets.only(
-          top: _isFirstInCluster ? 6.h : 2.h,
-          bottom: _isLastInCluster ? 2.h : 1.h,
-          left: isMe ? 40.w : 4.w,
-          right: isMe ? 4.w : 40.w,
+          top: _isFirstInCluster ? 5.h : 1.5.h,
+          bottom: _isLastInCluster ? 2.h : 0.5.h,
+          left: isMe ? 48.w : 6.w,
+          right: isMe ? 6.w : 48.w,
         ),
-        child: CustomPaint(
-          painter: _BubblePainter(
+        child: Container(
+          decoration: BoxDecoration(
             color: isMe ? userMessageBg : senderMessageBg,
-            isMe: isMe,
-            showTail: _isLastInCluster,
-          ),
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(
-              isMe ? 10.w : (_isLastInCluster ? 14.w : 10.w),
-              7.h,
-              isMe ? (_isLastInCluster ? 14.w : 10.w) : 10.w,
-              7.h,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(isMe ? 16 : (_isFirstInCluster ? 16 : 6)),
+              topRight:
+                  Radius.circular(isMe ? (_isFirstInCluster ? 16 : 6) : 16),
+              bottomLeft:
+                  Radius.circular(isMe ? 16 : (_isLastInCluster ? 4 : 6)),
+              bottomRight:
+                  Radius.circular(isMe ? (_isLastInCluster ? 4 : 6) : 16),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (element.replyTo != null) ...[
-                  _QuoteBlock(
-                    author: element.replyAuthor ?? '',
-                    text: element.replyTo!,
-                    isMe: isMe,
-                  ),
-                  SizedBox(height: 4.h),
-                ],
-                Stack(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(right: isMe ? 52.w : 40.w),
-                      child: Text(
-                        element.message,
-                        style: TextStyle(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.black,
-                          height: 1.25,
-                          letterSpacing: -0.2,
-                        ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.06),
+                blurRadius: 1.5,
+                offset: const Offset(0, 0.5),
+              ),
+            ],
+          ),
+          padding: EdgeInsets.fromLTRB(9.w, 6.h, 9.w, 6.h),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (element.replyTo != null) ...[
+                _QuoteBlock(
+                  author: element.replyAuthor ?? '',
+                  text: element.replyTo!,
+                  isMe: isMe,
+                ),
+                SizedBox(height: 4.h),
+              ],
+              Stack(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(right: isMe ? 54.w : 38.w),
+                    child: Text(
+                      element.message,
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.black,
+                        height: 1.28,
+                        letterSpacing: -0.2,
                       ),
                     ),
-                    Positioned(
-                      right: 0,
-                      bottom: -1,
-                      child: _TimeAndStatus(element: element, isMe: isMe),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+                  ),
+                  Positioned(
+                    right: 0,
+                    bottom: 0,
+                    child: _TimeAndStatus(element: element, isMe: isMe),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
       ),
@@ -129,7 +132,7 @@ class _QuoteBlock extends StatelessWidget {
         border: Border(
           left: BorderSide(
             color: isMe ? const Color(0xFF34B7F1) : primaryColor,
-            width: 3,
+            width: 3.5,
           ),
         ),
       ),
@@ -181,10 +184,8 @@ class _TimeAndStatus extends StatelessWidget {
         if (isMe) ...[
           SizedBox(width: 2.w),
           Icon(
-            element.seen || element.delivered
-                ? Icons.done_all
-                : Icons.done,
-            size: 14.sp,
+            element.seen || element.delivered ? Icons.done_all : Icons.done,
+            size: 15.sp,
             color: element.seen ? checkBlue : secondaryLabel,
           ),
         ],
@@ -197,55 +198,81 @@ class _ImageMessage extends StatelessWidget {
   const _ImageMessage({
     required this.element,
     required this.isMe,
-    required this.showTail,
   });
   final Messages element;
   final bool isMe;
-  final bool showTail;
 
   @override
   Widget build(BuildContext context) {
     return Align(
       alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
-      child: Container(
-        constraints: BoxConstraints(maxWidth: 0.72.sw),
-        margin: EdgeInsets.symmetric(vertical: 4.h, horizontal: 4.w),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(12),
-          child: Stack(
-            children: [
-              Image.asset(
-                element.image!,
-                fit: BoxFit.cover,
-                width: 0.68.sw,
-                errorBuilder: (_, __, ___) => Container(
-                  width: 0.68.sw,
-                  height: 280.h,
-                  color: searchBarBg,
-                  child: const Icon(CupertinoIcons.photo, size: 40),
-                ),
-              ),
-              Positioned(
-                right: 8,
-                bottom: 6,
-                child: Container(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
-                  decoration: BoxDecoration(
-                    color: Colors.black.withValues(alpha: 0.35),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Text(
-                    DateFormat('HH:mm').format(element.date),
-                    style: TextStyle(
-                      fontSize: 11.sp,
-                      color: Colors.white,
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 6.w),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Stack(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: Image.asset(
+                    element.image!,
+                    fit: BoxFit.cover,
+                    width: 0.62.sw,
+                    height: 0.72.sw,
+                    errorBuilder: (_, __, ___) => Container(
+                      width: 0.62.sw,
+                      height: 0.72.sw,
+                      color: searchBarBg,
+                      child: const Icon(CupertinoIcons.photo, size: 40),
                     ),
                   ),
                 ),
+                Positioned(
+                  right: 8,
+                  bottom: 6,
+                  child: Container(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withValues(alpha: 0.35),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      DateFormat('HH:mm').format(element.date),
+                      style: TextStyle(
+                        fontSize: 11.sp,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            if (!isMe) ...[
+              SizedBox(width: 8.w),
+              Container(
+                width: 32,
+                height: 32,
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.9),
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.08),
+                      blurRadius: 4,
+                    ),
+                  ],
+                ),
+                child: Icon(
+                  CupertinoIcons.arrowshape_turn_up_right,
+                  size: 16.sp,
+                  color: secondaryLabel,
+                ),
               ),
             ],
-          ),
+          ],
         ),
       ),
     );
@@ -262,26 +289,15 @@ class _StickerMessage extends StatelessWidget {
     return Align(
       alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+        padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
         child: Column(
           crossAxisAlignment:
               isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
           children: [
-            if (element.image != null)
-              Image.asset(
-                element.image!,
-                width: 140.w,
-                height: 140.w,
-                errorBuilder: (_, __, ___) => Text(
-                  element.message.isNotEmpty ? element.message : '😊',
-                  style: TextStyle(fontSize: 72.sp),
-                ),
-              )
-            else
-              Text(
-                element.message.isNotEmpty ? element.message : '☕',
-                style: TextStyle(fontSize: 72.sp),
-              ),
+            Text(
+              element.message.isNotEmpty ? element.message : '☕',
+              style: TextStyle(fontSize: 64.sp, height: 1.1),
+            ),
             Text(
               DateFormat('HH:mm').format(element.date),
               style: TextStyle(fontSize: 11.sp, color: secondaryLabel),
@@ -290,48 +306,5 @@ class _StickerMessage extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-class _BubblePainter extends CustomPainter {
-  _BubblePainter({
-    required this.color,
-    required this.isMe,
-    required this.showTail,
-  });
-
-  final Color color;
-  final bool isMe;
-  final bool showTail;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = color
-      ..style = PaintingStyle.fill;
-
-    final r = RRect.fromRectAndCorners(
-      Rect.fromLTWH(isMe ? 0 : (showTail ? 4 : 0), 0,
-          size.width - (showTail ? 4 : 0), size.height),
-      topLeft: const Radius.circular(16),
-      topRight: const Radius.circular(16),
-      bottomLeft: Radius.circular(isMe ? 16 : (showTail ? 4 : 16)),
-      bottomRight: Radius.circular(isMe ? (showTail ? 4 : 16) : 16),
-    );
-    canvas.drawRRect(r, paint);
-
-    // subtle shadow edge
-    final border = Paint()
-      ..color = Colors.black.withValues(alpha: 0.04)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 0.5;
-    canvas.drawRRect(r, border);
-  }
-
-  @override
-  bool shouldRepaint(covariant _BubblePainter oldDelegate) {
-    return oldDelegate.color != color ||
-        oldDelegate.isMe != isMe ||
-        oldDelegate.showTail != showTail;
   }
 }

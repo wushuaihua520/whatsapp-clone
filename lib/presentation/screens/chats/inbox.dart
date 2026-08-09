@@ -18,6 +18,10 @@ class Inbox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Ensure messages are available when opening inbox directly.
+    if (MessageController.list.isEmpty) {
+      MessageController.init();
+    }
     final size = MediaQuery.of(context).size;
     final user = KDummyData.participantsChat;
     final top = MediaQuery.of(context).padding.top;
@@ -47,40 +51,41 @@ class Inbox extends StatelessWidget {
             children: [
               _IosChatNavBar(user: user, top: top),
               Expanded(
-                child: StreamBuilder(
+                child: StreamBuilder<List<Messages>>(
                   stream: MessageController.streamData,
+                  initialData: MessageController.list,
                   builder: (context, snapshot) {
-                    if (snapshot.data != null) {
-                      final messageList = snapshot.data!.reversed.toList();
-                      return GroupedListView<Messages, DateTime>(
-                        padding: EdgeInsets.fromLTRB(8.w, 8.h, 8.w, 8.h),
-                        elements: messageList,
-                        groupBy: (element) => DateTime(
-                          element.date.year,
-                          element.date.month,
-                          element.date.day,
-                        ),
-                        groupSeparatorBuilder: (DateTime groupByValue) =>
-                            Column(
-                          children: [
-                            MessageSeparator(groupByValue: groupByValue),
-                            if (_isFirstGroup(messageList, groupByValue))
-                              const _EncryptionBanner(),
-                          ],
-                        ),
-                        itemBuilder: (context, Messages element) =>
-                            MessageComponent(
-                          element: element,
-                          messages: messageList,
-                        ),
-                        itemComparator: (item1, item2) =>
-                            item1.date.compareTo(item2.date),
-                        useStickyGroupSeparators: false,
-                        floatingHeader: true,
-                        order: GroupedListOrder.ASC,
-                      );
+                    final data = snapshot.data;
+                    if (data == null || data.isEmpty) {
+                      return const SizedBox();
                     }
-                    return const SizedBox();
+                    final messageList = data.reversed.toList();
+                    return GroupedListView<Messages, DateTime>(
+                      padding: EdgeInsets.fromLTRB(8.w, 8.h, 8.w, 8.h),
+                      elements: messageList,
+                      groupBy: (element) => DateTime(
+                        element.date.year,
+                        element.date.month,
+                        element.date.day,
+                      ),
+                      groupSeparatorBuilder: (DateTime groupByValue) => Column(
+                        children: [
+                          MessageSeparator(groupByValue: groupByValue),
+                          if (_isFirstGroup(messageList, groupByValue))
+                            const _EncryptionBanner(),
+                        ],
+                      ),
+                      itemBuilder: (context, Messages element) =>
+                          MessageComponent(
+                        element: element,
+                        messages: messageList,
+                      ),
+                      itemComparator: (item1, item2) =>
+                          item1.date.compareTo(item2.date),
+                      useStickyGroupSeparators: false,
+                      floatingHeader: true,
+                      order: GroupedListOrder.ASC,
+                    );
                   },
                 ),
               ),
@@ -169,17 +174,17 @@ class _IosChatNavBar extends StatelessWidget {
                 ),
               ),
               Container(
-                height: 34,
-                padding: EdgeInsets.symmetric(horizontal: 12.w),
+                height: 36,
+                padding: EdgeInsets.symmetric(horizontal: 14.w),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF2F2F7),
-                  borderRadius: BorderRadius.circular(18),
+                  color: const Color(0xFFE8E8ED),
+                  borderRadius: BorderRadius.circular(20),
                 ),
                 child: Row(
                   children: [
                     Icon(CupertinoIcons.videocam_fill,
                         size: 22.sp, color: Colors.black),
-                    SizedBox(width: 14.w),
+                    SizedBox(width: 16.w),
                     Icon(CupertinoIcons.phone_fill,
                         size: 18.sp, color: Colors.black),
                   ],
