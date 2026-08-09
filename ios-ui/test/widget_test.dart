@@ -6,6 +6,7 @@ import 'package:whatsapp_ios_ui/presentation/core/routes/routes_name.dart';
 import 'package:whatsapp_ios_ui/presentation/screens/main_screen/main_screen.dart';
 import 'package:whatsapp_ios_ui/widgets/custom_theme.dart';
 import 'package:whatsapp_ios_ui/widgets/glass_surface.dart';
+import 'package:whatsapp_ios_ui/widgets/iphone_device_frame.dart';
 
 void main() {
   testWidgets('shows the current Meta-branded welcome flow', (tester) async {
@@ -82,5 +83,32 @@ void main() {
       ),
     );
     expect(find.text('加密'), findsOneWidget);
+  });
+
+  testWidgets('shows Apple iPhone chrome on a desktop-sized surface',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(1280, 900));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(
+      MediaQuery(
+        data: const MediaQueryData(size: Size(1280, 900)),
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: MyTheme.theme,
+          builder: (context, child) => IphoneExperience(
+            forceFrame: true,
+            child: child ?? const SizedBox.shrink(),
+          ),
+          home: const MainScreen(),
+          onGenerateRoute: RouteNames.generateRoutes,
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.byType(IphoneExperience), findsOneWidget);
+    expect(find.text('9:41'), findsOneWidget);
+    expect(find.byKey(const Key('ios-聊天-title')), findsOneWidget);
   });
 }

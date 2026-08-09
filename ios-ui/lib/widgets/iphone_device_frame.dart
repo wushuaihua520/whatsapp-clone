@@ -16,79 +16,107 @@ const double kIphoneHomeInset = 34;
 /// titanium bezel, Dynamic Island, status icons, home indicator, and
 /// iPhone-accurate [MediaQuery] padding.
 class IphoneExperience extends StatelessWidget {
-  const IphoneExperience({super.key, required this.child});
+  const IphoneExperience({
+    super.key,
+    required this.child,
+    this.forceFrame,
+  });
 
   final Widget child;
 
-  static bool shouldShowFrame(Size viewport) {
-    if (!kIsWeb && defaultTargetPlatform != TargetPlatform.macOS) {
-      // Keep native mobile / test surfaces fullscreen.
-      if (defaultTargetPlatform == TargetPlatform.iOS ||
-          defaultTargetPlatform == TargetPlatform.android) {
-        return false;
-      }
-    }
-    // Show the phone chrome whenever there is room around the logical screen.
-    return viewport.width >= kIphoneLogicalSize.width + 72 &&
-        viewport.height >= kIphoneLogicalSize.height + 72;
+  /// When set, overrides the automatic desktop/web frame decision.
+  /// Useful in widget tests (`true`) or forced fullscreen (`false`).
+  final bool? forceFrame;
+
+  static bool shouldShowFrame(Size viewport, {bool? forceFrame}) {
+    if (forceFrame != null) return forceFrame;
+
+    // Keep widget tests / native builds fullscreen.
+    if (!kIsWeb) return false;
+
+    // Real iPhone Safari (and other handset browsers) stay edge-to-edge.
+    final looksLikeHandset =
+        viewport.shortestSide < 500 && viewport.width <= 500;
+    if (looksLikeHandset) return false;
+
+    return viewport.width >= kIphoneLogicalSize.width + 48;
   }
 
   @override
   Widget build(BuildContext context) {
     final host = MediaQuery.of(context);
     final viewport = host.size;
-    final showFrame = shouldShowFrame(viewport);
+    final showFrame =
+        shouldShowFrame(viewport, forceFrame: forceFrame);
 
-    // Widget tests / native phones keep the host metrics.
-    // Web on a real iPhone stays fullscreen but gains Apple-like insets
-    // when the browser reports none.
     if (!showFrame) {
-      if (!kIsWeb) return child;
-      return _withIphoneMetrics(host: host, size: viewport, child: child);
+      if (!kIsWeb && forceFrame != true) return child;
+      return _IphoneMetrics(
+        host: host,
+        size: viewport,
+        child: child,
+      );
     }
 
     return ColoredBox(
       color: const Color(0xFF0B0B0D),
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          const _DeskAtmosphere(),
-          Center(
-            child: FittedBox(
-              fit: BoxFit.contain,
-              child: Padding(
-                padding: const EdgeInsets.all(28),
-                child: _IphoneHardware(
-                  child: SizedBox(
-                    width: kIphoneLogicalSize.width,
-                    height: kIphoneLogicalSize.height,
-                    child: _withIphoneMetrics(
-                      host: host,
-                      size: kIphoneLogicalSize,
-                      child: Stack(
-                        fit: StackFit.expand,
-                        children: [
-                          child,
-                          const IgnorePointer(child: _StatusBarOverlay()),
-                          const IgnorePointer(child: _HomeIndicator()),
-                        ],
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          const bezel = 14.0;
+          final phoneWidth = kIphoneLogicalSize.width + bezel * 2;
+          final phoneHeight = kIphoneLogicalSize.height + bezel * 2;
+          final maxW = math.max(constraints.maxWidth - 40, 1.0);
+          final maxH = math.max(constraints.maxHeight - 40, 1.0);
+          final scale = math.min(maxW / phoneWidth, maxH / phoneHeight);
+
+          return Stack(
+            fit: StackFit.expand,
+            children: [
+              const _DeskAtmosphere(),
+              Center(
+                child: SizedBox(
+                  width: phoneWidth * scale,
+                  height: phoneHeight * scale,
+                  child: FittedBox(
+                    fit: BoxFit.contain,
+                    child: _IphoneHardware(
+                      screen: _IphoneMetrics(
+                        host: host,
+                        size: kIphoneLogicalSize,
+                        child: Stack(
+                          fit: StackFit.expand,
+                          children: [
+                            child,
+                            const IgnorePointer(child: _StatusBarOverlay()),
+                            const IgnorePointer(child: _HomeIndicator()),
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ),
-        ],
+            ],
+          );
+        },
       ),
     );
   }
+}
 
-  Widget _withIphoneMetrics({
-    required MediaQueryData host,
-    required Size size,
-    required Widget child,
-  }) {
+class _IphoneMetrics extends StatelessWidget {
+  const _IphoneMetrics({
+    required this.host,
+    required this.size,
+    required this.child,
+  });
+
+  final MediaQueryData host;
+  final Size size;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
     final top = math.max(host.padding.top, kIphoneStatusInset);
     final bottom = math.max(host.padding.bottom, kIphoneHomeInset);
     final padding = EdgeInsets.only(top: top, bottom: bottom);
@@ -99,7 +127,6 @@ class IphoneExperience extends StatelessWidget {
         padding: padding,
         viewPadding: padding,
         viewInsets: EdgeInsets.zero,
-        devicePixelRatio: math.max(host.devicePixelRatio, 3),
       ),
       child: child,
     );
@@ -130,66 +157,78 @@ class _DeskAtmosphere extends StatelessWidget {
 }
 
 class _IphoneHardware extends StatelessWidget {
-  const _IphoneHardware({required this.child});
+  const _IphoneHardware({required this.screen});
 
-  final Widget child;
+  final Widget screen;
 
   @override
   Widget build(BuildContext context) {
     const bezel = 14.0;
     const radius = 55.0;
+    final width = kIphoneLogicalSize.width + bezel * 2;
+    final height = kIphoneLogicalSize.height + bezel * 2;
 
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(radius),
-        gradient: const LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            Color(0xFF5C5C63),
-            Color(0xFF1C1C1F),
-            Color(0xFF3A3A40),
-            Color(0xFF111114),
-          ],
-          stops: [0, 0.35, 0.7, 1],
-        ),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x99000000),
-            blurRadius: 48,
-            offset: Offset(0, 28),
-          ),
-          BoxShadow(
-            color: Color(0x33FFFFFF),
-            blurRadius: 1,
-            offset: Offset(0, -0.5),
-          ),
-        ],
-      ),
-      padding: const EdgeInsets.all(bezel),
+    return SizedBox(
+      width: width,
+      height: height,
       child: Stack(
         clipBehavior: Clip.none,
         children: [
-          // Side buttons
-          const Positioned(left: -bezel - 2, top: 148, child: _SideButton(height: 36)),
-          const Positioned(left: -bezel - 2, top: 208, child: _SideButton(height: 62)),
-          const Positioned(left: -bezel - 2, top: 286, child: _SideButton(height: 62)),
-          const Positioned(right: -bezel - 2, top: 230, child: _SideButton(height: 96)),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(radius - bezel + 2),
-            child: ColoredBox(
-              color: Colors.black,
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  child,
-                  const Positioned(
-                    top: 11,
-                    left: 0,
-                    right: 0,
-                    child: Center(child: _DynamicIsland()),
+          Positioned.fill(
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(radius),
+                gradient: const LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    Color(0xFF5C5C63),
+                    Color(0xFF1C1C1F),
+                    Color(0xFF3A3A40),
+                    Color(0xFF111114),
+                  ],
+                  stops: [0, 0.35, 0.7, 1],
+                ),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Color(0x99000000),
+                    blurRadius: 48,
+                    offset: Offset(0, 28),
+                  ),
+                  BoxShadow(
+                    color: Color(0x33FFFFFF),
+                    blurRadius: 1,
+                    offset: Offset(0, -0.5),
                   ),
                 ],
+              ),
+            ),
+          ),
+          const Positioned(left: -3, top: 148, child: _SideButton(height: 36)),
+          const Positioned(left: -3, top: 208, child: _SideButton(height: 62)),
+          const Positioned(left: -3, top: 286, child: _SideButton(height: 62)),
+          const Positioned(right: -3, top: 230, child: _SideButton(height: 96)),
+          Positioned(
+            left: bezel,
+            top: bezel,
+            width: kIphoneLogicalSize.width,
+            height: kIphoneLogicalSize.height,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(radius - bezel + 2),
+              child: ColoredBox(
+                color: Colors.black,
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    screen,
+                    const Positioned(
+                      top: 11,
+                      left: 0,
+                      right: 0,
+                      child: Center(child: _DynamicIsland()),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -290,7 +329,8 @@ class _StatusBarOverlay extends StatelessWidget {
                 ),
               ),
               const Spacer(),
-              Icon(Icons.signal_cellular_alt, size: 15, color: Colors.black.withOpacity(0.92)),
+              Icon(Icons.signal_cellular_alt,
+                  size: 15, color: Colors.black.withOpacity(0.92)),
               const SizedBox(width: 5),
               Icon(Icons.wifi, size: 15, color: Colors.black.withOpacity(0.92)),
               const SizedBox(width: 5),
@@ -321,7 +361,8 @@ class _BatteryPill extends StatelessWidget {
               height: 11,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(3.5),
-                border: Border.all(color: Colors.black.withOpacity(0.45), width: 1.1),
+                border: Border.all(
+                    color: Colors.black.withOpacity(0.45), width: 1.1),
               ),
               padding: const EdgeInsets.all(1.5),
               child: Align(
