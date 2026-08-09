@@ -62,7 +62,7 @@ class _ConversationListState extends State<ConversationList> {
       padding: const EdgeInsets.only(bottom: 118),
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(16, 2, 16, 12),
+          padding: const EdgeInsets.fromLTRB(16, 2, 16, 10),
           child: TextField(
             key: const Key('chat-search-field'),
             controller: _searchController,
@@ -89,66 +89,29 @@ class _ConversationListState extends State<ConversationList> {
             ),
           ),
         ),
-        const _ContactAccessCard(),
-        const SizedBox(height: 13),
         SizedBox(
-          height: 36,
+          height: 34,
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 16),
             itemCount: _filters.length + 1,
-            separatorBuilder: (_, __) => const SizedBox(width: 7),
+            separatorBuilder: (_, __) => const SizedBox(width: 8),
             itemBuilder: (context, index) {
               if (index == _filters.length) {
-                return Material(
-                  color: Colors.white,
-                  shape: const CircleBorder(
-                    side: BorderSide(color: dividerColor),
-                  ),
-                  child: InkWell(
-                    customBorder: const CircleBorder(),
-                    onTap: () {},
-                    child: const SizedBox(
-                      width: 32,
-                      height: 32,
-                      child: Icon(
-                        Icons.add_rounded,
-                        color: iosSecondaryLabel,
-                        size: 19,
-                      ),
-                    ),
-                  ),
-                );
+                return _IosFilterAddButton(onTap: () {});
               }
               final filter = _filters[index];
-              return FilterChip(
+              final selected = _selectedFilter == filter;
+              return _IosFilterChip(
                 key: Key('filter-$filter'),
-                label: Text(filter),
-                selected: _selectedFilter == filter,
-                showCheckmark: false,
-                selectedColor: selectedNavColor,
-                backgroundColor: scaffoldBgColor,
-                side: BorderSide(
-                  color: _selectedFilter == filter
-                      ? const Color(0xFFA8E7B3)
-                      : borderColor,
-                ),
-                shape: const StadiumBorder(),
-                labelStyle: TextStyle(
-                  color: _selectedFilter == filter
-                      ? const Color(0xFF248449)
-                      : iosSecondaryLabel,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
-                ),
-                visualDensity: VisualDensity.compact,
-                padding: const EdgeInsets.symmetric(horizontal: 2),
-                onSelected: (_) => setState(() => _selectedFilter = filter),
+                label: filter,
+                selected: selected,
+                onTap: () => setState(() => _selectedFilter = filter),
               );
             },
           ),
         ),
-        const SizedBox(height: 9),
+        const SizedBox(height: 8),
         if (chats.isEmpty)
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 28, vertical: 34),
@@ -179,64 +142,64 @@ class _ConversationListState extends State<ConversationList> {
   }
 }
 
-class _ContactAccessCard extends StatelessWidget {
-  const _ContactAccessCard();
+class _IosFilterChip extends StatelessWidget {
+  const _IosFilterChip({
+    super.key,
+    required this.label,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16),
-      padding: const EdgeInsets.fromLTRB(14, 12, 14, 10),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(17),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x12000000),
-            blurRadius: 18,
-            offset: Offset(0, 7),
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 160),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+        decoration: BoxDecoration(
+          color: selected ? const Color(0xFFE7F8EC) : const Color(0xFFF2F2F7),
+          borderRadius: BorderRadius.circular(18),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            color: selected ? const Color(0xFF1A7F37) : iosSecondaryLabel,
+            fontSize: 13,
+            fontWeight: FontWeight.w500,
+            height: 1,
           ),
-        ],
+        ),
       ),
-      child: Column(
-        children: [
-          const Text(
-            '允许完整联系人访问权限',
-            style: TextStyle(
-              color: textColor,
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const SizedBox(height: 5),
-          const Text(
-            '除非你允许完整访问权限，否则无法找到你的所有亲朋好友。',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: iosSecondaryLabel,
-              fontSize: 11,
-              height: 1.3,
-            ),
-          ),
-          const SizedBox(height: 9),
-          SizedBox(
-            width: double.infinity,
-            height: 29,
-            child: ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.zero,
-                backgroundColor: const Color(0xFF20C56D),
-                foregroundColor: Colors.white,
-                textStyle: const TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              child: const Text('允许访问'),
-            ),
-          ),
-        ],
+    );
+  }
+}
+
+class _IosFilterAddButton extends StatelessWidget {
+  const _IosFilterAddButton({required this.onTap});
+
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 34,
+        height: 34,
+        decoration: const BoxDecoration(
+          color: Color(0xFFF2F2F7),
+          shape: BoxShape.circle,
+        ),
+        child: const Icon(
+          Icons.add_rounded,
+          color: iosSecondaryLabel,
+          size: 18,
+        ),
       ),
     );
   }
@@ -248,7 +211,7 @@ class _LimitedContactsNotice extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Padding(
-      padding: EdgeInsets.fromLTRB(28, 19, 28, 0),
+      padding: EdgeInsets.fromLTRB(28, 22, 28, 0),
       child: Column(
         children: [
           Text.rich(
@@ -257,26 +220,26 @@ class _LimitedContactsNotice extends StatelessWidget {
               text: 'WhatsApp 没有完整的联系人访问权限，因此部分姓名可能不会显示。 ',
               style: TextStyle(
                 color: iosSecondaryLabel,
-                fontSize: 11,
+                fontSize: 12,
                 height: 1.45,
               ),
               children: [
                 TextSpan(
                   text: '允许访问权限',
-                  style: TextStyle(color: primaryColor),
+                  style: TextStyle(color: iosBlue),
                 ),
               ],
             ),
           ),
-          SizedBox(height: 13),
+          SizedBox(height: 14),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.lock_rounded, size: 10, color: iosSecondaryLabel),
+              Icon(Icons.lock_rounded, size: 11, color: iosSecondaryLabel),
               SizedBox(width: 4),
               Text(
                 '你的私人消息已进行端到端加密',
-                style: TextStyle(color: iosSecondaryLabel, fontSize: 9),
+                style: TextStyle(color: iosSecondaryLabel, fontSize: 11),
               ),
             ],
           ),

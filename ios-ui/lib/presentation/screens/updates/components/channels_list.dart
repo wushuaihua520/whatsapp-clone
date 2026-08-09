@@ -19,7 +19,7 @@ class ChannelsList extends StatelessWidget {
             children: [
               const Expanded(
                 child: Text(
-                  'Channels',
+                  '频道',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
@@ -28,18 +28,18 @@ class ChannelsList extends StatelessWidget {
                 ),
               ),
               PopupMenuButton<String>(
-                tooltip: 'Channel options',
+                tooltip: '频道选项',
                 padding: EdgeInsets.zero,
                 icon: const Icon(Icons.add_rounded, color: textColor),
                 offset: const Offset(0, 35),
                 itemBuilder: (context) => const [
                   PopupMenuItem(
                     value: 'Find channels',
-                    child: Text('Find channels'),
+                    child: Text('查找频道'),
                   ),
                   PopupMenuItem(
                     value: 'Create channel',
-                    child: Text('Create channel'),
+                    child: Text('创建频道'),
                   ),
                 ],
               ),
@@ -47,8 +47,8 @@ class ChannelsList extends StatelessWidget {
           ),
           const SizedBox(height: 2),
           const Text(
-            'Stay updated on topics that matter to you.',
-            style: TextStyle(color: subTitleTextColor, fontSize: 13),
+            '及时了解你关心的话题。',
+            style: TextStyle(color: iosSecondaryLabel, fontSize: 13),
           ),
           const SizedBox(height: 12),
           Container(
@@ -74,7 +74,7 @@ class ChannelsList extends StatelessWidget {
           OutlinedButton.icon(
             onPressed: () {},
             icon: const Icon(Icons.explore_outlined, size: 19),
-            label: const Text('Explore more channels'),
+            label: const Text('探索更多频道'),
           ),
         ],
       ),

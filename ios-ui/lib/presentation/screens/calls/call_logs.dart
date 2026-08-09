@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../../data/dummy_data.dart';
 import '../../../utils/constants.dart';
-
 import '../../../data/model/call_log_model.dart';
 
 class CallLogs extends StatelessWidget {
@@ -17,7 +16,7 @@ class CallLogs extends StatelessWidget {
         const _CreateCallLink(),
         const SizedBox(height: 22),
         const Text(
-          'Favorites',
+          '特别关注',
           style: TextStyle(
             color: textColor,
             fontSize: 18,
@@ -28,7 +27,7 @@ class CallLogs extends StatelessWidget {
         const _FavoriteContacts(),
         const SizedBox(height: 24),
         const Text(
-          'Recent',
+          '最近',
           style: TextStyle(
             color: textColor,
             fontSize: 18,
@@ -48,8 +47,8 @@ class _CreateCallLink extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: searchFieldColor,
-      borderRadius: BorderRadius.circular(18),
+      color: const Color(0xFFF2F2F7),
+      borderRadius: BorderRadius.circular(14),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: () {},
@@ -58,9 +57,9 @@ class _CreateCallLink extends StatelessWidget {
           child: Row(
             children: [
               CircleAvatar(
-                radius: 25,
-                backgroundColor: actionGreen,
-                child: Icon(Icons.link_rounded, color: blackColor, size: 25),
+                radius: 24,
+                backgroundColor: Color(0xFFE5E5EA),
+                child: Icon(Icons.link_rounded, color: primaryColor, size: 22),
               ),
               SizedBox(width: 13),
               Expanded(
@@ -68,7 +67,7 @@ class _CreateCallLink extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Create call link',
+                      '创建通话链接',
                       style: TextStyle(
                         color: textColor,
                         fontSize: 16,
@@ -77,16 +76,15 @@ class _CreateCallLink extends StatelessWidget {
                     ),
                     SizedBox(height: 3),
                     Text(
-                      'Share a link for your WhatsApp call',
+                      '分享链接，邀请他人加入 WhatsApp 通话',
                       style: TextStyle(
-                        color: subTitleTextColor,
+                        color: iosSecondaryLabel,
                         fontSize: 13,
                       ),
                     ),
                   ],
                 ),
               ),
-              Icon(Icons.chevron_right_rounded, color: subTitleTextColor),
             ],
           ),
         ),
@@ -148,7 +146,7 @@ class _AddFavorite extends StatelessWidget {
       child: Column(
         children: [
           Material(
-            color: searchFieldColor,
+            color: const Color(0xFFF2F2F7),
             shape: const CircleBorder(),
             child: InkWell(
               customBorder: const CircleBorder(),
@@ -156,13 +154,13 @@ class _AddFavorite extends StatelessWidget {
               child: const SizedBox(
                 width: 54,
                 height: 54,
-                child: Icon(Icons.add_rounded, color: primaryColor),
+                child: Icon(Icons.add_rounded, color: iosBlue),
               ),
             ),
           ),
           const SizedBox(height: 6),
           const Text(
-            'Add',
+            '添加',
             style: TextStyle(color: textColor, fontSize: 12),
           ),
         ],
@@ -192,34 +190,34 @@ class CallCard extends StatelessWidget {
       title: Text(
         callLogs.personName,
         style: TextStyle(
-          fontSize: 15,
+          fontSize: 16,
           fontWeight: FontWeight.w600,
-          color: callLogs.isMissed ? const Color(0xFFD93025) : textColor,
+          color: callLogs.isMissed ? const Color(0xFFFF3B30) : textColor,
         ),
       ),
       subtitle: Row(
         children: [
           Icon(
             callLogs.incoming ? Icons.call_received : Icons.call_made,
-            size: 17,
-            color: callLogs.isMissed ? const Color(0xFFD93025) : primaryColor,
+            size: 16,
+            color: callLogs.isMissed ? const Color(0xFFFF3B30) : primaryColor,
           ),
           const SizedBox(width: 5),
           Text(
             callLogs.time,
             style: const TextStyle(
-              color: subTitleTextColor,
-              fontSize: 13,
+              color: iosSecondaryLabel,
+              fontSize: 14,
             ),
           ),
         ],
       ),
       trailing: IconButton(
-        tooltip: isVideo ? 'Video call' : 'Voice call',
+        tooltip: isVideo ? '视频通话' : '语音通话',
         onPressed: () {},
         icon: Icon(
           isVideo ? Icons.videocam_outlined : Icons.call_outlined,
-          color: primaryColor,
+          color: iosBlue,
         ),
       ),
     );

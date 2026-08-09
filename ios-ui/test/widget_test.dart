@@ -49,8 +49,8 @@ void main() {
     await tester.tap(find.byKey(const Key('ios-tab-动态')));
     await tester.pumpAndSettle();
     expect(find.byKey(const Key('ios-动态-title')), findsOneWidget);
-    expect(find.text('Status'), findsOneWidget);
-    expect(find.text('Channels'), findsOneWidget);
+    expect(find.text('状态'), findsOneWidget);
+    expect(find.text('频道'), findsOneWidget);
 
     await tester.tap(find.byKey(const Key('ios-tab-设置')));
     await tester.pumpAndSettle();

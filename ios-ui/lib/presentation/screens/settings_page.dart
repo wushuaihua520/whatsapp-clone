@@ -14,24 +14,28 @@ class SettingsPage extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(16, 0, 16, 116),
         children: const [
           _ProfileHero(),
-          SizedBox(height: 8),
+          SizedBox(height: 14),
           _SettingsSection(
             rows: [
               _SettingsRowData(
                 icon: Icons.list_alt_rounded,
                 title: '列表',
+                tint: Color(0xFF34C759),
               ),
               _SettingsRowData(
                 icon: Icons.star_border_rounded,
                 title: '已加星标',
+                tint: Color(0xFFFFCC00),
               ),
               _SettingsRowData(
                 icon: Icons.campaign_outlined,
                 title: '群发消息',
+                tint: Color(0xFF007AFF),
               ),
               _SettingsRowData(
                 icon: Icons.devices_outlined,
                 title: '已关联的设备',
+                tint: Color(0xFF8E8E93),
               ),
             ],
           ),
@@ -41,22 +45,47 @@ class SettingsPage extends StatelessWidget {
               _SettingsRowData(
                 icon: Icons.key_rounded,
                 title: '账户',
+                tint: Color(0xFF007AFF),
               ),
               _SettingsRowData(
                 icon: Icons.lock_outline_rounded,
                 title: '隐私',
+                tint: Color(0xFF34C759),
+              ),
+              _SettingsRowData(
+                icon: Icons.face_retouching_natural,
+                title: '头像',
+                tint: Color(0xFFAF52DE),
               ),
               _SettingsRowData(
                 icon: Icons.chat_bubble_outline_rounded,
                 title: '聊天',
+                tint: Color(0xFF34C759),
               ),
               _SettingsRowData(
                 icon: Icons.notifications_none_rounded,
                 title: '通知',
+                tint: Color(0xFFFF3B30),
               ),
               _SettingsRowData(
                 icon: Icons.swap_vert_rounded,
                 title: '存储空间和数据',
+                tint: Color(0xFF007AFF),
+              ),
+            ],
+          ),
+          SizedBox(height: 18),
+          _SettingsSection(
+            rows: [
+              _SettingsRowData(
+                icon: Icons.help_outline_rounded,
+                title: '帮助',
+                tint: Color(0xFF007AFF),
+              ),
+              _SettingsRowData(
+                icon: Icons.favorite_border_rounded,
+                title: '邀请好友',
+                tint: Color(0xFFFF2D55),
               ),
             ],
           ),
@@ -75,7 +104,7 @@ class _ProfileHero extends StatelessWidget {
       children: [
         DecoratedBox(
           decoration: BoxDecoration(
-            color: Color(0xFFF0F0F2),
+            color: Color(0xFFE9E9EB),
             borderRadius: BorderRadius.all(Radius.circular(13)),
           ),
           child: Padding(
@@ -89,17 +118,17 @@ class _ProfileHero extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(height: 3),
+        SizedBox(height: 8),
         CircleAvatar(
-          radius: 37,
+          radius: 42,
           backgroundColor: Color(0xFF91DCD6),
           child: Icon(
             Icons.person_rounded,
             color: Color(0xFF137D78),
-            size: 37,
+            size: 42,
           ),
         ),
-        SizedBox(height: 6),
+        SizedBox(height: 8),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -107,18 +136,20 @@ class _ProfileHero extends StatelessWidget {
               '心如止水',
               style: TextStyle(
                 color: textColor,
-                fontSize: 19,
-                fontWeight: FontWeight.w600,
-                letterSpacing: -0.3,
+                fontSize: 26,
+                fontWeight: FontWeight.w700,
+                letterSpacing: -0.4,
               ),
             ),
-            SizedBox(width: 4),
-            Icon(
-              Icons.verified_outlined,
-              color: primaryColor,
-              size: 15,
-            ),
           ],
+        ),
+        SizedBox(height: 4),
+        Text(
+          '嘿！我正在使用 WhatsApp.',
+          style: TextStyle(
+            color: iosSecondaryLabel,
+            fontSize: 14,
+          ),
         ),
       ],
     );
@@ -134,14 +165,14 @@ class _SettingsSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: Colors.white,
-      borderRadius: BorderRadius.circular(15),
+      borderRadius: BorderRadius.circular(12),
       clipBehavior: Clip.antiAlias,
       child: Column(
         children: [
           for (var index = 0; index < rows.length; index++) ...[
             _SettingsRow(data: rows[index]),
             if (index < rows.length - 1)
-              const Divider(indent: 58, color: dividerColor),
+              const Divider(height: 1, indent: 58, color: Color(0xFFE5E5EA)),
           ],
         ],
       ),
@@ -159,27 +190,32 @@ class _SettingsRow extends StatelessWidget {
     return InkWell(
       onTap: () {},
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
         child: Row(
           children: [
-            SizedBox(
-              width: 24,
-              child: Icon(data.icon, color: textColor, size: 18),
+            Container(
+              width: 29,
+              height: 29,
+              decoration: BoxDecoration(
+                color: data.tint,
+                borderRadius: BorderRadius.circular(7),
+              ),
+              child: Icon(data.icon, color: Colors.white, size: 17),
             ),
-            const SizedBox(width: 9),
+            const SizedBox(width: 12),
             Expanded(
               child: Text(
                 data.title,
                 style: const TextStyle(
                   color: textColor,
-                  fontSize: 15,
+                  fontSize: 17,
                   fontWeight: FontWeight.w400,
                 ),
               ),
             ),
             const Icon(
               Icons.chevron_right_rounded,
-              color: iosSeparator,
+              color: Color(0xFFC7C7CC),
               size: 22,
             ),
           ],
@@ -193,8 +229,10 @@ class _SettingsRowData {
   const _SettingsRowData({
     required this.icon,
     required this.title,
+    required this.tint,
   });
 
   final IconData icon;
   final String title;
+  final Color tint;
 }

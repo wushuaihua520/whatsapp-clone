@@ -282,14 +282,12 @@ class _LiquidGlassTabBar extends StatelessWidget {
       label: '聊天',
       icon: Icons.chat_bubble_outline_rounded,
       selectedIcon: Icons.chat_bubble_rounded,
+      badge: 1,
     ),
     _IosTabDestination(
       label: '设置',
       icon: Icons.settings_outlined,
       selectedIcon: Icons.settings_rounded,
-      badge: 1,
-      badgeColor: selectedNavColor,
-      badgeTextColor: primaryColor,
     ),
   ];
 
@@ -336,11 +334,8 @@ class _IosTabButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isSettings = destination.label == '设置';
-    final color =
-        selected ? (isSettings ? primaryColor : textColor) : iosSecondaryLabel;
-    final selectedBackground =
-        isSettings ? const Color(0x80D9FDD3) : const Color(0x247A7A7A);
+    final color = selected ? textColor : iosSecondaryLabel;
+    const selectedBackground = Color(0x337A7A7A);
     return Semantics(
       selected: selected,
       button: true,
@@ -357,9 +352,6 @@ class _IosTabButton extends StatelessWidget {
             decoration: BoxDecoration(
               color: selected ? selectedBackground : Colors.transparent,
               borderRadius: BorderRadius.circular(27),
-              border: selected
-                  ? Border.all(color: const Color(0x99FFFFFF), width: 0.7)
-                  : null,
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -381,14 +373,14 @@ class _IosTabButton extends StatelessWidget {
                               const BoxConstraints(minWidth: 17, minHeight: 17),
                           padding: const EdgeInsets.symmetric(horizontal: 4),
                           alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            color: destination.badgeColor,
+                          decoration: const BoxDecoration(
+                            color: Color(0xFFFF3B30),
                             shape: BoxShape.circle,
                           ),
                           child: Text(
                             destination.badge.toString(),
-                            style: TextStyle(
-                              color: destination.badgeTextColor,
+                            style: const TextStyle(
+                              color: Colors.white,
                               fontSize: 9,
                               fontWeight: FontWeight.w700,
                             ),
@@ -423,14 +415,10 @@ class _IosTabDestination {
     required this.icon,
     required this.selectedIcon,
     this.badge,
-    this.badgeColor = const Color(0xFFFF3B30),
-    this.badgeTextColor = Colors.white,
   });
 
   final String label;
   final IconData icon;
   final IconData selectedIcon;
   final int? badge;
-  final Color badgeColor;
-  final Color badgeTextColor;
 }

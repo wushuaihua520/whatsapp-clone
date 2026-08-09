@@ -18,7 +18,7 @@ class KDummyData {
       delivered: true,
       unread: 0,
       sent: true,
-      date: DateTime(2026, 1, 29, 9, 28).toString(),
+      date: DateTime(2026, 8, 9, 9, 28).toString(),
     ),
     Participant(
       id: 2,
@@ -31,7 +31,7 @@ class KDummyData {
       delivered: true,
       sent: true,
       unread: 1,
-      date: DateTime(2026, 1, 21, 20, 18).toString(),
+      date: DateTime(2026, 8, 8, 20, 18).toString(),
     ),
   ];
 

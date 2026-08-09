@@ -21,7 +21,7 @@ class StatusHorizontal extends StatelessWidget {
               children: [
                 const Expanded(
                   child: Text(
-                    'Status',
+                    '状态',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
@@ -30,21 +30,21 @@ class StatusHorizontal extends StatelessWidget {
                   ),
                 ),
                 PopupMenuButton<String>(
-                  tooltip: 'Status options',
+                  tooltip: '状态选项',
                   padding: EdgeInsets.zero,
                   icon: const Icon(
-                    Icons.more_vert_rounded,
+                    Icons.more_horiz_rounded,
                     color: textColor,
                   ),
                   offset: const Offset(0, 35),
                   itemBuilder: (context) => const [
                     PopupMenuItem(
                       value: 'Muted updates',
-                      child: Text('Muted updates'),
+                      child: Text('已静音的动态'),
                     ),
                     PopupMenuItem(
                       value: 'Status privacy',
-                      child: Text('Status privacy'),
+                      child: Text('状态隐私'),
                     ),
                   ],
                 ),
@@ -97,7 +97,7 @@ class _MyStatusCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return _StatusCard(
       image: KImages.chatAvatar1,
-      label: 'My status',
+      label: '我的状态',
       isMine: true,
       onTap: () {},
     );
