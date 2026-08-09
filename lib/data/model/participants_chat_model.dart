@@ -10,6 +10,7 @@ class ParticipantsChat {
   final String status;
   final String contact;
   final List<Messages> messages;
+  final bool usePlaceholder;
   ParticipantsChat({
     required this.id,
     required this.participant,
@@ -17,6 +18,7 @@ class ParticipantsChat {
     required this.status,
     required this.contact,
     required this.messages,
+    this.usePlaceholder = false,
   });
 
   ParticipantsChat copyWith({
@@ -26,6 +28,7 @@ class ParticipantsChat {
     String? status,
     String? contact,
     List<Messages>? messages,
+    bool? usePlaceholder,
   }) {
     return ParticipantsChat(
       id: id ?? this.id,
@@ -34,6 +37,7 @@ class ParticipantsChat {
       status: status ?? this.status,
       contact: contact ?? this.contact,
       messages: messages ?? this.messages,
+      usePlaceholder: usePlaceholder ?? this.usePlaceholder,
     );
   }
 
@@ -45,6 +49,7 @@ class ParticipantsChat {
       'status': status,
       'contact': contact,
       'messages': messages.map((x) => x.toMap()).toList(),
+      'usePlaceholder': usePlaceholder,
     };
   }
 
@@ -56,10 +61,11 @@ class ParticipantsChat {
       status: map['status'] as String,
       contact: map['contact'] as String,
       messages: List<Messages>.from(
-        (map['messages'] as List<int>).map<Messages>(
+        (map['messages'] as List).map<Messages>(
           (x) => Messages.fromMap(x as Map<String, dynamic>),
         ),
       ),
+      usePlaceholder: map['usePlaceholder'] as bool? ?? false,
     );
   }
 
@@ -106,6 +112,9 @@ class Messages {
   final bool sent;
   final String? image;
   final String? video;
+  final String? replyTo;
+  final String? replyAuthor;
+  final bool isSticker;
   Messages({
     required this.id,
     required this.message,
@@ -116,6 +125,9 @@ class Messages {
     required this.sent,
     this.image,
     this.video,
+    this.replyTo,
+    this.replyAuthor,
+    this.isSticker = false,
   });
 
   Messages copyWith({
@@ -128,6 +140,9 @@ class Messages {
     bool? sent,
     String? image,
     String? video,
+    String? replyTo,
+    String? replyAuthor,
+    bool? isSticker,
   }) {
     return Messages(
       id: id ?? this.id,
@@ -139,6 +154,9 @@ class Messages {
       sent: sent ?? this.sent,
       image: image ?? this.image,
       video: video ?? this.video,
+      replyTo: replyTo ?? this.replyTo,
+      replyAuthor: replyAuthor ?? this.replyAuthor,
+      isSticker: isSticker ?? this.isSticker,
     );
   }
 
@@ -153,6 +171,9 @@ class Messages {
       'sent': sent,
       'image': image,
       'video': video,
+      'replyTo': replyTo,
+      'replyAuthor': replyAuthor,
+      'isSticker': isSticker,
     };
   }
 
@@ -167,6 +188,9 @@ class Messages {
       sent: map['sent'] as bool,
       image: map['image'] != null ? map['image'] as String : null,
       video: map['video'] != null ? map['video'] as String : null,
+      replyTo: map['replyTo'] as String?,
+      replyAuthor: map['replyAuthor'] as String?,
+      isSticker: map['isSticker'] as bool? ?? false,
     );
   }
 

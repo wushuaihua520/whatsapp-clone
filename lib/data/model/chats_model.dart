@@ -1,6 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
+
 class Participant {
   final int id;
   final String avatar;
@@ -12,8 +14,12 @@ class Participant {
   final bool delivered;
   final int unread;
   final bool seen;
-
   final String date;
+  final String? dateLabel;
+  final bool isVideoPreview;
+  final bool usePlaceholderAvatar;
+  final Color? placeholderColor;
+
   Participant({
     required this.id,
     required this.avatar,
@@ -26,6 +32,10 @@ class Participant {
     required this.unread,
     required this.seen,
     required this.date,
+    this.dateLabel,
+    this.isVideoPreview = false,
+    this.usePlaceholderAvatar = false,
+    this.placeholderColor,
   });
 
   Participant copyWith({
@@ -40,6 +50,10 @@ class Participant {
     int? unread,
     bool? seen,
     String? date,
+    String? dateLabel,
+    bool? isVideoPreview,
+    bool? usePlaceholderAvatar,
+    Color? placeholderColor,
   }) {
     return Participant(
       id: id ?? this.id,
@@ -53,6 +67,11 @@ class Participant {
       unread: unread ?? this.unread,
       seen: seen ?? this.seen,
       date: date ?? this.date,
+      dateLabel: dateLabel ?? this.dateLabel,
+      isVideoPreview: isVideoPreview ?? this.isVideoPreview,
+      usePlaceholderAvatar:
+          usePlaceholderAvatar ?? this.usePlaceholderAvatar,
+      placeholderColor: placeholderColor ?? this.placeholderColor,
     );
   }
 
@@ -69,6 +88,9 @@ class Participant {
       'unread': unread,
       'seen': seen,
       'date': date,
+      'dateLabel': dateLabel,
+      'isVideoPreview': isVideoPreview,
+      'usePlaceholderAvatar': usePlaceholderAvatar,
     };
   }
 
@@ -85,6 +107,9 @@ class Participant {
       unread: map['unread'] as int,
       seen: map['seen'] as bool,
       date: map['date'] as String,
+      dateLabel: map['dateLabel'] as String?,
+      isVideoPreview: map['isVideoPreview'] as bool? ?? false,
+      usePlaceholderAvatar: map['usePlaceholderAvatar'] as bool? ?? false,
     );
   }
 
@@ -92,41 +117,4 @@ class Participant {
 
   factory Participant.fromJson(String source) =>
       Participant.fromMap(json.decode(source) as Map<String, dynamic>);
-
-  @override
-  String toString() {
-    return 'Participant(id: $id, avatar: $avatar, name: $name, messageFrom: $messageFrom, lastMessage: $lastMessage, isImage: $isImage, sent: $sent, delivered: $delivered, unread: $unread, seen: $seen, date: $date)';
-  }
-
-  @override
-  bool operator ==(covariant Participant other) {
-    if (identical(this, other)) return true;
-
-    return other.id == id &&
-        other.avatar == avatar &&
-        other.name == name &&
-        other.messageFrom == messageFrom &&
-        other.lastMessage == lastMessage &&
-        other.isImage == isImage &&
-        other.sent == sent &&
-        other.delivered == delivered &&
-        other.unread == unread &&
-        other.seen == seen &&
-        other.date == date;
-  }
-
-  @override
-  int get hashCode {
-    return id.hashCode ^
-        avatar.hashCode ^
-        name.hashCode ^
-        messageFrom.hashCode ^
-        lastMessage.hashCode ^
-        isImage.hashCode ^
-        sent.hashCode ^
-        delivered.hashCode ^
-        unread.hashCode ^
-        seen.hashCode ^
-        date.hashCode;
-  }
 }

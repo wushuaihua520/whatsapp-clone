@@ -1,12 +1,12 @@
-import 'dart:io';
+import 'dart:io' show Platform;
 
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 
 import '../../../../utils/constants.dart';
-import '../../../../utils/k_images.dart';
 import '../../../../utils/utils.dart';
 import '../controller/message_controller.dart';
 
@@ -21,165 +21,161 @@ class _TextEmojiInputFieldState extends State<TextEmojiInputField> {
   final TextEditingController controller = TextEditingController();
   bool enableEmoji = false;
   bool isTyping = false;
+
+  bool get _isApple {
+    if (kIsWeb) return false;
+    try {
+      return Platform.isIOS || Platform.isMacOS;
+    } catch (_) {
+      return false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
+    final bottom = MediaQuery.of(context).padding.bottom;
     return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 6),
-          child: Row(children: [
-            Expanded(
-              child: Container(
-                height: 48.h,
-                decoration: BoxDecoration(
-                    color: Color(0xFFF7F7F8),
-                    borderRadius: BorderRadius.circular(40)),
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: Row(children: [
-                  GestureDetector(
-                    onTap: () {
-                      if (FocusScope.of(context).hasFocus) {
-                        FocusScope.of(context).unfocus();
-                      }
-                      if (enableEmoji) {
-                        FocusScope.of(context).canRequestFocus;
-                      }
-                      enableEmoji = !enableEmoji;
-                      setState(() {});
-                    },
-                    child: Icon(
-                      enableEmoji
-                          ? Icons.keyboard
-                          : Icons.emoji_emotions_outlined,
-                      color: subTitleTextColor,
-                      size: 30,
-                    ),
-                  ),
-                  Expanded(
-                      child: TextField(
-                          cursorColor: primaryColor,
-                          cursorWidth: 3,
-                          controller: controller,
-                          onChanged: (v) {
-                            if (v.length > 0 && isTyping == false) {
-                              isTyping = true;
-                              setState(() {});
-                            } else if (v.length == 0 && isTyping == true) {
-                              isTyping = false;
-                              setState(() {});
-                            }
-                          },
-                          onTap: () {
-                            if (mounted) {
-                              setState(() {
-                                if (enableEmoji) {
-                                  enableEmoji = false;
-                                }
-                              });
-                            }
-                          },
-                          decoration: InputDecoration(
-                            contentPadding:
-                                EdgeInsets.symmetric(horizontal: 10),
-                            hintText: "Message",
-                            hintStyle: TextStyle(fontSize: 16.sp),
-                            filled: false,
-                            border: InputBorder.none,
-                            focusedBorder: InputBorder.none,
-                            enabledBorder: InputBorder.none,
-                          ))),
-                  RotatedBox(
-                    quarterTurns: 100,
-                    child: Icon(
-                      Icons.attach_file,
-                      color: subTitleTextColor,
-                      size: 30,
-                    ),
-                  ),
-                  Utils.horizontalSpace(16),
-                  GestureDetector(
-                    onTap: () {
-                      Utils.openCamera();
-                    },
-                    child: SvgPicture.asset(
-                      KImages.cameraFill,
-                      height: 24,
-                    ),
-                  ),
-                ]),
-              ),
-            ),
-            Utils.horizontalSpace(8),
-            GestureDetector(
-              onTap: () {
-                if (isTyping) {
-                  MessageController.addMessage(controller.text);
-                  controller.clear();
-                  isTyping = false;
-                  if (mounted) setState(() {});
-                }
-              },
-              child: CircleAvatar(
-                radius: 24.r,
-                backgroundColor: primaryColor,
-                child: Icon(
-                  isTyping ? Icons.send : Icons.mic,
-                  color: Colors.white,
-                  size: 24,
-                ),
-              ),
-            )
-          ]),
-        ),
-        Utils.verticalSpace(6),
-        SizedBox(
-          height: size.height * (enableEmoji ? 0.4 : 0),
-          child: EmojiPicker(
-            onEmojiSelected: (Category? category, Emoji emoji) {
-              // Do something when emoji is tapped (optional)
-            },
-            onBackspacePressed: () {
-              // Do something when the user taps the backspace button (optional)
-              // Set it to null to hide the Backspace-Button
-            },
-            textEditingController:
-                controller, // pass here the same [TextEditingController] that is connected to your input field, usually a [TextFormField]
-            config: Config(
-              columns: 7,
-              emojiSizeMax: 24 *
-                  (Platform.isAndroid
-                      ? 1
-                      : 1.30), // Issue: https://github.com/flutter/flutter/issues/28894
-              verticalSpacing: 0,
-              horizontalSpacing: 0,
-
-              gridPadding: EdgeInsets.zero,
-              initCategory: Category.RECENT,
-              bgColor: Color(0xFFF2F2F2),
-              indicatorColor: Colors.blue,
-              iconColor: Colors.grey,
-              iconColorSelected: Colors.blue,
-              backspaceColor: Colors.blue,
-              skinToneDialogBgColor: Colors.white,
-              skinToneIndicatorColor: Colors.grey,
-              enableSkinTones: true,
-              recentTabBehavior: RecentTabBehavior.RECENT,
-              recentsLimit: 28,
-              noRecents: const Text(
-                'No Recents',
-                style: TextStyle(fontSize: 20, color: Colors.black26),
-                textAlign: TextAlign.center,
-              ), // Needs to be const Widget
-              loadingIndicator:
-                  const SizedBox.shrink(), // Needs to be const Widget
-              tabIndicatorAnimDuration: kTabScrollDuration,
-              categoryIcons: const CategoryIcons(),
-              buttonMode: ButtonMode.MATERIAL,
+        Container(
+          padding:
+              EdgeInsets.fromLTRB(8.w, 6.h, 8.w, bottom > 0 ? bottom : 8.h),
+          decoration: BoxDecoration(
+            color: Colors.white.withValues(alpha: 0.94),
+            border: const Border(
+              top: BorderSide(color: Color(0xFFE5E5EA), width: 0.5),
             ),
           ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(bottom: 6.h),
+                child: Icon(
+                  CupertinoIcons.plus,
+                  size: 28.sp,
+                  color: const Color(0xFF007AFF),
+                ),
+              ),
+              SizedBox(width: 6.w),
+              Expanded(
+                child: Container(
+                  constraints: BoxConstraints(minHeight: 36.h),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(
+                      color: const Color(0xFFD1D1D6),
+                      width: 0.8,
+                    ),
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 12.w),
+                  child: TextField(
+                    controller: controller,
+                    cursorColor: primaryColor,
+                    cursorWidth: 2,
+                    minLines: 1,
+                    maxLines: 5,
+                    style: TextStyle(fontSize: 16.sp, color: Colors.black),
+                    onChanged: (v) {
+                      final typing = v.isNotEmpty;
+                      if (typing != isTyping) {
+                        setState(() => isTyping = typing);
+                      }
+                    },
+                    onTap: () {
+                      if (enableEmoji) {
+                        setState(() => enableEmoji = false);
+                      }
+                    },
+                    decoration: InputDecoration(
+                      isDense: true,
+                      contentPadding: EdgeInsets.symmetric(vertical: 8.h),
+                      hintText: '',
+                      filled: false,
+                      border: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(width: 8.w),
+              Padding(
+                padding: EdgeInsets.only(bottom: 4.h),
+                child: Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        if (FocusScope.of(context).hasFocus) {
+                          FocusScope.of(context).unfocus();
+                        }
+                        setState(() => enableEmoji = !enableEmoji);
+                      },
+                      child: Icon(
+                        enableEmoji
+                            ? CupertinoIcons.keyboard
+                            : CupertinoIcons.smiley,
+                        size: 26.sp,
+                        color: const Color(0xFF8E8E93),
+                      ),
+                    ),
+                    SizedBox(width: 10.w),
+                    GestureDetector(
+                      onTap: () => Utils.openCamera(),
+                      child: Icon(
+                        CupertinoIcons.camera,
+                        size: 24.sp,
+                        color: const Color(0xFF8E8E93),
+                      ),
+                    ),
+                    SizedBox(width: 10.w),
+                    GestureDetector(
+                      onTap: () {
+                        if (isTyping) {
+                          MessageController.addMessage(controller.text);
+                          controller.clear();
+                          setState(() => isTyping = false);
+                        }
+                      },
+                      child: Icon(
+                        isTyping
+                            ? CupertinoIcons.paperplane_fill
+                            : CupertinoIcons.mic,
+                        size: 24.sp,
+                        color: isTyping
+                            ? primaryColor
+                            : const Color(0xFF8E8E93),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
+        if (enableEmoji)
+          SizedBox(
+            height: 280.h,
+            child: EmojiPicker(
+              textEditingController: controller,
+              onEmojiSelected: (category, emoji) {
+                if (!isTyping) setState(() => isTyping = true);
+              },
+              config: Config(
+                columns: 8,
+                emojiSizeMax: 28 * (_isApple ? 1.2 : 1.0),
+                bgColor: const Color(0xFFF2F2F2),
+                indicatorColor: primaryColor,
+                iconColorSelected: primaryColor,
+                backspaceColor: primaryColor,
+                noRecents: const Text(
+                  'No Recents',
+                  style: TextStyle(fontSize: 20, color: Colors.black26),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ),
       ],
     );
   }
