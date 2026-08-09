@@ -172,6 +172,16 @@ class KDummyData {
         isSticker: true,
       ),
       Messages(
+        id: 71,
+        message: "😊",
+        sender: "participant",
+        date: DateTime(2026, 1, 19, 18, 56),
+        seen: true,
+        delivered: true,
+        sent: true,
+        isSticker: true,
+      ),
+      Messages(
         id: 8,
         message: "你好呀",
         sender: "user",
