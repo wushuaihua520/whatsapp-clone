@@ -73,6 +73,14 @@ void main() {
     expect(find.text('联系人信息'), findsOneWidget);
     expect(find.text('新建联系人'), findsOneWidget);
     expect(find.text('媒体、链接和文档'), findsOneWidget);
+    await tester.scrollUntilVisible(
+      find.text('加密'),
+      300,
+      scrollable: find.descendant(
+        of: find.byKey(const Key('ios-contact-info-list')),
+        matching: find.byType(Scrollable),
+      ),
+    );
     expect(find.text('加密'), findsOneWidget);
   });
 }
