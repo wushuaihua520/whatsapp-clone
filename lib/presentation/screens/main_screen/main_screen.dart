@@ -1,14 +1,15 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
+
+import '../../../utils/constants.dart';
+import '../../../widgets/ios_glass.dart';
 import '../../core/routes/routes_name.dart';
 import '../calls/call_logs.dart';
-import '../../../utils/constants.dart';
-import '../../../utils/k_images.dart';
-import '../../../utils/utils.dart';
 import '../chats/controller/message_controller.dart';
 import '../chats/participants_list.dart';
 import '../community/community_page.dart';
+import '../profile/profile_page.dart';
 import '../updates/updates_page.dart';
 
 class MainScreen extends StatefulWidget {
@@ -18,221 +19,262 @@ class MainScreen extends StatefulWidget {
   State<MainScreen> createState() => _MainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
-  late TabController tabController;
-  int selectedTab = 0;
+class _MainScreenState extends State<MainScreen> {
+  int _selectedIndex = 3; // 聊天
+
+  final _pages = const [
+    UpdatesPage(),
+    CallLogs(),
+    CommunityPage(),
+    ConversationList(),
+    ProfilePage(),
+  ];
 
   @override
   void initState() {
-    tabController = TabController(length: 4, vsync: this);
     MessageController.init();
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final tab = Uri.base.queryParameters['tab'];
+      if (tab != null) {
+        final i = int.tryParse(tab);
+        if (i != null && i >= 0 && i < _pages.length) {
+          setState(() => _selectedIndex = i);
+        }
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    return DefaultTabController(
-      length: 4,
-      initialIndex: 1,
-      child: Scaffold(
-        appBar: AppBar(
-          toolbarHeight: 60.h,
-          backgroundColor: primaryColor,
-          leading: SizedBox(),
-          leadingWidth: Utils.kDefaultSpace,
-          title: Text(
-            "WhatsApp",
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.w400,
-            ),
-          ),
-          titleSpacing: 0,
-          actions: [
-            IconButton(
-                onPressed: () {
-                  Utils.openCamera();
-                },
-                icon: SvgPicture.asset(KImages.camera)),
-            if (selectedTab != 2)
-              IconButton(
-                  onPressed: () {}, icon: SvgPicture.asset(KImages.search)),
-            PopupMenuButton(
-                icon: Icon(Icons.more_vert),
-                offset: Offset(0, 60),
-                color: scaffoldBgColor,
-                elevation: 1,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                itemBuilder: (context) {
-                  return <PopupMenuEntry>[
-                    PopupMenuItem(
-                      child: Text("New Group "),
-                    ),
-                    PopupMenuItem(
-                      child: Text("New boradcast"),
-                    ),
-                    PopupMenuItem(
-                      child: Text("Linked devices"),
-                    ),
-                    PopupMenuItem(
-                      child: Text("Starred messages"),
-                    ),
-                    PopupMenuItem(
-                      child: Text("Settins"),
-                    ),
-                  ];
-                })
-          ],
-          bottom: TabBar(
-              controller: tabController,
-              onTap: (v) {
-                setState(() {
-                  selectedTab = v;
-                });
+    final bottomInset = MediaQuery.of(context).padding.bottom;
+    final isProfile = _selectedIndex == 4;
+    return Scaffold(
+      backgroundColor: isProfile ? settingsBgColor : scaffoldBgColor,
+      // Let body paint under the glass tab bar so blur is visible.
+      extendBody: true,
+      body: IndexedStack(
+        index: _selectedIndex,
+        children: _pages,
+      ),
+      bottomNavigationBar: _IosTabBar(
+        selectedIndex: _selectedIndex,
+        bottomInset: bottomInset,
+        onTap: (i) => setState(() => _selectedIndex = i),
+      ),
+      floatingActionButton: (_selectedIndex == 1 || _selectedIndex == 0)
+          ? FloatingActionButton(
+              onPressed: () {
+                Navigator.pushNamed(context, RouteNames.contactPage);
               },
-              padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-              indicatorColor: Colors.white,
-              indicatorWeight: 3,
-              isScrollable: true,
-              indicatorSize: TabBarIndicatorSize.tab,
-              indicatorPadding: EdgeInsets.only(top: Utils.kDefaultSpace / 20),
-              unselectedLabelStyle: TextStyle(
-                  fontSize: 14.sp,
-                  color: subTitleTextColor,
-                  fontWeight: FontWeight.w600),
-              labelPadding: EdgeInsets.only(bottom: 0),
-              labelStyle: TextStyle(
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w600,
+              backgroundColor: primaryColor,
+              elevation: 2,
+              child: Icon(
+                _selectedIndex == 1
+                    ? CupertinoIcons.phone_fill
+                    : CupertinoIcons.camera_fill,
+                color: Colors.white,
               ),
-              tabs: [
-                SizedBox(
-                    width: size.width * 0.1,
-                    child: Tab(child: Icon(Icons.groups_2_rounded))),
-                SizedBox(
-                    width: size.width * 0.3,
-                    child: Tab(
-                        child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text("Chats"),
-                        Utils.horizontalSpace(6),
-                        CircleAvatar(
-                          backgroundColor: Colors.white,
-                          radius: 12,
-                          child: Text(
-                            "6",
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: primaryColor,
-                            ),
-                          ),
-                        )
-                      ],
-                    ))),
-                SizedBox(
-                    width: size.width * 0.3,
-                    child: Tab(child: Text("Updates"))),
-                SizedBox(
-                    width: size.width * 0.3, child: Tab(child: Text("Calls"))),
-              ]),
+            )
+          : null,
+    );
+  }
+}
+
+class _IosTabBar extends StatelessWidget {
+  const _IosTabBar({
+    required this.selectedIndex,
+    required this.onTap,
+    required this.bottomInset,
+  });
+
+  final int selectedIndex;
+  final ValueChanged<int> onTap;
+  final double bottomInset;
+
+  @override
+  Widget build(BuildContext context) {
+    final isProfile = selectedIndex == 4;
+    if (isProfile) {
+      return Padding(
+        padding: EdgeInsets.fromLTRB(
+          16,
+          0,
+          16,
+          bottomInset > 0 ? bottomInset : 10,
         ),
-        body: TabBarView(controller: tabController, children: [
-          CommunityPage(),
-          ConversationList(),
-          UpdatesPage(),
-          CallLogs(),
-        ]),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-        floatingActionButton: selectedTab == 0
-            ? SizedBox()
-            : Stack(
-                // mainAxisSize: MainAxisSize.min,
-                clipBehavior: Clip.none,
-                children: [
-                  // if (selectedTab == 2)
-                  Positioned(
-                    bottom: selectedTab == 2 ? 70 : 0,
-                    child: FloatingActionButton(
-                      onPressed: () {
-                        press(selectedTab);
-                      },
-                      elevation: 0,
-                      hoverElevation: 2,
-                      child: AnimatedContainer(
-                        duration: Duration(milliseconds: 500),
-                        curve: Curves.ease,
-                        height: 40.h,
-                        width: 40.w,
-                        padding: EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                            color: Colors.green[100],
-                            borderRadius: BorderRadius.circular(8)),
-                        child: Icon(
-                          Icons.edit,
-                          color: primaryColor,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Utils.verticalSpace(10),
-                  FloatingActionButton(
-                    onPressed: () {
-                      press(selectedTab);
-                    },
-                    child: Container(
-                      height: 50.h,
-                      width: 50.w,
-                      padding: EdgeInsets.all(14),
-                      decoration: BoxDecoration(
-                          color: primaryColor,
-                          borderRadius: BorderRadius.circular(12)),
-                      child: getIcon(selectedTab),
-                    ),
-                  ),
-                ],
-              ),
+        child: _FloatingTabBar(
+          selectedIndex: selectedIndex,
+          onTap: onTap,
+        ),
+      );
+    }
+
+    return IosGlass(
+      sigma: 40,
+      tint: const Color(0x99F2F2F7),
+      border: Border(
+        top: BorderSide(
+          color: Colors.white.withValues(alpha: 0.55),
+          width: 0.6,
+        ),
+      ),
+      child: SafeArea(
+        top: false,
+        child: SizedBox(
+          height: 54.h,
+          child: Row(
+            children: List.generate(5, (i) {
+              return Expanded(
+                child: _TabItem(
+                  index: i,
+                  selected: selectedIndex == i,
+                  floating: false,
+                  onTap: () => onTap(i),
+                ),
+              );
+            }),
+          ),
+        ),
       ),
     );
   }
+}
 
-  Widget getIcon(int index) {
+class _FloatingTabBar extends StatelessWidget {
+  const _FloatingTabBar({
+    required this.selectedIndex,
+    required this.onTap,
+  });
+
+  final int selectedIndex;
+  final ValueChanged<int> onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return IosGlass(
+      sigma: 40,
+      tint: const Color(0xA8FFFFFF),
+      frostImage: null,
+      borderRadius: BorderRadius.circular(28),
+      border: Border.all(
+        color: Colors.white.withValues(alpha: 0.7),
+        width: 0.9,
+      ),
+      shadows: [
+        BoxShadow(
+          color: Colors.black.withValues(alpha: 0.12),
+          blurRadius: 28,
+          offset: const Offset(0, 10),
+        ),
+      ],
+      child: SizedBox(
+        height: 64,
+        child: Row(
+          children: List.generate(5, (i) {
+            return Expanded(
+              child: _TabItem(
+                index: i,
+                selected: selectedIndex == i,
+                floating: true,
+                onTap: () => onTap(i),
+              ),
+            );
+          }),
+        ),
+      ),
+    );
+  }
+}
+
+class _TabItem extends StatelessWidget {
+  const _TabItem({
+    required this.index,
+    required this.selected,
+    required this.onTap,
+    required this.floating,
+  });
+
+  final int index;
+  final bool selected;
+  final VoidCallback onTap;
+  final bool floating;
+
+  static const _labels = [
+    '更新',
+    '通话',
+    '社群',
+    '聊天',
+    '自己',
+  ];
+
+  IconData _icon(bool filled) {
     switch (index) {
+      case 0:
+        return CupertinoIcons.arrow_2_circlepath;
       case 1:
-        return SvgPicture.asset(
-          KImages.message,
-        );
+        return filled ? CupertinoIcons.phone_fill : CupertinoIcons.phone;
       case 2:
-        return SvgPicture.asset(
-          KImages.cameraFillWhite,
-        );
+        return filled
+            ? CupertinoIcons.person_3_fill
+            : CupertinoIcons.person_3;
       case 3:
-        return SvgPicture.asset(
-          KImages.phone,
-        );
+        return filled
+            ? CupertinoIcons.chat_bubble_fill
+            : CupertinoIcons.chat_bubble;
+      case 4:
+        return filled
+            ? CupertinoIcons.person_crop_circle_fill
+            : CupertinoIcons.person_crop_circle;
       default:
-        return SizedBox();
+        return CupertinoIcons.circle;
     }
   }
 
-  press(int index) {
-    switch (index) {
-      case 1:
-        Navigator.pushNamed(context, RouteNames.contactPage);
-        break;
-      case 2:
-        Utils.openCamera();
-        break;
-      case 3:
-        Navigator.pushNamed(context, RouteNames.contactPage);
-        break;
-      default:
-        null;
-        break;
-    }
+  @override
+  Widget build(BuildContext context) {
+    const activeColor = Color(0xFF1C1C1E);
+    const inactiveColor = Color(0xFF8E8E93);
+
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: onTap,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 180),
+            curve: Curves.easeOut,
+            padding: EdgeInsets.symmetric(
+              horizontal: floating ? 12 : 14,
+              vertical: floating ? 6 : 4,
+            ),
+            decoration: BoxDecoration(
+              color: selected
+                  ? (floating ? accentMint : const Color(0xFF3A3A3C))
+                  : Colors.transparent,
+              borderRadius: BorderRadius.circular(18),
+            ),
+            child: Icon(
+              _icon(selected),
+              size: 22,
+              color: selected
+                  ? (floating ? const Color(0xFF1C1C1E) : Colors.white)
+                  : inactiveColor,
+            ),
+          ),
+          const SizedBox(height: 2),
+          Text(
+            _labels[index],
+            style: TextStyle(
+              fontSize: 10,
+              fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
+              color: selected ? activeColor : inactiveColor,
+              letterSpacing: -0.2,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

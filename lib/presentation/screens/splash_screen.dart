@@ -13,8 +13,8 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
-    Future.delayed(Duration(seconds: 2)).then(
-        (value) => Navigator.popAndPushNamed(context, RouteNames.welcome));
+    Future.delayed(const Duration(milliseconds: 800)).then(
+        (value) => Navigator.popAndPushNamed(context, RouteNames.mainScreen));
     super.initState();
   }
 

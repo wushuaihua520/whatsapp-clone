@@ -1,11 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import '../../../data/dummy_data.dart';
 import '../../../utils/constants.dart';
-import 'package:whatsapp_clone/utils/k_images.dart';
-import 'package:whatsapp_clone/utils/utils.dart';
-
+import '../../../utils/strings.dart';
 import '../../../data/model/call_log_model.dart';
 
 class CallLogs extends StatelessWidget {
@@ -13,96 +11,124 @@ class CallLogs extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ListTile(
-            contentPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 20),
-            leading: CircleAvatar(
-              radius: 35,
-              backgroundColor: primaryColor,
-              child: Icon(
-                Icons.link,
-                color: Colors.white,
-              ),
-            ),
-            title: Text(
-              "Create call link",
-              style: TextStyle(
-                fontSize: 16.sp,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            subtitle: Text(
-              "Share a link for your WhatsApp call",
-              style: TextStyle(
-                fontSize: 13.sp,
-                fontWeight: FontWeight.w400,
+    final top = MediaQuery.of(context).padding.top;
+    return ColoredBox(
+      color: Colors.white,
+      child: CustomScrollView(
+        physics: const BouncingScrollPhysics(
+          parent: AlwaysScrollableScrollPhysics(),
+        ),
+        slivers: [
+          SliverToBoxAdapter(child: SizedBox(height: top + 8)),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.w),
+              child: Text(
+                KStrings.calls,
+                style: TextStyle(
+                  fontSize: 34.sp,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.black,
+                ),
               ),
             ),
           ),
-          Text(
-            "Recent",
-            style: TextStyle(
-              fontSize: 16.sp,
-              fontWeight: FontWeight.w600,
+          SliverToBoxAdapter(
+            child: ListTile(
+              contentPadding:
+                  EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+              leading: CircleAvatar(
+                radius: 26,
+                backgroundColor: searchBarBg,
+                child: Icon(
+                  CupertinoIcons.link,
+                  color: primaryColor,
+                  size: 22.sp,
+                ),
+              ),
+              title: Text(
+                "创建通话链接",
+                style: TextStyle(
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              subtitle: Text(
+                "分享链接以发起 WhatsApp 通话",
+                style: TextStyle(
+                  fontSize: 13.sp,
+                  color: secondaryLabel,
+                ),
+              ),
             ),
           ),
-          ...List.generate(
-            KDummyData.callHistory.length,
-            (index) => CallCard(callLogs: KDummyData.callHistory[index]),
-          )
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(16.w, 8.h, 16.w, 8.h),
+              child: Text(
+                "最近",
+                style: TextStyle(
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ),
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                final log = KDummyData.callHistory[index];
+                return _CallTile(log: log);
+              },
+              childCount: KDummyData.callHistory.length,
+            ),
+          ),
         ],
       ),
     );
   }
 }
 
-class CallCard extends StatelessWidget {
-  const CallCard({
-    super.key,
-    required this.callLogs,
-  });
-  final CallLog callLogs;
+class _CallTile extends StatelessWidget {
+  const _CallTile({required this.log});
+  final CallLog log;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      contentPadding: EdgeInsets.symmetric(horizontal: 6, vertical: 8),
+      contentPadding: EdgeInsets.symmetric(horizontal: 16.w),
       leading: CircleAvatar(
-        radius: 35,
-        backgroundColor: Colors.green,
-        backgroundImage: AssetImage(KImages.chatAvatar1),
+        radius: 26,
+        backgroundImage: AssetImage(log.avatar),
       ),
       title: Text(
-        callLogs.personName,
+        log.personName,
         style: TextStyle(
           fontSize: 16.sp,
-          fontWeight: FontWeight.w500,
-          color: callLogs.isMissed ? Colors.red : textColor,
+          fontWeight: FontWeight.w600,
+          color: log.isMissed ? Colors.red : Colors.black,
         ),
       ),
       subtitle: Row(
         children: [
           Icon(
-            callLogs.incoming ? Icons.call_received : Icons.call_made,
-            size: 20,
-            color: callLogs.isMissed ? Colors.red : Colors.green,
+            log.incoming
+                ? CupertinoIcons.arrow_down_left
+                : CupertinoIcons.arrow_up_right,
+            size: 14.sp,
+            color: log.isMissed ? Colors.red : secondaryLabel,
           ),
-          Utils.horizontalSpace(6),
+          SizedBox(width: 4.w),
           Text(
-            callLogs.time,
-            style: TextStyle(
-              fontSize: 13.sp,
-              fontWeight: FontWeight.w400,
-            ),
+            log.time,
+            style: TextStyle(fontSize: 13.sp, color: secondaryLabel),
           ),
         ],
       ),
-      trailing: SvgPicture.asset(
-        callLogs.callType == "audio" ? KImages.phone : KImages.video,
+      trailing: Icon(
+        log.callType.toLowerCase() == 'video'
+            ? CupertinoIcons.videocam
+            : CupertinoIcons.phone,
         color: primaryColor,
       ),
     );
