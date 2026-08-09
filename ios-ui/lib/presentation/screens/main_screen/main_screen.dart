@@ -337,9 +337,8 @@ class _IosTabButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isSettings = destination.label == '设置';
-    final color = selected
-        ? (isSettings ? primaryColor : textColor)
-        : iosSecondaryLabel;
+    final color =
+        selected ? (isSettings ? primaryColor : textColor) : iosSecondaryLabel;
     final selectedBackground =
         isSettings ? const Color(0x80D9FDD3) : const Color(0x247A7A7A);
     return Semantics(
