@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
 import '../core/routes/routes_name.dart';
 import '../../utils/k_images.dart';
@@ -24,9 +24,9 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CupertinoPageScaffold(
       backgroundColor: scaffoldBgColor,
-      body: SafeArea(
+      child: SafeArea(
         child: Stack(
           children: [
             Center(
@@ -34,16 +34,9 @@ class _SplashScreenState extends State<SplashScreen> {
                 width: 88,
                 height: 88,
                 padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFF0FFF4),
+                decoration: const BoxDecoration(
+                  color: Color(0xFFF0FFF4),
                   shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                      color: actionGreen.withOpacity(0.12),
-                      blurRadius: 24,
-                      spreadRadius: 6,
-                    ),
-                  ],
                 ),
                 child: Image.asset(KImages.logo),
               ),
@@ -57,30 +50,19 @@ class _SplashScreenState extends State<SplashScreen> {
                   Text(
                     'from',
                     style: TextStyle(
-                      color: subTitleTextColor,
+                      color: CupertinoColors.systemGrey,
                       fontSize: 12,
                     ),
                   ),
                   SizedBox(height: 5),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.all_inclusive_rounded,
-                        color: primaryColor,
-                        size: 21,
-                      ),
-                      SizedBox(width: 6),
-                      Text(
-                        'Meta',
-                        style: TextStyle(
-                          color: primaryColor,
-                          fontSize: 17,
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: -0.2,
-                        ),
-                      ),
-                    ],
+                  Text(
+                    'Meta',
+                    style: TextStyle(
+                      color: primaryColor,
+                      fontSize: 17,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: -0.2,
+                    ),
                   ),
                 ],
               ),

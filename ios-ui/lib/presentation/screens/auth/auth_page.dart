@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
-import '../../../widgets/custom_button.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/strings.dart';
 import '../../core/routes/routes_name.dart';
@@ -10,167 +9,92 @@ class AuthPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        centerTitle: true,
-        title: Text(
+    return CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+        middle: Text(
           KStrings.enterPhoneTitle,
           style: const TextStyle(
-            fontSize: 18,
+            fontSize: 17,
             fontWeight: FontWeight.w600,
             color: primaryColor,
           ),
         ),
-        actions: [
-          PopupMenuButton<String>(
-              tooltip: 'More options',
-              icon: const Icon(Icons.more_vert_rounded, color: textColor),
-              itemBuilder: (context) {
-                return const <PopupMenuEntry<String>>[
-                  PopupMenuItem<String>(
-                    value: 'companion',
-                    child: Text('Link as companion device'),
-                  ),
-                  PopupMenuItem<String>(
-                    value: 'help',
-                    child: Text('Help'),
-                  ),
-                ];
-              }),
-          const SizedBox(width: 4),
-        ],
+        trailing: CupertinoButton(
+          padding: EdgeInsets.zero,
+          minSize: 0,
+          onPressed: () {},
+          child: const Icon(CupertinoIcons.ellipsis, color: textColor),
+        ),
       ),
-      body: SafeArea(
+      child: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(28, 12, 28, 20),
+          padding: const EdgeInsets.fromLTRB(24, 24, 24, 18),
           child: Column(
             children: [
-              Text.rich(
+              const Text(
+                'WhatsApp will need to verify your phone number.',
                 textAlign: TextAlign.center,
-                TextSpan(
-                  text: KStrings.verifyAccountText,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    height: 1.45,
-                    color: textColor,
-                  ),
-                  children: [
-                    TextSpan(
-                      text: KStrings.myNumber,
-                      style: const TextStyle(color: Color(0xFF027EB5)),
-                    ),
-                  ],
+                style: TextStyle(
+                  color: CupertinoColors.systemGrey,
+                  fontSize: 14,
+                  height: 1.4,
                 ),
               ),
               const SizedBox(height: 28),
-              ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 310),
-                child: DropdownButtonFormField<String>(
-                  value: 'Bangladesh',
-                  isExpanded: true,
-                  alignment: Alignment.center,
-                  icon: const Icon(
-                    Icons.arrow_drop_down_rounded,
-                    color: primaryColor,
-                  ),
-                  decoration: const InputDecoration(
-                    filled: false,
-                    contentPadding: EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 10,
+              CupertinoButton(
+                padding: EdgeInsets.zero,
+                onPressed: () {},
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'United States',
+                      style: TextStyle(color: iosBlue, fontSize: 16),
                     ),
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: primaryColor, width: 1.5),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: primaryColor, width: 2),
-                    ),
-                  ),
-                  items: const [
-                    DropdownMenuItem(
-                      value: 'Bangladesh',
-                      child: Center(child: Text('Bangladesh')),
-                    ),
-                    DropdownMenuItem(
-                      value: 'United States',
-                      child: Center(child: Text('United States')),
-                    ),
-                    DropdownMenuItem(
-                      value: 'United Kingdom',
-                      child: Center(child: Text('United Kingdom')),
-                    ),
+                    Icon(CupertinoIcons.chevron_down, size: 16, color: iosBlue),
                   ],
-                  onChanged: (_) {},
                 ),
               ),
               const SizedBox(height: 12),
-              ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 310),
-                child: Row(
-                  children: [
-                    const SizedBox(
-                      width: 74,
-                      child: TextField(
-                        keyboardType: TextInputType.phone,
-                        textAlign: TextAlign.center,
-                        decoration: InputDecoration(
-                          filled: false,
-                          hintText: '+880',
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide:
-                                BorderSide(color: primaryColor, width: 1.5),
-                          ),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide:
-                                BorderSide(color: primaryColor, width: 2),
-                          ),
-                        ),
-                      ),
+              const Row(
+                children: [
+                  SizedBox(
+                    width: 72,
+                    child: CupertinoTextField(
+                      placeholder: '+1',
+                      textAlign: TextAlign.center,
+                      keyboardType: TextInputType.phone,
                     ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: TextField(
-                        keyboardType: TextInputType.phone,
-                        autofocus: false,
-                        decoration: InputDecoration(
-                          filled: false,
-                          hintText: KStrings.phontHint,
-                          enabledBorder: const UnderlineInputBorder(
-                            borderSide:
-                                BorderSide(color: primaryColor, width: 1.5),
-                          ),
-                          focusedBorder: const UnderlineInputBorder(
-                            borderSide:
-                                BorderSide(color: primaryColor, width: 2),
-                          ),
-                        ),
-                      ),
+                  ),
+                  SizedBox(width: 10),
+                  Expanded(
+                    child: CupertinoTextField(
+                      placeholder: 'phone number',
+                      keyboardType: TextInputType.phone,
                     ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 18),
-              Text(
-                KStrings.carrierCharge,
-                style: const TextStyle(
-                  color: subTitleTextColor,
-                  fontSize: 12,
-                ),
+                  ),
+                ],
               ),
               const Spacer(),
               SizedBox(
-                width: 96,
-                child: CustomButton(
-                  text: 'Next',
-                  textSize: 15,
-                  height: 46,
-                  press: () {
-                    Navigator.pushReplacementNamed(
+                width: double.infinity,
+                child: CupertinoButton(
+                  color: primaryColor,
+                  borderRadius: BorderRadius.circular(24),
+                  onPressed: () {
+                    Navigator.pushNamedAndRemoveUntil(
                       context,
                       RouteNames.mainScreen,
+                      (_) => false,
                     );
                   },
+                  child: const Text(
+                    'Next',
+                    style: TextStyle(
+                      color: CupertinoColors.white,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                 ),
               ),
             ],

@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:whatsapp_ios_ui/presentation/screens/auth/auth_page.dart';
+
 import '../../screens/auth/welcome_screen.dart';
 import '../../screens/contact/contact_page.dart';
 import '../../screens/chats/inbox.dart';
 import '../../screens/chats/contact_info_page.dart';
 import '../../screens/updates/story_view.dart';
-
 import '../../screens/main_screen/main_screen.dart';
 import '../../screens/splash_screen.dart';
 
@@ -22,37 +22,52 @@ class RouteNames {
   static Route<dynamic> generateRoutes(RouteSettings settings) {
     switch (settings.name) {
       case RouteNames.splashScreen:
-        return MaterialPageRoute(
-            settings: settings, builder: (_) => const SplashScreen());
+        return CupertinoPageRoute(
+          settings: settings,
+          builder: (_) => const SplashScreen(),
+        );
       case RouteNames.mainScreen:
-        return MaterialPageRoute(
-            settings: settings, builder: (_) => const MainScreen());
-
+        return CupertinoPageRoute(
+          settings: settings,
+          builder: (_) => const MainScreen(),
+        );
       case RouteNames.inbox:
-        return MaterialPageRoute(
-            settings: settings, builder: (_) => const Inbox());
+        return CupertinoPageRoute(
+          settings: settings,
+          builder: (_) => const Inbox(),
+        );
       case RouteNames.contactInfo:
-        return MaterialPageRoute(
-            settings: settings, builder: (_) => const ContactInfoPage());
+        return CupertinoPageRoute(
+          settings: settings,
+          builder: (_) => const ContactInfoPage(),
+        );
       case RouteNames.storyPage:
-        return MaterialPageRoute(
-            settings: settings, builder: (_) => MyStoryPage());
-
+        return CupertinoPageRoute(
+          settings: settings,
+          builder: (_) => MyStoryPage(),
+        );
       case RouteNames.contactPage:
-        return MaterialPageRoute(
-            settings: settings, builder: (_) => const ContactPage());
-
+        return CupertinoPageRoute(
+          settings: settings,
+          builder: (_) => const ContactPage(),
+        );
       case RouteNames.welcome:
-        return MaterialPageRoute(
-            settings: settings, builder: (_) => const WelcomeScreen());
-
+        return CupertinoPageRoute(
+          settings: settings,
+          builder: (_) => const WelcomeScreen(),
+        );
       case RouteNames.auth:
-        return MaterialPageRoute(
-            settings: settings, builder: (_) => const AuthPage());
+        return CupertinoPageRoute(
+          settings: settings,
+          builder: (_) => const AuthPage(),
+        );
       default:
-        return MaterialPageRoute(
-          builder: (_) => Scaffold(
-            body: Center(
+        return CupertinoPageRoute(
+          builder: (_) => CupertinoPageScaffold(
+            navigationBar: const CupertinoNavigationBar(
+              middle: Text('路由错误'),
+            ),
+            child: Center(
               child: Text('No Route Found ${settings.name}'),
             ),
           ),

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
 import 'presentation/core/routes/routes_name.dart';
 import 'utils/strings.dart';
@@ -12,15 +12,14 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return CupertinoApp(
       title: KStrings.appName,
       debugShowCheckedModeBanner: false,
+      theme: MyTheme.cupertino,
       initialRoute: RouteNames.splashScreen,
       onGenerateRoute: RouteNames.generateRoutes,
-      theme: MyTheme.theme,
       builder: (context, child) {
         return IphoneExperience(
           child: child ?? const SizedBox.shrink(),

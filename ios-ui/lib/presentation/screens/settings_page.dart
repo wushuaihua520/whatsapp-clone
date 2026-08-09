@@ -1,54 +1,106 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 
 import '../../utils/constants.dart';
 
+/// Profile / 「自己」 — Cupertino inset grouped settings.
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return ColoredBox(
-      color: iosGroupedBackground,
-      child: ListView(
+    return CupertinoPageScaffold(
+      backgroundColor: iosGroupedBackground,
+      child: CustomScrollView(
         key: const PageStorageKey('ios-settings-list'),
-        padding: const EdgeInsets.fromLTRB(16, 8, 16, 116),
-        children: const [
-          _ProfileHero(),
-          SizedBox(height: 18),
-          _SettingsSection(
-            rows: [
-              _SettingsRowData(icon: CupertinoIcons.list_bullet, title: '列表'),
-              _SettingsRowData(icon: CupertinoIcons.star, title: '已加星标'),
-              _SettingsRowData(
-                icon: CupertinoIcons.speaker_2,
-                title: '群发消息',
-              ),
-              _SettingsRowData(
-                icon: CupertinoIcons.desktopcomputer,
-                title: '已关联的设备',
-              ),
-            ],
+        slivers: [
+          CupertinoSliverNavigationBar(
+            largeTitle: const Text(''),
+            backgroundColor: iosGroupedBackground,
+            border: null,
+            leading: CupertinoButton(
+              padding: EdgeInsets.zero,
+              minSize: 0,
+              onPressed: () {},
+              child: const Icon(CupertinoIcons.search, size: 26),
+            ),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CupertinoButton(
+                  padding: const EdgeInsets.only(right: 8),
+                  minSize: 0,
+                  onPressed: () {},
+                  child: const Icon(CupertinoIcons.qrcode, size: 24),
+                ),
+                CupertinoButton(
+                  padding: EdgeInsets.zero,
+                  minSize: 0,
+                  onPressed: () {},
+                  child: const Icon(CupertinoIcons.pencil, size: 24),
+                ),
+              ],
+            ),
           ),
-          SizedBox(height: 18),
-          _SettingsSection(
-            rows: [
-              _SettingsRowData(icon: CupertinoIcons.person_crop_circle, title: '账户'),
-              _SettingsRowData(icon: CupertinoIcons.lock, title: '隐私'),
-              _SettingsRowData(
-                icon: CupertinoIcons.chat_bubble,
-                title: '聊天',
+          const SliverToBoxAdapter(child: _ProfileHero()),
+          SliverToBoxAdapter(
+            child: CupertinoListSection.insetGrouped(
+              backgroundColor: iosGroupedBackground,
+              decoration: BoxDecoration(
+                color: CupertinoColors.white,
+                borderRadius: BorderRadius.circular(12),
               ),
-              _SettingsRowData(
-                icon: CupertinoIcons.bell,
-                title: '通知',
-              ),
-              _SettingsRowData(
-                icon: CupertinoIcons.arrow_up_arrow_down,
-                title: '存储空间和数据',
-              ),
-            ],
+              children: const [
+                _SettingsTile(
+                  icon: CupertinoIcons.list_bullet,
+                  title: '列表',
+                ),
+                _SettingsTile(
+                  icon: CupertinoIcons.star,
+                  title: '已加星标',
+                ),
+                _SettingsTile(
+                  icon: CupertinoIcons.speaker_2,
+                  title: '群发消息',
+                ),
+                _SettingsTile(
+                  icon: CupertinoIcons.desktopcomputer,
+                  title: '已关联的设备',
+                ),
+              ],
+            ),
           ),
+          SliverToBoxAdapter(
+            child: CupertinoListSection.insetGrouped(
+              backgroundColor: iosGroupedBackground,
+              decoration: BoxDecoration(
+                color: CupertinoColors.white,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              children: const [
+                _SettingsTile(
+                  icon: CupertinoIcons.person_crop_circle,
+                  title: '账户',
+                ),
+                _SettingsTile(
+                  icon: CupertinoIcons.lock,
+                  title: '隐私',
+                ),
+                _SettingsTile(
+                  icon: CupertinoIcons.chat_bubble,
+                  title: '聊天',
+                ),
+                _SettingsTile(
+                  icon: CupertinoIcons.bell,
+                  title: '通知',
+                ),
+                _SettingsTile(
+                  icon: CupertinoIcons.arrow_up_arrow_down,
+                  title: '存储空间和数据',
+                ),
+              ],
+            ),
+          ),
+          const SliverToBoxAdapter(child: SizedBox(height: 40)),
         ],
       ),
     );
@@ -68,13 +120,19 @@ class _ProfileHero extends StatelessWidget {
           children: [
             const Padding(
               padding: EdgeInsets.only(top: 18),
-              child: CircleAvatar(
-                radius: 48,
-                backgroundColor: Color(0xFF91DCD6),
-                child: Icon(
-                  CupertinoIcons.person_fill,
-                  color: Color(0xFF3A3A3C),
-                  size: 52,
+              child: SizedBox(
+                width: 96,
+                height: 96,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: Color(0xFF91DCD6),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    CupertinoIcons.person_fill,
+                    color: Color(0xFF3A3A3C),
+                    size: 52,
+                  ),
                 ),
               ),
             ),
@@ -84,7 +142,7 @@ class _ProfileHero extends StatelessWidget {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: CupertinoColors.white,
                   borderRadius: BorderRadius.circular(14),
                   boxShadow: const [
                     BoxShadow(
@@ -127,84 +185,35 @@ class _ProfileHero extends StatelessWidget {
             ),
           ],
         ),
+        const SizedBox(height: 8),
       ],
     );
   }
 }
 
-class _SettingsSection extends StatelessWidget {
-  const _SettingsSection({required this.rows});
-
-  final List<_SettingsRowData> rows;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: Column(
-        children: [
-          for (var index = 0; index < rows.length; index++) ...[
-            _SettingsRow(data: rows[index]),
-            if (index < rows.length - 1)
-              const Divider(height: 1, indent: 52, color: Color(0xFFE5E5EA)),
-          ],
-        ],
-      ),
-    );
-  }
-}
-
-class _SettingsRow extends StatelessWidget {
-  const _SettingsRow({required this.data});
-
-  final _SettingsRowData data;
-
-  @override
-  Widget build(BuildContext context) {
-    return CupertinoButton(
-      padding: EdgeInsets.zero,
-      minSize: 0,
-      onPressed: () {},
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
-        child: Row(
-          children: [
-            Icon(data.icon, color: textColor, size: 22),
-            const SizedBox(width: 14),
-            Expanded(
-              child: Text(
-                data.title,
-                textAlign: TextAlign.left,
-                style: const TextStyle(
-                  color: textColor,
-                  fontSize: 17,
-                  fontWeight: FontWeight.w400,
-                  letterSpacing: -0.4,
-                ),
-              ),
-            ),
-            const Icon(
-              CupertinoIcons.chevron_forward,
-              color: Color(0xFFC7C7CC),
-              size: 18,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _SettingsRowData {
-  const _SettingsRowData({
+class _SettingsTile extends StatelessWidget {
+  const _SettingsTile({
     required this.icon,
     required this.title,
   });
 
   final IconData icon;
   final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return CupertinoListTile(
+      leading: Icon(icon, color: textColor, size: 22),
+      title: Text(
+        title,
+        style: const TextStyle(
+          color: textColor,
+          fontSize: 17,
+          letterSpacing: -0.41,
+        ),
+      ),
+      trailing: const CupertinoListTileChevron(),
+      onTap: () {},
+    );
+  }
 }

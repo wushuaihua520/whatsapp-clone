@@ -1,12 +1,11 @@
 import 'dart:ui';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
 import '../../../data/dummy_data.dart';
 import '../../../data/model/participants_chat_model.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/k_images.dart';
-import '../../../widgets/glass_surface.dart';
 import '../../core/routes/routes_name.dart';
 import 'components/input_text_emoji.dart';
 import 'components/message_item.dart';
@@ -19,227 +18,147 @@ class Inbox extends StatelessWidget {
   Widget build(BuildContext context) {
     final user = KDummyData.participantsChat;
 
-    return WillPopScope(
-      onWillPop: () async {
-        FocusScope.of(context).unfocus();
-        return true;
-      },
-      child: Scaffold(
-        extendBody: true,
-        body: Stack(
+    return CupertinoPageScaffold(
+      backgroundColor: const Color(0xFFF1EEE8),
+      navigationBar: CupertinoNavigationBar(
+        backgroundColor: const Color(0xCCF7F7F7),
+        border: null,
+        leading: CupertinoButton(
+          key: const Key('ios-chat-back'),
+          padding: EdgeInsets.zero,
+          minSize: 0,
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Icon(CupertinoIcons.back, size: 28),
+        ),
+        middle: CupertinoButton(
+          key: const Key('ios-chat-avatar'),
+          padding: EdgeInsets.zero,
+          minSize: 0,
+          onPressed: () =>
+              Navigator.of(context).pushNamed(RouteNames.contactInfo),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 32,
+                height: 32,
+                decoration: const BoxDecoration(
+                  color: Color(0xFFF4E7C9),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  CupertinoIcons.person_fill,
+                  color: Color(0xFFB78032),
+                  size: 18,
+                ),
+              ),
+              const SizedBox(width: 6),
+              Flexible(
+                child: Text(
+                  user.participant,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    color: textColor,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: -0.3,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Positioned.fill(
-              child: DecoratedBox(decoration: _decoration()),
+            CupertinoButton(
+              padding: const EdgeInsets.only(right: 2),
+              minSize: 0,
+              onPressed: () {},
+              child: const Icon(CupertinoIcons.videocam, size: 26),
             ),
-            Positioned.fill(
-              child: StreamBuilder<List<Messages>>(
-                stream: MessageController.streamData,
-                initialData: MessageController.list,
-                builder: (context, snapshot) {
-                  final messages = snapshot.data ?? user.messages;
-                  if (messages.isEmpty) {
-                    return const SizedBox();
-                  }
-                  final sortedMessages = messages.toList()
-                    ..sort((a, b) => a.date.compareTo(b.date));
-                  return ListView(
-                    padding: EdgeInsets.fromLTRB(
-                      10,
-                      MediaQuery.of(context).padding.top + 70,
-                      10,
-                      MediaQuery.of(context).padding.bottom + 96,
-                    ),
-                    children: [
-                      const _ConversationDate(),
-                      const _EncryptionNotice(),
-                      const SizedBox(height: 8),
-                      ...sortedMessages.map(
-                        (message) => MessageComponent(element: message),
-                      ),
-                    ],
-                  );
-                },
-              ),
-            ),
-            Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              child: _GlassChatHeader(user: user),
-            ),
-            Positioned(
-              right: 12,
-              bottom: MediaQuery.of(context).padding.bottom + 66,
-              child: GlassCircleButton(
-                key: const Key('ios-jump-to-latest'),
-                icon: Icons.keyboard_arrow_down_rounded,
-                tooltip: '最新消息',
-                size: 36,
-                iconColor: textColor,
-                opacity: 0.46,
-                blur: 34,
-                onPressed: () {},
-              ),
-            ),
-            const Positioned(
-              left: 0,
-              right: 0,
-              bottom: 0,
-              child: TextEmojiInputField(),
+            CupertinoButton(
+              padding: EdgeInsets.zero,
+              minSize: 0,
+              onPressed: () {},
+              child: const Icon(CupertinoIcons.phone, size: 24),
             ),
           ],
         ),
       ),
-    );
-  }
-
-  BoxDecoration _decoration() {
-    return const BoxDecoration(
-      color: Color(0xFFF1EEE8),
-      image: DecorationImage(
-        image: AssetImage(KImages.defaultWallpaper),
-        fit: BoxFit.cover,
-        colorFilter: ColorFilter.mode(
-          Color(0x2BFFFFFF),
-          BlendMode.srcATop,
-        ),
-      ),
-    );
-  }
-}
-
-class _GlassChatHeader extends StatelessWidget {
-  const _GlassChatHeader({required this.user});
-
-  final ParticipantsChat user;
-
-  @override
-  Widget build(BuildContext context) {
-    return ClipRect(
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 22, sigmaY: 22),
-        child: DecoratedBox(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                Color(0xB8FFFFFF),
-                Color(0x73FFFFFF),
-                Color(0x14FFFFFF),
-              ],
-              stops: [0, 0.72, 1],
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: Image.asset(
+              KImages.defaultWallpaper,
+              fit: BoxFit.cover,
+              color: const Color(0x2BFFFFFF),
+              colorBlendMode: BlendMode.srcATop,
+              errorBuilder: (_, __, ___) =>
+                  const ColoredBox(color: Color(0xFFF1EEE8)),
             ),
           ),
-          child: SafeArea(
-            bottom: false,
-            child: SizedBox(
-              height: 62,
-              child: Row(
-                children: [
-                  const SizedBox(width: 4),
-                  GestureDetector(
-                    key: const Key('ios-chat-back'),
-                    onTap: () => Navigator.pop(context),
-                    child: const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 4, vertical: 8),
-                      child: Icon(
-                        Icons.chevron_left_rounded,
-                        color: Color(0xFF3C3C43),
-                        size: 32,
-                      ),
+          Positioned.fill(
+            child: StreamBuilder<List<Messages>>(
+              stream: MessageController.streamData,
+              initialData: MessageController.list,
+              builder: (context, snapshot) {
+                final messages = snapshot.data ?? user.messages;
+                final sorted = messages.toList()
+                  ..sort((a, b) => a.date.compareTo(b.date));
+                return ListView(
+                  padding: EdgeInsets.fromLTRB(
+                    10,
+                    8,
+                    10,
+                    MediaQuery.of(context).padding.bottom + 72,
+                  ),
+                  children: [
+                    const _ConversationDate(),
+                    const _EncryptionNotice(),
+                    const SizedBox(height: 8),
+                    ...sorted.map(
+                      (message) => MessageComponent(element: message),
+                    ),
+                  ],
+                );
+              },
+            ),
+          ),
+          Positioned(
+            right: 12,
+            bottom: MediaQuery.of(context).padding.bottom + 66,
+            child: ClipOval(
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+                child: CupertinoButton(
+                  key: const Key('ios-jump-to-latest'),
+                  padding: EdgeInsets.zero,
+                  minSize: 0,
+                  color: const Color(0x99FFFFFF),
+                  borderRadius: BorderRadius.circular(18),
+                  onPressed: () {},
+                  child: const SizedBox(
+                    width: 36,
+                    height: 36,
+                    child: Icon(
+                      CupertinoIcons.chevron_down,
+                      color: textColor,
+                      size: 18,
                     ),
                   ),
-                  Expanded(
-                    child: Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        key: const Key('ios-chat-avatar'),
-                        borderRadius: BorderRadius.circular(20),
-                        onTap: () => Navigator.pushNamed(
-                          context,
-                          RouteNames.contactInfo,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const CircleAvatar(
-                              radius: 16,
-                              backgroundColor: Color(0xFFF4E7C9),
-                              child: Icon(
-                                Icons.person_rounded,
-                                color: Color(0xFFB78032),
-                                size: 17,
-                              ),
-                            ),
-                            const SizedBox(width: 6),
-                            Flexible(
-                              child: Text(
-                                user.participant,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  color: textColor,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                  letterSpacing: -0.25,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    height: 34,
-                    margin: const EdgeInsets.only(right: 10),
-                    padding: const EdgeInsets.symmetric(horizontal: 2),
-                    decoration: BoxDecoration(
-                      color: const Color(0xE6FFFFFF),
-                      borderRadius: BorderRadius.circular(17),
-                      border: Border.all(color: const Color(0x33FFFFFF)),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(
-                          tooltip: '视频通话',
-                          onPressed: () {},
-                          constraints: const BoxConstraints.tightFor(
-                            width: 36,
-                            height: 34,
-                          ),
-                          padding: EdgeInsets.zero,
-                          icon: const Icon(
-                            Icons.videocam_outlined,
-                            color: textColor,
-                            size: 22,
-                          ),
-                        ),
-                        IconButton(
-                          tooltip: '语音通话',
-                          onPressed: () {},
-                          constraints: const BoxConstraints.tightFor(
-                            width: 36,
-                            height: 34,
-                          ),
-                          padding: EdgeInsets.zero,
-                          icon: const Icon(
-                            Icons.call_outlined,
-                            color: textColor,
-                            size: 19,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
           ),
-        ),
+          const Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: TextEmojiInputField(),
+          ),
+        ],
       ),
     );
   }
@@ -257,18 +176,11 @@ class _ConversationDate extends StatelessWidget {
         decoration: BoxDecoration(
           color: const Color(0xDFFFFFFF),
           borderRadius: BorderRadius.circular(11),
-          boxShadow: const [
-            BoxShadow(
-              color: Color(0x15000000),
-              blurRadius: 3,
-              offset: Offset(0, 1),
-            ),
-          ],
         ),
         child: const Text(
           '2024年1月14日',
           style: TextStyle(
-            color: iosSecondaryLabel,
+            color: CupertinoColors.systemGrey,
             fontSize: 11,
             fontWeight: FontWeight.w500,
           ),
@@ -294,7 +206,11 @@ class _EncryptionNotice extends StatelessWidget {
         child: const Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.lock_rounded, color: Color(0xFFB4872C), size: 11),
+            Icon(
+              CupertinoIcons.lock_fill,
+              color: Color(0xFFB4872C),
+              size: 11,
+            ),
             SizedBox(width: 4),
             Flexible(
               child: Text(

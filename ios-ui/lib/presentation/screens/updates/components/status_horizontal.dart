@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
 import '../../../../data/dummy_data.dart';
 import '../../../../utils/constants.dart';
@@ -15,40 +15,15 @@ class StatusHorizontal extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Row(
-              children: [
-                const Expanded(
-                  child: Text(
-                    '状态',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: hTextColor,
-                    ),
-                  ),
-                ),
-                PopupMenuButton<String>(
-                  tooltip: '状态选项',
-                  padding: EdgeInsets.zero,
-                  icon: const Icon(
-                    Icons.more_horiz_rounded,
-                    color: textColor,
-                  ),
-                  offset: const Offset(0, 35),
-                  itemBuilder: (context) => const [
-                    PopupMenuItem(
-                      value: 'Muted updates',
-                      child: Text('已静音的动态'),
-                    ),
-                    PopupMenuItem(
-                      value: 'Status privacy',
-                      child: Text('状态隐私'),
-                    ),
-                  ],
-                ),
-              ],
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: Text(
+              '状态',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: textColor,
+              ),
             ),
           ),
           const SizedBox(height: 8),
@@ -62,30 +37,18 @@ class StatusHorizontal extends StatelessWidget {
                 if (index == 0) {
                   return const _MyStatusCard();
                 }
-                return Story(index: index - 1);
+                final story = KDummyData.storyList[index - 1];
+                return _StatusCard(
+                  image: story['avatar']!,
+                  label: story['user']!.split(' ').first,
+                  onTap: () =>
+                      Navigator.of(context).pushNamed(RouteNames.storyPage),
+                );
               },
             ),
           ),
         ],
       ),
-    );
-  }
-}
-
-class Story extends StatelessWidget {
-  const Story({
-    super.key,
-    required this.index,
-  });
-  final int index;
-
-  @override
-  Widget build(BuildContext context) {
-    final story = KDummyData.storyList[index];
-    return _StatusCard(
-      image: story['avatar']!,
-      label: story['user']!.split(' ').first,
-      onTap: () => Navigator.pushNamed(context, RouteNames.storyPage),
     );
   }
 }
@@ -121,14 +84,13 @@ class _StatusCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(right: 9),
-      child: Material(
-        color: searchFieldColor,
-        borderRadius: BorderRadius.circular(16),
-        clipBehavior: Clip.antiAlias,
-        child: InkWell(
-          onTap: onTap,
+      child: GestureDetector(
+        onTap: onTap,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(16),
           child: SizedBox(
             width: 104,
+            height: 166,
             child: Stack(
               fit: StackFit.expand,
               children: [
@@ -140,48 +102,11 @@ class _StatusCard extends StatelessWidget {
                       end: Alignment.bottomCenter,
                       colors: [
                         Color(0x1A000000),
-                        Color(0x14000000),
                         Color(0xB8000000),
                       ],
-                      stops: [0, 0.52, 1],
                     ),
                   ),
                 ),
-                Positioned(
-                  top: 10,
-                  left: 10,
-                  child: Container(
-                    width: 38,
-                    height: 38,
-                    padding: const EdgeInsets.all(2.5),
-                    decoration: BoxDecoration(
-                      color: isMine ? Colors.white : actionGreen,
-                      shape: BoxShape.circle,
-                    ),
-                    child: CircleAvatar(
-                      backgroundImage: AssetImage(image),
-                    ),
-                  ),
-                ),
-                if (isMine)
-                  Positioned(
-                    top: 32,
-                    left: 34,
-                    child: Container(
-                      width: 20,
-                      height: 20,
-                      decoration: BoxDecoration(
-                        color: actionGreen,
-                        shape: BoxShape.circle,
-                        border: Border.all(color: Colors.white, width: 2),
-                      ),
-                      child: const Icon(
-                        Icons.add_rounded,
-                        color: blackColor,
-                        size: 14,
-                      ),
-                    ),
-                  ),
                 Positioned(
                   left: 10,
                   right: 8,
@@ -191,15 +116,22 @@ class _StatusCard extends StatelessWidget {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
-                      color: Colors.white,
+                      color: CupertinoColors.white,
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
-                      shadows: [
-                        Shadow(color: Colors.black45, blurRadius: 4),
-                      ],
                     ),
                   ),
                 ),
+                if (isMine)
+                  const Positioned(
+                    top: 10,
+                    left: 10,
+                    child: Icon(
+                      CupertinoIcons.plus_circle_fill,
+                      color: actionGreen,
+                      size: 28,
+                    ),
+                  ),
               ],
             ),
           ),

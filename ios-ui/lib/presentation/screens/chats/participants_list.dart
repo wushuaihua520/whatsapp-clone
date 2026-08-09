@@ -1,15 +1,14 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../../data/dummy_data.dart';
 import '../../../data/model/chats_model.dart';
 import '../../../utils/constants.dart';
-import 'components/participate_tile.dart';
+import '../../core/routes/routes_name.dart';
 
+/// Chats tab — Cupertino large title + search + inset list.
 class ConversationList extends StatefulWidget {
-  const ConversationList({
-    super.key,
-  });
+  const ConversationList({super.key});
 
   @override
   State<ConversationList> createState() => _ConversationListState();
@@ -50,7 +49,6 @@ class _ConversationListState extends State<ConversationList> {
             chat.lastMessage.toLowerCase().contains(query),
       );
     }
-
     return chats.toList();
   }
 
@@ -58,143 +56,240 @@ class _ConversationListState extends State<ConversationList> {
   Widget build(BuildContext context) {
     final chats = _visibleChats;
 
-    return ListView(
-      key: const PageStorageKey('conversation-list'),
-      padding: const EdgeInsets.only(bottom: 118),
-      children: [
-        const SizedBox(height: 6),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: CupertinoSearchTextField(
-            key: const Key('chat-search-field'),
-            controller: _searchController,
-            placeholder: '搜索',
-            style: const TextStyle(
-              color: textColor,
-              fontSize: 17,
-              letterSpacing: -0.4,
+    return CupertinoPageScaffold(
+      backgroundColor: scaffoldBgColor,
+      child: CustomScrollView(
+        key: const PageStorageKey('conversation-list'),
+        slivers: [
+          CupertinoSliverNavigationBar(
+            largeTitle: const Text('聊天', key: Key('ios-聊天-title')),
+            backgroundColor: const Color(0xF7F9F9F9),
+            border: null,
+            leading: CupertinoButton(
+              padding: EdgeInsets.zero,
+              minSize: 0,
+              onPressed: () {},
+              child: const Icon(CupertinoIcons.ellipsis_circle, size: 28),
             ),
-            placeholderStyle: const TextStyle(
-              color: Color(0xFF8E8E93),
-              fontSize: 17,
-              letterSpacing: -0.4,
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CupertinoButton(
+                  padding: const EdgeInsets.only(right: 4),
+                  minSize: 0,
+                  onPressed: () {},
+                  child: const Icon(CupertinoIcons.camera, size: 26),
+                ),
+                CupertinoButton(
+                  padding: EdgeInsets.zero,
+                  minSize: 0,
+                  onPressed: () =>
+                      Navigator.of(context).pushNamed(RouteNames.contactPage),
+                  child: const Icon(
+                    CupertinoIcons.plus_circle_fill,
+                    key: Key('ios-new-chat'),
+                    color: Color(0xFF25D366),
+                    size: 28,
+                  ),
+                ),
+              ],
             ),
-            prefixIcon: const Icon(
-              CupertinoIcons.search,
-              color: Color(0xFF8E8E93),
-              size: 18,
-            ),
-            suffixMode: OverlayVisibilityMode.editing,
-            backgroundColor: const Color(0xFFE9E9EB),
-            borderRadius: BorderRadius.circular(10),
-            padding: const EdgeInsetsDirectional.fromSTEB(6, 8, 6, 8),
-            onChanged: (_) => setState(() {}),
           ),
-        ),
-        const SizedBox(height: 12),
-        const _ContactAccessCard(),
-        const SizedBox(height: 12),
-        SizedBox(
-          height: 32,
-          child: ListView.separated(
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            itemCount: _filters.length + 1,
-            separatorBuilder: (_, __) => const SizedBox(width: 8),
-            itemBuilder: (context, index) {
-              if (index == _filters.length) {
-                return _IosFilterAddButton(onTap: () {});
-              }
-              final filter = _filters[index];
-              return _IosFilterChip(
-                key: Key('filter-$filter'),
-                label: filter,
-                selected: _selectedFilter == filter,
-                onTap: () => setState(() => _selectedFilter = filter),
-              );
-            },
-          ),
-        ),
-        const SizedBox(height: 6),
-        if (chats.isEmpty)
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 28, vertical: 34),
-            child: Text(
-              '没有找到会话',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: textColor,
-                fontSize: 15,
-                fontWeight: FontWeight.w600,
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 10),
+              child: CupertinoSearchTextField(
+                key: const Key('chat-search-field'),
+                controller: _searchController,
+                placeholder: '搜索',
+                onChanged: (_) => setState(() {}),
               ),
             ),
-          )
-        else
-          ...chats.map((chat) => ParticipateTile(element: chat)),
-        const _LimitedContactsNotice(),
-      ],
+          ),
+          const SliverToBoxAdapter(child: _ContactAccessCard()),
+          SliverToBoxAdapter(
+            child: SizedBox(
+              height: 40,
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
+                itemCount: _filters.length + 1,
+                separatorBuilder: (_, __) => const SizedBox(width: 8),
+                itemBuilder: (context, index) {
+                  if (index == _filters.length) {
+                    return CupertinoButton(
+                      padding: EdgeInsets.zero,
+                      minSize: 0,
+                      onPressed: () {},
+                      child: Container(
+                        width: 32,
+                        height: 32,
+                        decoration: BoxDecoration(
+                          color: CupertinoColors.systemGrey5.resolveFrom(context),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(CupertinoIcons.plus, size: 18),
+                      ),
+                    );
+                  }
+                  final filter = _filters[index];
+                  final selected = _selectedFilter == filter;
+                  return CupertinoButton(
+                    key: Key('filter-$filter'),
+                    padding: EdgeInsets.zero,
+                    minSize: 0,
+                    onPressed: () =>
+                        setState(() => _selectedFilter = filter),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 7,
+                      ),
+                      decoration: BoxDecoration(
+                        color: selected
+                            ? const Color(0xFFD8F5E2)
+                            : CupertinoColors.systemGrey6
+                                .resolveFrom(context),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Text(
+                        filter,
+                        style: TextStyle(
+                          color: selected
+                              ? const Color(0xFF128C4E)
+                              : textColor,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+          if (chats.isEmpty)
+            const SliverFillRemaining(
+              hasScrollBody: false,
+              child: Center(child: Text('没有找到会话')),
+            )
+          else
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  if (index == chats.length) {
+                    return const _LimitedContactsNotice();
+                  }
+                  return _ChatRow(chat: chats[index]);
+                },
+                childCount: chats.length + 1,
+              ),
+            ),
+        ],
+      ),
     );
   }
 }
 
-/// Cupertino filter chip matching Chinese WhatsApp iOS.
-class _IosFilterChip extends StatelessWidget {
-  const _IosFilterChip({
-    super.key,
-    required this.label,
-    required this.selected,
-    required this.onTap,
-  });
+class _ChatRow extends StatelessWidget {
+  const _ChatRow({required this.chat});
 
-  final String label;
-  final bool selected;
-  final VoidCallback onTap;
+  final Participant chat;
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
+    final date = DateTime.tryParse(chat.date);
+    final timeLabel =
+        date == null ? '' : DateFormat('yyyy/M/d').format(date);
+
+    return CupertinoButton(
+      padding: EdgeInsets.zero,
+      onPressed: () => Navigator.of(context).pushNamed(RouteNames.inbox),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
-        decoration: BoxDecoration(
-          color: selected ? const Color(0xFFD8F5E2) : const Color(0xFFF2F2F7),
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Text(
-          label,
-          style: TextStyle(
-            color: selected ? const Color(0xFF128C4E) : textColor,
-            fontSize: 13,
-            fontWeight: FontWeight.w500,
-            height: 1,
+        padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
+        decoration: const BoxDecoration(
+          border: Border(
+            bottom: BorderSide(color: Color(0x143C3C43), width: 0.33),
           ),
+        ),
+        child: Row(
+          children: [
+            _Avatar(chat: chat),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          chat.name,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            color: textColor,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: -0.3,
+                          ),
+                        ),
+                      ),
+                      Text(
+                        timeLabel,
+                        style: const TextStyle(
+                          color: CupertinoColors.systemGrey,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 3),
+                  Text(
+                    chat.lastMessage,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      color: CupertinoColors.systemGrey,
+                      fontSize: 14.5,
+                      height: 1.25,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
 }
 
-class _IosFilterAddButton extends StatelessWidget {
-  const _IosFilterAddButton({required this.onTap});
+class _Avatar extends StatelessWidget {
+  const _Avatar({required this.chat});
 
-  final VoidCallback onTap;
+  final Participant chat;
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: 32,
-        height: 32,
-        decoration: const BoxDecoration(
-          color: Color(0xFFF2F2F7),
-          shape: BoxShape.circle,
-        ),
-        child: const Icon(
-          CupertinoIcons.plus,
-          color: Color(0xFF8E8E93),
-          size: 18,
-        ),
+    if (chat.id == 1) {
+      return SizedBox(
+        width: 52,
+        height: 52,
+        child: Image.asset(chat.avatar, fit: BoxFit.contain),
+      );
+    }
+    return Container(
+      width: 52,
+      height: 52,
+      decoration: const BoxDecoration(
+        color: Color(0xFFF4E7C9),
+        shape: BoxShape.circle,
+      ),
+      child: const Icon(
+        CupertinoIcons.person_fill,
+        color: Color(0xFFB78032),
+        size: 28,
       ),
     );
   }
@@ -206,12 +301,12 @@ class _ContactAccessCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16),
+      margin: const EdgeInsets.fromLTRB(16, 0, 16, 8),
       padding: const EdgeInsets.fromLTRB(16, 14, 16, 12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: CupertinoColors.white,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: const Color(0xFFB7E8C5), width: 1),
+        border: Border.all(color: const Color(0xFFB7E8C5)),
       ),
       child: Column(
         children: [
@@ -228,7 +323,7 @@ class _ContactAccessCard extends StatelessWidget {
             '除非你允许完整访问权限，否则无法查找到你的所有亲朋好友。',
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: iosSecondaryLabel,
+              color: CupertinoColors.systemGrey,
               fontSize: 12.5,
               height: 1.35,
             ),
@@ -244,7 +339,7 @@ class _ContactAccessCard extends StatelessWidget {
               child: const Text(
                 '允许访问',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: CupertinoColors.white,
                   fontSize: 15,
                   fontWeight: FontWeight.w600,
                 ),
@@ -262,51 +357,48 @@ class _LimitedContactsNotice extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(28, 20, 28, 0),
+    return const Padding(
+      padding: EdgeInsets.fromLTRB(28, 20, 28, 40),
       child: Column(
         children: [
           Text.rich(
             textAlign: TextAlign.center,
             TextSpan(
-              text: 'WhatsApp 没有完整的联系人访问权限，因此部分姓名可能不会显示。',
-              style: const TextStyle(
-                color: iosSecondaryLabel,
+              text: 'WhatsApp 没有完整的联系人访问权限，因此部分姓名可能不会显示。 ',
+              style: TextStyle(
+                color: CupertinoColors.systemGrey,
                 fontSize: 12,
                 height: 1.45,
               ),
               children: [
-                const TextSpan(text: ' '),
                 TextSpan(
                   text: '允许访问权限',
-                  style: TextStyle(
-                    color: primaryColor.withOpacity(0.95),
-                    fontSize: 12,
-                  ),
+                  style: TextStyle(color: primaryColor, fontSize: 12),
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 14),
+          SizedBox(height: 14),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.lock_rounded, size: 11, color: iosSecondaryLabel),
-              const SizedBox(width: 4),
+              Icon(
+                CupertinoIcons.lock_fill,
+                size: 11,
+                color: CupertinoColors.systemGrey,
+              ),
+              SizedBox(width: 4),
               Text.rich(
                 TextSpan(
                   text: '你的私人消息已进行',
-                  style: const TextStyle(
-                    color: iosSecondaryLabel,
+                  style: TextStyle(
+                    color: CupertinoColors.systemGrey,
                     fontSize: 11,
                   ),
                   children: [
                     TextSpan(
                       text: '端到端加密',
-                      style: TextStyle(
-                        color: primaryColor.withOpacity(0.95),
-                        fontSize: 11,
-                      ),
+                      style: TextStyle(color: primaryColor, fontSize: 11),
                     ),
                   ],
                 ),

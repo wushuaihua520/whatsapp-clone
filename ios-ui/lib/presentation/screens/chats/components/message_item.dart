@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../data/model/participants_chat_model.dart';
@@ -28,13 +28,6 @@ class MessageComponent extends StatelessWidget {
           decoration: BoxDecoration(
             color: senderMessageBg,
             borderRadius: BorderRadius.circular(14),
-            boxShadow: const [
-              BoxShadow(
-                color: Color(0x18000000),
-                blurRadius: 2,
-                offset: Offset(0, 1),
-              ),
-            ],
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(11),
@@ -50,11 +43,8 @@ class MessageComponent extends StatelessWidget {
                     child: Text(
                       DateFormat.Hm().format(element.date),
                       style: const TextStyle(
-                        color: Colors.white,
+                        color: CupertinoColors.white,
                         fontSize: 10,
-                        shadows: [
-                          Shadow(color: Colors.black87, blurRadius: 5),
-                        ],
                       ),
                     ),
                   ),
@@ -81,27 +71,18 @@ class MessageComponent extends StatelessWidget {
             bottomLeft: const Radius.circular(17),
             bottomRight: const Radius.circular(17),
           ),
-          boxShadow: const [
-            BoxShadow(
-              color: Color(0x18000000),
-              blurRadius: 1,
-              offset: Offset(0, 1),
-            ),
-          ],
         ),
         child: Wrap(
           alignment: WrapAlignment.end,
           crossAxisAlignment: WrapCrossAlignment.end,
           spacing: 6,
-          runSpacing: 2,
           children: [
             Text(
               element.message,
               style: const TextStyle(
                 fontSize: 16,
                 height: 1.25,
-                fontWeight: FontWeight.w400,
-                color: blackColor,
+                color: textColor,
               ),
             ),
             Row(
@@ -110,76 +91,23 @@ class MessageComponent extends StatelessWidget {
                 Text(
                   DateFormat.Hm().format(element.date),
                   style: const TextStyle(
-                    color: iosSecondaryLabel,
+                    color: CupertinoColors.systemGrey,
                     fontSize: 10.5,
                   ),
                 ),
                 if (isMe) ...[
                   const SizedBox(width: 3),
                   Icon(
-                    element.delivered
-                        ? Icons.done_all_rounded
-                        : Icons.check_rounded,
-                    size: 15,
-                    color: element.seen ? readReceiptColor : iosSecondaryLabel,
+                    CupertinoIcons.checkmark_alt,
+                    size: 14,
+                    color: element.seen
+                        ? readReceiptColor
+                        : CupertinoColors.systemGrey,
                   ),
                 ],
               ],
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class MessageSeparator extends StatelessWidget {
-  const MessageSeparator({
-    super.key,
-    required this.groupByValue,
-  });
-
-  final DateTime groupByValue;
-
-  @override
-  Widget build(BuildContext context) {
-    final now = DateTime.now();
-    final today = DateTime(now.year, now.month, now.day);
-    final date = DateTime(
-      groupByValue.year,
-      groupByValue.month,
-      groupByValue.day,
-    );
-    final difference = today.difference(date).inDays;
-    final label = difference == 0
-        ? 'Today'
-        : difference == 1
-            ? 'Yesterday'
-            : DateFormat.yMMMd().format(groupByValue);
-
-    return Container(
-      alignment: Alignment.center,
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 6),
-        decoration: BoxDecoration(
-          color: const Color(0xDFFFFFFF),
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: const [
-            BoxShadow(
-              color: Color(0x16000000),
-              blurRadius: 2,
-              offset: Offset(0, 1),
-            ),
-          ],
-        ),
-        child: Text(
-          label,
-          style: const TextStyle(
-            fontWeight: FontWeight.w500,
-            fontSize: 12,
-            color: iosSecondaryLabel,
-          ),
         ),
       ),
     );

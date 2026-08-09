@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:whatsapp_ios_ui/main.dart';
@@ -20,24 +20,24 @@ void main() {
     expect(find.text('Agree and continue'), findsOneWidget);
   });
 
-  testWidgets('uses iOS Liquid Glass navigation and chat filters',
-      (tester) async {
+  testWidgets('uses Cupertino navigation and chat filters', (tester) async {
     await tester.pumpWidget(
-      MaterialApp(
+      const CupertinoApp(
         debugShowCheckedModeBanner: false,
-        theme: MyTheme.theme,
-        home: const MainScreen(),
+        theme: MyTheme.cupertino,
+        home: MainScreen(),
         onGenerateRoute: RouteNames.generateRoutes,
       ),
     );
+    await tester.pumpAndSettle();
 
-    expect(find.byKey(const Key('ios-聊天-title')), findsOneWidget);
+    expect(find.byKey(const Key('ios-聊天-title')), findsWidgets);
     expect(find.text('搜索'), findsOneWidget);
-    expect(find.byKey(const Key('ios-tab-更新')), findsOneWidget);
-    expect(find.byKey(const Key('ios-tab-通话')), findsOneWidget);
-    expect(find.byKey(const Key('ios-tab-社区')), findsOneWidget);
-    expect(find.byKey(const Key('ios-tab-聊天')), findsOneWidget);
-    expect(find.byKey(const Key('ios-tab-自己')), findsOneWidget);
+    expect(find.text('更新'), findsWidgets);
+    expect(find.text('通话'), findsWidgets);
+    expect(find.text('社区'), findsWidgets);
+    expect(find.text('聊天'), findsWidgets);
+    expect(find.text('自己'), findsWidgets);
     expect(find.text('允许完整联系人访问权限'), findsOneWidget);
 
     await tester.tap(find.byKey(const Key('filter-未读')));
@@ -45,21 +45,21 @@ void main() {
     expect(find.text('+852 5923 9971'), findsOneWidget);
     expect(find.text('WhatsApp'), findsNothing);
 
-    await tester.tap(find.byKey(const Key('ios-tab-更新')));
+    await tester.tap(find.text('更新').last);
     await tester.pumpAndSettle();
-    expect(find.byKey(const Key('ios-更新-title')), findsOneWidget);
+    expect(find.byKey(const Key('ios-更新-title')), findsWidgets);
     expect(find.text('状态'), findsOneWidget);
     expect(find.text('频道'), findsOneWidget);
 
-    await tester.tap(find.byKey(const Key('ios-tab-自己')));
+    await tester.tap(find.text('自己').last);
     await tester.pumpAndSettle();
     expect(find.text('心如止水'), findsOneWidget);
     expect(find.text('账户'), findsOneWidget);
     expect(find.text('隐私'), findsOneWidget);
 
-    await tester.tap(find.byKey(const Key('ios-tab-聊天')));
+    await tester.tap(find.text('聊天').last);
     await tester.pumpAndSettle();
-    await tester.tap(find.byTooltip('新聊天'));
+    await tester.tap(find.byKey(const Key('ios-new-chat')));
     await tester.pumpAndSettle();
     expect(find.text('新聊天'), findsOneWidget);
 
@@ -92,9 +92,9 @@ void main() {
     await tester.pumpWidget(
       MediaQuery(
         data: const MediaQueryData(size: Size(1280, 900)),
-        child: MaterialApp(
+        child: CupertinoApp(
           debugShowCheckedModeBanner: false,
-          theme: MyTheme.theme,
+          theme: MyTheme.cupertino,
           builder: (context, child) => IphoneExperience(
             forceFrame: true,
             child: child ?? const SizedBox.shrink(),
@@ -108,6 +108,6 @@ void main() {
 
     expect(find.byType(IphoneExperience), findsOneWidget);
     expect(find.text('9:41'), findsOneWidget);
-    expect(find.byKey(const Key('ios-聊天-title')), findsOneWidget);
+    expect(find.byKey(const Key('ios-聊天-title')), findsWidgets);
   });
 }
