@@ -112,18 +112,10 @@ class _SettingsChrome extends StatelessWidget {
             const Spacer(),
             Container(
               height: 34,
-              padding: const EdgeInsets.symmetric(horizontal: 2),
+              padding: const EdgeInsets.symmetric(horizontal: 4),
               decoration: BoxDecoration(
-                color: CupertinoColors.white,
+                color: const Color(0xFFE5E5EA),
                 borderRadius: BorderRadius.circular(17),
-                border: Border.all(color: const Color(0x143C3C43)),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Color(0x14000000),
-                    blurRadius: 6,
-                    offset: Offset(0, 1),
-                  ),
-                ],
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
