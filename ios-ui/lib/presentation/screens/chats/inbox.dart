@@ -7,6 +7,7 @@ import '../../../data/model/participants_chat_model.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/k_images.dart';
 import '../../../widgets/glass_surface.dart';
+import '../../core/routes/routes_name.dart';
 import 'components/input_text_emoji.dart';
 import 'components/message_item.dart';
 import 'controller/message_controller.dart';
@@ -148,13 +149,24 @@ class _GlassChatHeader extends StatelessWidget {
                     onPressed: () => Navigator.pop(context),
                   ),
                   const SizedBox(width: 7),
-                  const CircleAvatar(
-                    radius: 18,
-                    backgroundColor: Color(0xFFF4E7C9),
-                    child: Icon(
-                      Icons.person_rounded,
-                      color: Color(0xFFB78032),
-                      size: 19,
+                  Material(
+                    color: Colors.transparent,
+                    shape: const CircleBorder(),
+                    clipBehavior: Clip.antiAlias,
+                    child: InkWell(
+                      key: const Key('ios-chat-avatar'),
+                      customBorder: const CircleBorder(),
+                      onTap: () =>
+                          Navigator.pushNamed(context, RouteNames.contactInfo),
+                      child: const CircleAvatar(
+                        radius: 18,
+                        backgroundColor: Color(0xFFF4E7C9),
+                        child: Icon(
+                          Icons.person_rounded,
+                          color: Color(0xFFB78032),
+                          size: 19,
+                        ),
+                      ),
                     ),
                   ),
                   const SizedBox(width: 7),

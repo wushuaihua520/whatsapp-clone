@@ -3,6 +3,7 @@ import 'package:whatsapp_ios_ui/presentation/screens/auth/auth_page.dart';
 import '../../screens/auth/welcome_screen.dart';
 import '../../screens/contact/contact_page.dart';
 import '../../screens/chats/inbox.dart';
+import '../../screens/chats/contact_info_page.dart';
 import '../../screens/updates/story_view.dart';
 
 import '../../screens/main_screen/main_screen.dart';
@@ -12,6 +13,7 @@ class RouteNames {
   static const String splashScreen = '/s';
   static const String mainScreen = '/mainScreen';
   static const String inbox = '/inbox';
+  static const String contactInfo = '/contactInfo';
   static const String storyPage = '/storyPage';
   static const String contactPage = '/contact';
   static const String welcome = '/welcome';
@@ -29,6 +31,9 @@ class RouteNames {
       case RouteNames.inbox:
         return MaterialPageRoute(
             settings: settings, builder: (_) => const Inbox());
+      case RouteNames.contactInfo:
+        return MaterialPageRoute(
+            settings: settings, builder: (_) => const ContactInfoPage());
       case RouteNames.storyPage:
         return MaterialPageRoute(
             settings: settings, builder: (_) => MyStoryPage());

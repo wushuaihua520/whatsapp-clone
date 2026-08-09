@@ -67,5 +67,12 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('+852 5923 9971'), findsOneWidget);
     expect(find.text('消息'), findsOneWidget);
+
+    await tester.tap(find.byKey(const Key('ios-chat-avatar')));
+    await tester.pumpAndSettle();
+    expect(find.text('联系人信息'), findsOneWidget);
+    expect(find.text('新建联系人'), findsOneWidget);
+    expect(find.text('媒体、链接和文档'), findsOneWidget);
+    expect(find.text('加密'), findsOneWidget);
   });
 }
