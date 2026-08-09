@@ -153,11 +153,12 @@ class _FloatingTabBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IosGlass(
-      sigma: 42,
+      sigma: 40,
       tint: const Color(0xA8FFFFFF),
+      frostImage: null,
       borderRadius: BorderRadius.circular(28),
       border: Border.all(
-        color: Colors.white.withValues(alpha: 0.65),
+        color: Colors.white.withValues(alpha: 0.7),
         width: 0.9,
       ),
       shadows: [

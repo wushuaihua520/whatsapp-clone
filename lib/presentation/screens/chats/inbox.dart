@@ -136,15 +136,8 @@ class _IosChatNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IosGlass(
-      sigma: 40,
-      tint: const Color(0x8FF5F5F7),
-      border: Border(
-        bottom: BorderSide(
-          color: Colors.white.withValues(alpha: 0.45),
-          width: 0.6,
-        ),
-      ),
+    return ChatGlassBar(
+      bottomBorder: true,
       child: Padding(
         padding: EdgeInsets.only(top: top),
         child: SizedBox(
@@ -200,11 +193,13 @@ class _IosChatNavBar extends StatelessWidget {
                   ),
                 ),
                 IosGlass(
-                  sigma: 24,
-                  tint: const Color(0xB3FFFFFF),
+                  sigma: 18,
+                  tint: const Color(0x99FFFFFF),
+                  frostImage:
+                      const AssetImage('assets/images/default-wallpaper.png'),
                   borderRadius: BorderRadius.circular(17),
                   border: Border.all(
-                    color: Colors.white.withValues(alpha: 0.55),
+                    color: Colors.white.withValues(alpha: 0.65),
                     width: 0.7,
                   ),
                   child: SizedBox(

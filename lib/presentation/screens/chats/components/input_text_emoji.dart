@@ -40,15 +40,9 @@ class _TextEmojiInputFieldState extends State<TextEmojiInputField> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        IosGlass(
-          sigma: 40,
-          tint: const Color(0x8FF5F5F7),
-          border: Border(
-            top: BorderSide(
-              color: Colors.white.withValues(alpha: 0.45),
-              width: 0.6,
-            ),
-          ),
+        ChatGlassBar(
+          topBorder: true,
+          frostAlignment: Alignment.bottomCenter,
           child: Padding(
             padding:
                 EdgeInsets.fromLTRB(8.w, 6.h, 8.w, bottom > 0 ? bottom : 8.h),
@@ -68,7 +62,7 @@ class _TextEmojiInputFieldState extends State<TextEmojiInputField> {
                   child: Container(
                     constraints: BoxConstraints(minHeight: 36.h),
                     decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.92),
+                      color: Colors.white.withValues(alpha: 0.88),
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(
                         color: Colors.black.withValues(alpha: 0.10),
