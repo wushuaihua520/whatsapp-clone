@@ -109,7 +109,7 @@ class NewOption extends StatelessWidget {
       contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 2),
       leading: CircleAvatar(
         radius: 22,
-        backgroundColor: Color(0xFFE5F1FF),
+        backgroundColor: const Color(0xFFE5F1FF),
         child: Icon(
           icon,
           color: iosBlue,
