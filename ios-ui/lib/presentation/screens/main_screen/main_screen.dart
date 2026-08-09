@@ -1,6 +1,7 @@
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 
-import '../../core/routes/routes_name.dart';
 import '../calls/call_logs.dart';
 import '../chats/controller/message_controller.dart';
 import '../chats/participants_list.dart';
@@ -9,7 +10,7 @@ import '../settings_page.dart';
 import '../updates/updates_page.dart';
 import '../../../utils/constants.dart';
 
-/// Root shell built entirely with Cupertino tab navigation.
+/// WhatsApp iOS shell: Cupertino pages + floating Liquid Glass tab bar.
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
 
@@ -18,91 +19,167 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  late final CupertinoTabController _tabController;
+  int _index = 3;
+
+  static const _pages = <Widget>[
+    UpdatesPage(),
+    CallLogs(),
+    CommunityPage(),
+    ConversationList(),
+    SettingsPage(),
+  ];
 
   @override
   void initState() {
     MessageController.init();
-    _tabController = CupertinoTabController(initialIndex: 3);
     super.initState();
   }
 
   @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return CupertinoTabScaffold(
-      controller: _tabController,
-      backgroundColor: scaffoldBgColor,
-      tabBar: CupertinoTabBar(
-        backgroundColor: const Color(0xF2F7F7F7),
-        border: const Border(
-          top: BorderSide(color: Color(0x4D3C3C43), width: 0.33),
-        ),
-        activeColor: textColor,
-        inactiveColor: CupertinoColors.inactiveGray,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(CupertinoIcons.circle, key: Key('ios-tab-更新')),
-            activeIcon: Icon(CupertinoIcons.circle_fill),
-            label: '更新',
+    final bg = _index == 4 ? iosGroupedBackground : scaffoldBgColor;
+    return ColoredBox(
+      color: bg,
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: IndexedStack(
+              index: _index,
+              children: _pages,
+            ),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(CupertinoIcons.phone, key: Key('ios-tab-通话')),
-            activeIcon: Icon(CupertinoIcons.phone_fill),
-            label: '通话',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(CupertinoIcons.person_3, key: Key('ios-tab-社区')),
-            activeIcon: Icon(CupertinoIcons.person_3_fill),
-            label: '社区',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(CupertinoIcons.chat_bubble, key: Key('ios-tab-聊天')),
-            activeIcon: Icon(CupertinoIcons.chat_bubble_fill),
-            label: '聊天',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(CupertinoIcons.person, key: Key('ios-tab-自己')),
-            activeIcon: Icon(CupertinoIcons.person_fill),
-            label: '自己',
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: _LiquidGlassTabBar(
+              selectedIndex: _index,
+              onSelected: (i) => setState(() => _index = i),
+            ),
           ),
         ],
       ),
-      tabBuilder: (context, index) {
-        switch (index) {
-          case 0:
-            return CupertinoTabView(
-              builder: (_) => const UpdatesPage(),
-              onGenerateRoute: RouteNames.generateRoutes,
-            );
-          case 1:
-            return CupertinoTabView(
-              builder: (_) => const CallLogs(),
-              onGenerateRoute: RouteNames.generateRoutes,
-            );
-          case 2:
-            return CupertinoTabView(
-              builder: (_) => const CommunityPage(),
-              onGenerateRoute: RouteNames.generateRoutes,
-            );
-          case 3:
-            return CupertinoTabView(
-              builder: (_) => const ConversationList(),
-              onGenerateRoute: RouteNames.generateRoutes,
-            );
-          case 4:
-          default:
-            return CupertinoTabView(
-              builder: (_) => const SettingsPage(),
-              onGenerateRoute: RouteNames.generateRoutes,
-            );
-        }
-      },
+    );
+  }
+}
+
+class _LiquidGlassTabBar extends StatelessWidget {
+  const _LiquidGlassTabBar({
+    required this.selectedIndex,
+    required this.onSelected,
+  });
+
+  final int selectedIndex;
+  final ValueChanged<int> onSelected;
+
+  static const _tabs = [
+    (CupertinoIcons.arrow_2_circlepath, CupertinoIcons.arrow_2_circlepath, '更新'),
+    (CupertinoIcons.phone, CupertinoIcons.phone_fill, '通话'),
+    (CupertinoIcons.person_3, CupertinoIcons.person_3_fill, '社区'),
+    (CupertinoIcons.chat_bubble, CupertinoIcons.chat_bubble_fill, '聊天'),
+    (CupertinoIcons.person, CupertinoIcons.person_fill, '自己'),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      top: false,
+      minimum: const EdgeInsets.fromLTRB(16, 0, 16, 10),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(28),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 40, sigmaY: 40),
+          child: Container(
+            height: 58,
+            decoration: BoxDecoration(
+              color: const Color(0xD9F2F2F7),
+              borderRadius: BorderRadius.circular(28),
+              border: Border.all(color: const Color(0xB3FFFFFF), width: 0.7),
+              boxShadow: const [
+                BoxShadow(
+                  color: Color(0x22000000),
+                  blurRadius: 24,
+                  offset: Offset(0, 10),
+                ),
+              ],
+            ),
+            child: Row(
+              children: [
+                for (var i = 0; i < _tabs.length; i++)
+                  Expanded(
+                    child: _TabItem(
+                      icon: _tabs[i].$1,
+                      activeIcon: _tabs[i].$2,
+                      label: _tabs[i].$3,
+                      selected: selectedIndex == i,
+                      onTap: () => onSelected(i),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _TabItem extends StatelessWidget {
+  const _TabItem({
+    required this.icon,
+    required this.activeIcon,
+    required this.label,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final IconData activeIcon;
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final isMe = label == '自己';
+    final color = selected
+        ? (isMe ? const Color(0xFF00A884) : textColor)
+        : const Color(0xFF8E8E93);
+
+    return CupertinoButton(
+      padding: EdgeInsets.zero,
+      minSize: 0,
+      onPressed: onTap,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 180),
+            width: selected ? (isMe ? 38 : 46) : 36,
+            height: 28,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: !selected
+                  ? const Color(0x00000000)
+                  : isMe
+                      ? const Color(0x3325D366)
+                      : const Color(0x1A3C3C43),
+              borderRadius: BorderRadius.circular(14),
+            ),
+            child: Icon(selected ? activeIcon : icon, color: color, size: 22),
+          ),
+          const SizedBox(height: 1),
+          Text(
+            label,
+            style: TextStyle(
+              color: color,
+              fontSize: 10,
+              fontWeight: FontWeight.w500,
+              letterSpacing: -0.2,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

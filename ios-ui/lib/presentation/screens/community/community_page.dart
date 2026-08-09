@@ -13,10 +13,25 @@ class CommunityPage extends StatelessWidget {
       child: CustomScrollView(
         key: const PageStorageKey('community-list'),
         slivers: [
-          const CupertinoSliverNavigationBar(
-            largeTitle: Text('社区', key: Key('ios-社区-title')),
-            backgroundColor: Color(0xF7F9F9F9),
+          CupertinoSliverNavigationBar(
+            largeTitle: const Text('社区', key: Key('ios-社区-title')),
+            backgroundColor: const Color(0xF7F9F9F9),
             border: null,
+            transitionBetweenRoutes: false,
+            trailing: CupertinoButton(
+              padding: EdgeInsets.zero,
+              minSize: 0,
+              onPressed: () {},
+              child: Container(
+                width: 34,
+                height: 34,
+                decoration: const BoxDecoration(
+                  color: Color(0xFFE5E5EA),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(CupertinoIcons.ellipsis, size: 18),
+              ),
+            ),
           ),
           SliverToBoxAdapter(
             child: CupertinoListSection.insetGrouped(
@@ -88,6 +103,7 @@ class CommunityPage extends StatelessWidget {
               ),
             ),
           ),
+          const SliverToBoxAdapter(child: SizedBox(height: 110)),
         ],
       ),
     );

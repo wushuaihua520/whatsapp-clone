@@ -17,28 +17,53 @@ class SettingsPage extends StatelessWidget {
             largeTitle: const Text(''),
             backgroundColor: iosGroupedBackground,
             border: null,
+            transitionBetweenRoutes: false,
             leading: CupertinoButton(
               padding: EdgeInsets.zero,
               minSize: 0,
               onPressed: () {},
-              child: const Icon(CupertinoIcons.search, size: 26),
+              child: Container(
+                width: 34,
+                height: 34,
+                decoration: const BoxDecoration(
+                  color: Color(0xFFE5E5EA),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(CupertinoIcons.search, size: 18),
+              ),
             ),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                CupertinoButton(
-                  padding: const EdgeInsets.only(right: 8),
-                  minSize: 0,
-                  onPressed: () {},
-                  child: const Icon(CupertinoIcons.qrcode, size: 24),
-                ),
-                CupertinoButton(
-                  padding: EdgeInsets.zero,
-                  minSize: 0,
-                  onPressed: () {},
-                  child: const Icon(CupertinoIcons.pencil, size: 24),
-                ),
-              ],
+            trailing: Container(
+              height: 34,
+              padding: const EdgeInsets.symmetric(horizontal: 2),
+              decoration: BoxDecoration(
+                color: CupertinoColors.white,
+                borderRadius: BorderRadius.circular(17),
+                border: Border.all(color: const Color(0x143C3C43)),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Color(0x14000000),
+                    blurRadius: 6,
+                    offset: Offset(0, 1),
+                  ),
+                ],
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  CupertinoButton(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    minSize: 0,
+                    onPressed: () {},
+                    child: const Icon(CupertinoIcons.qrcode, size: 18),
+                  ),
+                  CupertinoButton(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    minSize: 0,
+                    onPressed: () {},
+                    child: const Icon(CupertinoIcons.pencil, size: 18),
+                  ),
+                ],
+              ),
             ),
           ),
           const SliverToBoxAdapter(child: _ProfileHero()),
@@ -59,7 +84,7 @@ class SettingsPage extends StatelessWidget {
                   title: '已加星标',
                 ),
                 _SettingsTile(
-                  icon: CupertinoIcons.speaker_2,
+                  icon: CupertinoIcons.speaker_2_fill,
                   title: '群发消息',
                 ),
                 _SettingsTile(
@@ -78,7 +103,7 @@ class SettingsPage extends StatelessWidget {
               ),
               children: const [
                 _SettingsTile(
-                  icon: CupertinoIcons.person_crop_circle,
+                  icon: CupertinoIcons.lock_shield,
                   title: '账户',
                 ),
                 _SettingsTile(
@@ -100,7 +125,7 @@ class SettingsPage extends StatelessWidget {
               ],
             ),
           ),
-          const SliverToBoxAdapter(child: SizedBox(height: 40)),
+          const SliverToBoxAdapter(child: SizedBox(height: 110)),
         ],
       ),
     );
@@ -179,8 +204,8 @@ class _ProfileHero extends StatelessWidget {
             ),
             SizedBox(width: 5),
             Icon(
-              CupertinoIcons.info_circle,
-              color: primaryColor,
+              CupertinoIcons.info_circle_fill,
+              color: iosBlue,
               size: 18,
             ),
           ],

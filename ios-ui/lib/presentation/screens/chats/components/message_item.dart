@@ -96,13 +96,34 @@ class MessageComponent extends StatelessWidget {
                   ),
                 ),
                 if (isMe) ...[
-                  const SizedBox(width: 3),
-                  Icon(
-                    CupertinoIcons.checkmark_alt,
-                    size: 14,
-                    color: element.seen
-                        ? readReceiptColor
-                        : CupertinoColors.systemGrey,
+                  const SizedBox(width: 2),
+                  SizedBox(
+                    width: 16,
+                    height: 12,
+                    child: Stack(
+                      children: [
+                        Positioned(
+                          left: 0,
+                          child: Icon(
+                            CupertinoIcons.checkmark_alt,
+                            size: 13,
+                            color: element.seen
+                                ? readReceiptColor
+                                : CupertinoColors.systemGrey,
+                          ),
+                        ),
+                        Positioned(
+                          left: 4,
+                          child: Icon(
+                            CupertinoIcons.checkmark_alt,
+                            size: 13,
+                            color: element.seen
+                                ? readReceiptColor
+                                : CupertinoColors.systemGrey,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ],

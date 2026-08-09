@@ -18,11 +18,43 @@ class CallLogs extends StatelessWidget {
             largeTitle: const Text('通话', key: Key('ios-通话-title')),
             backgroundColor: const Color(0xF7F9F9F9),
             border: null,
-            trailing: CupertinoButton(
-              padding: EdgeInsets.zero,
-              minSize: 0,
-              onPressed: () {},
-              child: const Icon(CupertinoIcons.phone_fill),
+            transitionBetweenRoutes: false,
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CupertinoButton(
+                  padding: const EdgeInsets.only(right: 8),
+                  minSize: 0,
+                  onPressed: () {},
+                  child: Container(
+                    width: 34,
+                    height: 34,
+                    decoration: const BoxDecoration(
+                      color: Color(0xFFE5E5EA),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(CupertinoIcons.ellipsis, size: 18),
+                  ),
+                ),
+                CupertinoButton(
+                  padding: EdgeInsets.zero,
+                  minSize: 0,
+                  onPressed: () {},
+                  child: Container(
+                    width: 34,
+                    height: 34,
+                    decoration: const BoxDecoration(
+                      color: Color(0xFF25D366),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      CupertinoIcons.phone_badge_plus,
+                      color: CupertinoColors.white,
+                      size: 18,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
           SliverToBoxAdapter(
@@ -57,6 +89,7 @@ class CallLogs extends StatelessWidget {
               ],
             ),
           ),
+          const SliverToBoxAdapter(child: SizedBox(height: 110)),
         ],
       ),
     );

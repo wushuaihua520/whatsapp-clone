@@ -65,39 +65,65 @@ class _ConversationListState extends State<ConversationList> {
             largeTitle: const Text('聊天', key: Key('ios-聊天-title')),
             backgroundColor: const Color(0xF7F9F9F9),
             border: null,
+            transitionBetweenRoutes: false,
             leading: CupertinoButton(
               padding: EdgeInsets.zero,
               minSize: 0,
               onPressed: () {},
-              child: const Icon(CupertinoIcons.ellipsis_circle, size: 28),
+              child: Container(
+                width: 34,
+                height: 34,
+                decoration: const BoxDecoration(
+                  color: Color(0xFFE5E5EA),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(CupertinoIcons.ellipsis, size: 18),
+              ),
             ),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 CupertinoButton(
-                  padding: const EdgeInsets.only(right: 4),
+                  padding: const EdgeInsets.only(right: 8),
                   minSize: 0,
                   onPressed: () {},
-                  child: const Icon(CupertinoIcons.camera, size: 26),
+                  child: Container(
+                    width: 34,
+                    height: 34,
+                    decoration: const BoxDecoration(
+                      color: Color(0xFFE5E5EA),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(CupertinoIcons.camera, size: 18),
+                  ),
                 ),
                 CupertinoButton(
                   padding: EdgeInsets.zero,
                   minSize: 0,
                   onPressed: () =>
                       Navigator.of(context).pushNamed(RouteNames.contactPage),
-                  child: const Icon(
-                    CupertinoIcons.plus_circle_fill,
-                    key: Key('ios-new-chat'),
-                    color: Color(0xFF25D366),
-                    size: 28,
+                  child: Container(
+                    key: const Key('ios-new-chat'),
+                    width: 34,
+                    height: 34,
+                    decoration: const BoxDecoration(
+                      color: Color(0xFF25D366),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      CupertinoIcons.plus,
+                      color: CupertinoColors.white,
+                      size: 20,
+                    ),
                   ),
                 ),
               ],
             ),
           ),
+          const SliverToBoxAdapter(child: SizedBox(height: 4)),
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 0, 16, 10),
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
               child: CupertinoSearchTextField(
                 key: const Key('chat-search-field'),
                 controller: _searchController,
@@ -185,6 +211,7 @@ class _ConversationListState extends State<ConversationList> {
                 childCount: chats.length + 1,
               ),
             ),
+          const SliverToBoxAdapter(child: SizedBox(height: 110)),
         ],
       ),
     );
