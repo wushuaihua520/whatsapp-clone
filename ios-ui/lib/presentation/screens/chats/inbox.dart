@@ -137,108 +137,104 @@ class _GlassChatHeader extends StatelessWidget {
               height: 62,
               child: Row(
                 children: [
-                  const SizedBox(width: 7),
-                  GlassCircleButton(
+                  const SizedBox(width: 4),
+                  GestureDetector(
                     key: const Key('ios-chat-back'),
-                    icon: Icons.chevron_left_rounded,
-                    tooltip: '返回',
-                    size: 38,
-                    iconColor: textColor,
-                    opacity: 0.4,
-                    blur: 32,
-                    onPressed: () => Navigator.pop(context),
+                    onTap: () => Navigator.pop(context),
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+                      child: Icon(
+                        Icons.chevron_left_rounded,
+                        color: Color(0xFF3C3C43),
+                        size: 32,
+                      ),
+                    ),
                   ),
-                  const SizedBox(width: 7),
-                  Material(
-                    color: Colors.transparent,
-                    shape: const CircleBorder(),
-                    clipBehavior: Clip.antiAlias,
-                    child: InkWell(
-                      key: const Key('ios-chat-avatar'),
-                      customBorder: const CircleBorder(),
-                      onTap: () =>
-                          Navigator.pushNamed(context, RouteNames.contactInfo),
-                      child: const CircleAvatar(
-                        radius: 18,
-                        backgroundColor: Color(0xFFF4E7C9),
-                        child: Icon(
-                          Icons.person_rounded,
-                          color: Color(0xFFB78032),
-                          size: 19,
+                  Expanded(
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        key: const Key('ios-chat-avatar'),
+                        borderRadius: BorderRadius.circular(20),
+                        onTap: () => Navigator.pushNamed(
+                          context,
+                          RouteNames.contactInfo,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const CircleAvatar(
+                              radius: 16,
+                              backgroundColor: Color(0xFFF4E7C9),
+                              child: Icon(
+                                Icons.person_rounded,
+                                color: Color(0xFFB78032),
+                                size: 17,
+                              ),
+                            ),
+                            const SizedBox(width: 6),
+                            Flexible(
+                              child: Text(
+                                user.participant,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  color: textColor,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  letterSpacing: -0.25,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
                   ),
-                  const SizedBox(width: 7),
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                  Container(
+                    height: 34,
+                    margin: const EdgeInsets.only(right: 10),
+                    padding: const EdgeInsets.symmetric(horizontal: 2),
+                    decoration: BoxDecoration(
+                      color: const Color(0xE6FFFFFF),
+                      borderRadius: BorderRadius.circular(17),
+                      border: Border.all(color: const Color(0x33FFFFFF)),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text(
-                          user.participant,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
+                        IconButton(
+                          tooltip: '视频通话',
+                          onPressed: () {},
+                          constraints: const BoxConstraints.tightFor(
+                            width: 36,
+                            height: 34,
+                          ),
+                          padding: EdgeInsets.zero,
+                          icon: const Icon(
+                            Icons.videocam_outlined,
                             color: textColor,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            letterSpacing: -0.2,
+                            size: 22,
                           ),
                         ),
-                        const Text(
-                          '点击此处查看联系人信息',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            color: iosSecondaryLabel,
-                            fontSize: 9,
+                        IconButton(
+                          tooltip: '语音通话',
+                          onPressed: () {},
+                          constraints: const BoxConstraints.tightFor(
+                            width: 36,
+                            height: 34,
+                          ),
+                          padding: EdgeInsets.zero,
+                          icon: const Icon(
+                            Icons.call_outlined,
+                            color: textColor,
+                            size: 19,
                           ),
                         ),
                       ],
                     ),
                   ),
-                  GlassSurface(
-                    borderRadius: 22,
-                    blur: 34,
-                    opacity: 0.42,
-                    boxShadow: false,
-                    child: SizedBox(
-                      height: 40,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(
-                            tooltip: '视频通话',
-                            onPressed: () {},
-                            constraints: const BoxConstraints.tightFor(
-                              width: 42,
-                              height: 40,
-                            ),
-                            icon: const Icon(
-                              Icons.videocam_outlined,
-                              color: textColor,
-                              size: 21,
-                            ),
-                          ),
-                          IconButton(
-                            tooltip: '语音通话',
-                            onPressed: () {},
-                            constraints: const BoxConstraints.tightFor(
-                              width: 42,
-                              height: 40,
-                            ),
-                            icon: const Icon(
-                              Icons.call_outlined,
-                              color: textColor,
-                              size: 19,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
                 ],
               ),
             ),
@@ -270,7 +266,7 @@ class _ConversationDate extends StatelessWidget {
           ],
         ),
         child: const Text(
-          '2026年1月14日',
+          '2024年1月14日',
           style: TextStyle(
             color: iosSecondaryLabel,
             fontSize: 11,

@@ -5,7 +5,6 @@ import 'package:whatsapp_ios_ui/main.dart';
 import 'package:whatsapp_ios_ui/presentation/core/routes/routes_name.dart';
 import 'package:whatsapp_ios_ui/presentation/screens/main_screen/main_screen.dart';
 import 'package:whatsapp_ios_ui/widgets/custom_theme.dart';
-import 'package:whatsapp_ios_ui/widgets/glass_surface.dart';
 import 'package:whatsapp_ios_ui/widgets/iphone_device_frame.dart';
 
 void main() {
@@ -34,25 +33,25 @@ void main() {
 
     expect(find.byKey(const Key('ios-聊天-title')), findsOneWidget);
     expect(find.text('搜索'), findsOneWidget);
-    expect(find.byKey(const Key('ios-tab-动态')), findsOneWidget);
+    expect(find.byKey(const Key('ios-tab-更新')), findsOneWidget);
     expect(find.byKey(const Key('ios-tab-通话')), findsOneWidget);
     expect(find.byKey(const Key('ios-tab-社区')), findsOneWidget);
     expect(find.byKey(const Key('ios-tab-聊天')), findsOneWidget);
-    expect(find.byKey(const Key('ios-tab-设置')), findsOneWidget);
-    expect(find.byType(GlassSurface), findsWidgets);
+    expect(find.byKey(const Key('ios-tab-自己')), findsOneWidget);
+    expect(find.text('允许完整联系人访问权限'), findsOneWidget);
 
     await tester.tap(find.byKey(const Key('filter-未读')));
     await tester.pump();
     expect(find.text('+852 5923 9971'), findsOneWidget);
     expect(find.text('WhatsApp'), findsNothing);
 
-    await tester.tap(find.byKey(const Key('ios-tab-动态')));
+    await tester.tap(find.byKey(const Key('ios-tab-更新')));
     await tester.pumpAndSettle();
-    expect(find.byKey(const Key('ios-动态-title')), findsOneWidget);
+    expect(find.byKey(const Key('ios-更新-title')), findsOneWidget);
     expect(find.text('状态'), findsOneWidget);
     expect(find.text('频道'), findsOneWidget);
 
-    await tester.tap(find.byKey(const Key('ios-tab-设置')));
+    await tester.tap(find.byKey(const Key('ios-tab-自己')));
     await tester.pumpAndSettle();
     expect(find.text('心如止水'), findsOneWidget);
     expect(find.text('账户'), findsOneWidget);

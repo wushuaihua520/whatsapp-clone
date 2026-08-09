@@ -122,20 +122,20 @@ class MyTheme {
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
       fillColor: searchFieldColor,
-      hintStyle: const TextStyle(color: subTitleTextColor, fontSize: 16),
+      hintStyle: const TextStyle(color: Color(0xFF8E8E93), fontSize: 17),
       border: OutlineInputBorder(
         borderSide: BorderSide.none,
-        borderRadius: BorderRadius.circular(13),
+        borderRadius: BorderRadius.circular(10),
       ),
       enabledBorder: OutlineInputBorder(
         borderSide: BorderSide.none,
-        borderRadius: BorderRadius.circular(13),
+        borderRadius: BorderRadius.circular(10),
       ),
       focusedBorder: OutlineInputBorder(
-        borderSide: const BorderSide(color: iosBlue, width: 1),
-        borderRadius: BorderRadius.circular(13),
+        borderSide: BorderSide.none,
+        borderRadius: BorderRadius.circular(10),
       ),
-      contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
