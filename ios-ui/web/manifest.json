@@ -1,11 +1,12 @@
 {
-    "name": "WhatsApp iOS UI",
-    "short_name": "WhatsApp iOS",
+    "name": "WhatsApp",
+    "short_name": "WhatsApp",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#F2F2F7",
-    "theme_color": "#F2F2F7",
-    "description": "A WhatsApp iOS 26 Liquid Glass UI showcase.",
+    "display_override": ["standalone", "fullscreen"],
+    "background_color": "#000000",
+    "theme_color": "#000000",
+    "description": "WhatsApp iPhone Liquid Glass UI showcase.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

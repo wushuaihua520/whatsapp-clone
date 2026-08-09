@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'presentation/core/routes/routes_name.dart';
 import 'utils/strings.dart';
 import 'widgets/custom_theme.dart';
+import 'widgets/iphone_device_frame.dart';
 
 void main() {
   runApp(const MyApp());
@@ -20,6 +21,11 @@ class MyApp extends StatelessWidget {
       initialRoute: RouteNames.splashScreen,
       onGenerateRoute: RouteNames.generateRoutes,
       theme: MyTheme.theme,
+      builder: (context, child) {
+        return IphoneExperience(
+          child: child ?? const SizedBox.shrink(),
+        );
+      },
     );
   }
 }

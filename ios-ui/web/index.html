@@ -18,20 +18,36 @@
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="A WhatsApp iOS 26 Liquid Glass UI showcase built with Flutter.">
+  <meta name="description" content="WhatsApp on iPhone — Liquid Glass UI showcase.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 
-  <!-- Mobile web app meta tags & icons -->
+  <!-- Installable Apple phone web app -->
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="WhatsApp iOS UI">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="WhatsApp">
+  <meta name="theme-color" content="#000000">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png"/>
 
-  <title>WhatsApp iOS UI</title>
+  <title>WhatsApp — iPhone</title>
   <link rel="manifest" href="manifest.json">
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      background: #0B0B0D;
+      overscroll-behavior: none;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-text-size-adjust: 100%;
+    }
+    flt-glass-pane {
+      height: 100%;
+    }
+  </style>
 
   <script>
     // The value below is injected by flutter build, do not touch.
