@@ -155,14 +155,14 @@ class _TabItem extends StatelessWidget {
         children: [
           AnimatedContainer(
             duration: const Duration(milliseconds: 180),
-            width: selected ? (isMe ? 38 : 46) : 36,
+            width: selected ? (isMe ? 40 : 46) : 36,
             height: 28,
             alignment: Alignment.center,
             decoration: BoxDecoration(
               color: !selected
                   ? const Color(0x00000000)
                   : isMe
-                      ? const Color(0x3325D366)
+                      ? const Color(0x4025D366)
                       : const Color(0x1A3C3C43),
               borderRadius: BorderRadius.circular(14),
             ),
@@ -174,7 +174,7 @@ class _TabItem extends StatelessWidget {
             style: TextStyle(
               color: color,
               fontSize: 10,
-              fontWeight: FontWeight.w500,
+              fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
               letterSpacing: -0.2,
             ),
           ),

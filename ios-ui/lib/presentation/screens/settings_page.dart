@@ -13,59 +13,7 @@ class SettingsPage extends StatelessWidget {
       child: CustomScrollView(
         key: const PageStorageKey('ios-settings-list'),
         slivers: [
-          CupertinoSliverNavigationBar(
-            largeTitle: const Text(''),
-            backgroundColor: iosGroupedBackground,
-            border: null,
-            transitionBetweenRoutes: false,
-            leading: CupertinoButton(
-              padding: EdgeInsets.zero,
-              minSize: 0,
-              onPressed: () {},
-              child: Container(
-                width: 34,
-                height: 34,
-                decoration: const BoxDecoration(
-                  color: Color(0xFFE5E5EA),
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(CupertinoIcons.search, size: 18),
-              ),
-            ),
-            trailing: Container(
-              height: 34,
-              padding: const EdgeInsets.symmetric(horizontal: 2),
-              decoration: BoxDecoration(
-                color: CupertinoColors.white,
-                borderRadius: BorderRadius.circular(17),
-                border: Border.all(color: const Color(0x143C3C43)),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Color(0x14000000),
-                    blurRadius: 6,
-                    offset: Offset(0, 1),
-                  ),
-                ],
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  CupertinoButton(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    minSize: 0,
-                    onPressed: () {},
-                    child: const Icon(CupertinoIcons.qrcode, size: 18),
-                  ),
-                  CupertinoButton(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    minSize: 0,
-                    onPressed: () {},
-                    child: const Icon(CupertinoIcons.pencil, size: 18),
-                  ),
-                ],
-              ),
-            ),
-          ),
+          const SliverToBoxAdapter(child: _SettingsChrome()),
           const SliverToBoxAdapter(child: _ProfileHero()),
           SliverToBoxAdapter(
             child: CupertinoListSection.insetGrouped(
@@ -127,6 +75,84 @@ class SettingsPage extends StatelessWidget {
           ),
           const SliverToBoxAdapter(child: SizedBox(height: 110)),
         ],
+      ),
+    );
+  }
+}
+
+class _SettingsChrome extends StatelessWidget {
+  const _SettingsChrome();
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      bottom: false,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 6, 16, 4),
+        child: Row(
+          children: [
+            CupertinoButton(
+              padding: EdgeInsets.zero,
+              minSize: 0,
+              onPressed: () {},
+              child: Container(
+                width: 34,
+                height: 34,
+                decoration: const BoxDecoration(
+                  color: Color(0xFFE5E5EA),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  CupertinoIcons.search,
+                  size: 18,
+                  color: textColor,
+                ),
+              ),
+            ),
+            const Spacer(),
+            Container(
+              height: 34,
+              padding: const EdgeInsets.symmetric(horizontal: 2),
+              decoration: BoxDecoration(
+                color: CupertinoColors.white,
+                borderRadius: BorderRadius.circular(17),
+                border: Border.all(color: const Color(0x143C3C43)),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Color(0x14000000),
+                    blurRadius: 6,
+                    offset: Offset(0, 1),
+                  ),
+                ],
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  CupertinoButton(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    minSize: 0,
+                    onPressed: () {},
+                    child: const Icon(
+                      CupertinoIcons.qrcode,
+                      size: 18,
+                      color: textColor,
+                    ),
+                  ),
+                  CupertinoButton(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    minSize: 0,
+                    onPressed: () {},
+                    child: const Icon(
+                      CupertinoIcons.pencil,
+                      size: 18,
+                      color: textColor,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

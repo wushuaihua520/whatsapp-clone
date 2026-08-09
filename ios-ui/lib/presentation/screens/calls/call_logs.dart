@@ -33,7 +33,11 @@ class CallLogs extends StatelessWidget {
                       color: Color(0xFFE5E5EA),
                       shape: BoxShape.circle,
                     ),
-                    child: const Icon(CupertinoIcons.ellipsis, size: 18),
+                    child: const Icon(
+                      CupertinoIcons.ellipsis,
+                      size: 18,
+                      color: textColor,
+                    ),
                   ),
                 ),
                 CupertinoButton(

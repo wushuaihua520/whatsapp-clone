@@ -77,7 +77,11 @@ class _ConversationListState extends State<ConversationList> {
                   color: Color(0xFFE5E5EA),
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(CupertinoIcons.ellipsis, size: 18),
+                child: const Icon(
+                  CupertinoIcons.ellipsis,
+                  size: 18,
+                  color: textColor,
+                ),
               ),
             ),
             trailing: Row(
@@ -94,7 +98,11 @@ class _ConversationListState extends State<ConversationList> {
                       color: Color(0xFFE5E5EA),
                       shape: BoxShape.circle,
                     ),
-                    child: const Icon(CupertinoIcons.camera, size: 18),
+                    child: const Icon(
+                      CupertinoIcons.camera,
+                      size: 18,
+                      color: textColor,
+                    ),
                   ),
                 ),
                 CupertinoButton(

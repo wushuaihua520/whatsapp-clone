@@ -118,8 +118,8 @@ class _TextEmojiInputFieldState extends State<TextEmojiInputField> {
                     minSize: 0,
                     onPressed: () {},
                     child: const Icon(
-                      CupertinoIcons.camera,
-                      size: 26,
+                      CupertinoIcons.camera_fill,
+                      size: 24,
                       color: textColor,
                     ),
                   ),
@@ -128,8 +128,8 @@ class _TextEmojiInputFieldState extends State<TextEmojiInputField> {
                     minSize: 0,
                     onPressed: () {},
                     child: const Icon(
-                      CupertinoIcons.mic,
-                      size: 26,
+                      CupertinoIcons.mic_fill,
+                      size: 24,
                       color: textColor,
                     ),
                   ),

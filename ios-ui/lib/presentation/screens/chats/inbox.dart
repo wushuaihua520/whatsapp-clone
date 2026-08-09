@@ -139,7 +139,11 @@ class _FrostedChatHeader extends StatelessWidget {
                     padding: const EdgeInsets.only(left: 4),
                     minSize: 0,
                     onPressed: () => Navigator.of(context).pop(),
-                    child: const Icon(CupertinoIcons.back, size: 28),
+                    child: const Icon(
+                      CupertinoIcons.back,
+                      size: 28,
+                      color: textColor,
+                    ),
                   ),
                   Expanded(
                     child: CupertinoButton(
