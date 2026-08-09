@@ -162,7 +162,11 @@ class _ConversationListState extends State<ConversationList> {
                           color: CupertinoColors.systemGrey5.resolveFrom(context),
                           shape: BoxShape.circle,
                         ),
-                        child: const Icon(CupertinoIcons.plus, size: 18),
+                        child: const Icon(
+                          CupertinoIcons.plus,
+                          size: 18,
+                          color: textColor,
+                        ),
                       ),
                     );
                   }
@@ -181,19 +185,24 @@ class _ConversationListState extends State<ConversationList> {
                       ),
                       decoration: BoxDecoration(
                         color: selected
-                            ? const Color(0xFFD8F5E2)
-                            : CupertinoColors.systemGrey6
-                                .resolveFrom(context),
+                            ? const Color(0xFF25D366)
+                            : const Color(0x00000000),
                         borderRadius: BorderRadius.circular(16),
+                        border: selected
+                            ? null
+                            : Border.all(
+                                color: const Color(0xFFC7C7CC),
+                                width: 1,
+                              ),
                       ),
                       child: Text(
                         filter,
                         style: TextStyle(
                           color: selected
-                              ? const Color(0xFF128C4E)
+                              ? CupertinoColors.white
                               : textColor,
                           fontSize: 13,
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),

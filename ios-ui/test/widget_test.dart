@@ -66,7 +66,8 @@ void main() {
     await tester.tap(find.text('Martin Luther'));
     await tester.pumpAndSettle();
     expect(find.text('+852 5923 9971'), findsOneWidget);
-    expect(find.text('消息'), findsOneWidget);
+    expect(find.byKey(const Key('ios-jump-to-latest')), findsOneWidget);
+    expect(find.text('hi'), findsOneWidget);
 
     await tester.tap(find.byKey(const Key('ios-chat-avatar')));
     await tester.pumpAndSettle();

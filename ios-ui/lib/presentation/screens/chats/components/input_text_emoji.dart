@@ -1,10 +1,12 @@
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart' show Icons;
 
 import '../../../../utils/constants.dart';
 import '../controller/message_controller.dart';
 
+/// WhatsApp iOS composer: `+` | field | sticker | camera | mic
 class TextEmojiInputField extends StatefulWidget {
   const TextEmojiInputField({super.key});
 
@@ -29,26 +31,25 @@ class _TextEmojiInputFieldState extends State<TextEmojiInputField> {
         filter: ImageFilter.blur(sigmaX: 24, sigmaY: 24),
         child: DecoratedBox(
           decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [Color(0x66F2F2F7), Color(0xE6F2F2F7)],
+            color: Color(0xE6F2F2F7),
+            border: Border(
+              top: BorderSide(color: Color(0x143C3C43), width: 0.33),
             ),
           ),
           child: SafeArea(
             top: false,
-            minimum: const EdgeInsets.fromLTRB(6, 6, 6, 6),
+            minimum: const EdgeInsets.fromLTRB(6, 6, 4, 6),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 CupertinoButton(
-                  padding: const EdgeInsets.all(4),
+                  padding: const EdgeInsets.fromLTRB(6, 4, 4, 4),
                   minSize: 0,
                   onPressed: () {},
                   child: const Icon(
                     CupertinoIcons.plus,
                     size: 28,
-                    color: textColor,
+                    color: Color(0xFF8E8E93),
                   ),
                 ),
                 Expanded(
@@ -59,36 +60,19 @@ class _TextEmojiInputFieldState extends State<TextEmojiInputField> {
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(color: const Color(0xFFD8D8DC)),
                     ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Expanded(
-                          child: CupertinoTextField(
-                            controller: controller,
-                            placeholder: '消息',
-                            padding: const EdgeInsets.fromLTRB(12, 8, 4, 8),
-                            decoration: null,
-                            maxLines: 5,
-                            minLines: 1,
-                            onChanged: (value) {
-                              final hasText = value.trim().isNotEmpty;
-                              if (hasText != isTyping) {
-                                setState(() => isTyping = hasText);
-                              }
-                            },
-                          ),
-                        ),
-                        CupertinoButton(
-                          padding: const EdgeInsets.all(6),
-                          minSize: 0,
-                          onPressed: () {},
-                          child: const Icon(
-                            CupertinoIcons.smiley,
-                            size: 22,
-                            color: Color(0xFF8E8E93),
-                          ),
-                        ),
-                      ],
+                    child: CupertinoTextField(
+                      controller: controller,
+                      placeholder: '',
+                      padding: const EdgeInsets.fromLTRB(14, 8, 14, 8),
+                      decoration: null,
+                      maxLines: 5,
+                      minLines: 1,
+                      onChanged: (value) {
+                        final hasText = value.trim().isNotEmpty;
+                        if (hasText != isTyping) {
+                          setState(() => isTyping = hasText);
+                        }
+                      },
                     ),
                   ),
                 ),
@@ -114,7 +98,17 @@ class _TextEmojiInputFieldState extends State<TextEmojiInputField> {
                   )
                 else ...[
                   CupertinoButton(
-                    padding: const EdgeInsets.all(4),
+                    padding: const EdgeInsets.all(6),
+                    minSize: 0,
+                    onPressed: () {},
+                    child: const Icon(
+                      Icons.sticky_note_2_outlined,
+                      size: 24,
+                      color: textColor,
+                    ),
+                  ),
+                  CupertinoButton(
+                    padding: const EdgeInsets.all(6),
                     minSize: 0,
                     onPressed: () {},
                     child: const Icon(
@@ -124,7 +118,7 @@ class _TextEmojiInputFieldState extends State<TextEmojiInputField> {
                     ),
                   ),
                   CupertinoButton(
-                    padding: const EdgeInsets.all(4),
+                    padding: const EdgeInsets.fromLTRB(4, 6, 8, 6),
                     minSize: 0,
                     onPressed: () {},
                     child: const Icon(

@@ -18,40 +18,64 @@ class MessageComponent extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
 
     if (element.image != null) {
-      return Align(
-        alignment: Alignment.centerLeft,
-        child: Container(
-          key: Key('message-${element.id}'),
-          width: width * 0.6,
-          margin: const EdgeInsets.only(bottom: 4),
-          padding: const EdgeInsets.all(3),
-          decoration: BoxDecoration(
-            color: senderMessageBg,
-            borderRadius: BorderRadius.circular(14),
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(11),
-            child: AspectRatio(
-              aspectRatio: 0.8,
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  Image.asset(element.image!, fit: BoxFit.cover),
-                  Positioned(
-                    right: 7,
-                    bottom: 6,
-                    child: Text(
-                      DateFormat.Hm().format(element.date),
-                      style: const TextStyle(
-                        color: CupertinoColors.white,
-                        fontSize: 10,
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 4),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              key: Key('message-${element.id}'),
+              width: width * 0.58,
+              padding: const EdgeInsets.all(3),
+              decoration: BoxDecoration(
+                color: senderMessageBg,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: AspectRatio(
+                  aspectRatio: 0.72,
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      Image.asset(element.image!, fit: BoxFit.cover),
+                      Positioned(
+                        right: 7,
+                        bottom: 6,
+                        child: Text(
+                          DateFormat.Hm().format(element.date),
+                          style: const TextStyle(
+                            color: CupertinoColors.white,
+                            fontSize: 10,
+                            shadows: [
+                              Shadow(
+                                color: Color(0x88000000),
+                                blurRadius: 4,
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
-          ),
+            const SizedBox(width: 6),
+            Container(
+              width: 28,
+              height: 28,
+              decoration: const BoxDecoration(
+                color: Color(0xFFE5E5EA),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                CupertinoIcons.arrowshape_turn_up_right_fill,
+                size: 14,
+                color: Color(0xFF8E8E93),
+              ),
+            ),
+          ],
         ),
       );
     }
@@ -61,15 +85,15 @@ class MessageComponent extends StatelessWidget {
       child: Container(
         key: Key('message-${element.id}'),
         constraints: BoxConstraints(maxWidth: width * 0.76),
-        margin: const EdgeInsets.only(bottom: 4),
-        padding: const EdgeInsets.fromLTRB(12, 8, 9, 6),
+        margin: const EdgeInsets.only(bottom: 3),
+        padding: const EdgeInsets.fromLTRB(11, 7, 8, 5),
         decoration: BoxDecoration(
-          color: isMe ? userMessageBg : senderMessageBg,
+          color: isMe ? const Color(0xFFE1FEC6) : senderMessageBg,
           borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(isMe ? 17 : 5),
-            topRight: Radius.circular(isMe ? 5 : 17),
-            bottomLeft: const Radius.circular(17),
-            bottomRight: const Radius.circular(17),
+            topLeft: Radius.circular(isMe ? 12 : 4),
+            topRight: Radius.circular(isMe ? 4 : 12),
+            bottomLeft: const Radius.circular(12),
+            bottomRight: const Radius.circular(12),
           ),
         ),
         child: Wrap(
@@ -109,7 +133,7 @@ class MessageComponent extends StatelessWidget {
                             size: 13,
                             color: element.seen
                                 ? readReceiptColor
-                                : CupertinoColors.systemGrey,
+                                : const Color(0xFF8E8E93),
                           ),
                         ),
                         Positioned(
@@ -119,7 +143,7 @@ class MessageComponent extends StatelessWidget {
                             size: 13,
                             color: element.seen
                                 ? readReceiptColor
-                                : CupertinoColors.systemGrey,
+                                : const Color(0xFF8E8E93),
                           ),
                         ),
                       ],

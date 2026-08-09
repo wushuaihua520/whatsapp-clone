@@ -142,9 +142,7 @@ class _TabItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isMe = label == '自己';
-    final color = selected
-        ? (isMe ? const Color(0xFF00A884) : textColor)
-        : const Color(0xFF8E8E93);
+    final color = selected ? textColor : const Color(0xFF8E8E93);
 
     return CupertinoButton(
       padding: EdgeInsets.zero,
@@ -155,15 +153,15 @@ class _TabItem extends StatelessWidget {
         children: [
           AnimatedContainer(
             duration: const Duration(milliseconds: 180),
-            width: selected ? (isMe ? 40 : 46) : 36,
+            width: selected ? (isMe ? 36 : 46) : 36,
             height: 28,
             alignment: Alignment.center,
             decoration: BoxDecoration(
               color: !selected
                   ? const Color(0x00000000)
                   : isMe
-                      ? const Color(0x4025D366)
-                      : const Color(0x1A3C3C43),
+                      ? const Color(0xFFB2EBE3)
+                      : const Color(0x293C3C43),
               borderRadius: BorderRadius.circular(14),
             ),
             child: Icon(selected ? activeIcon : icon, color: color, size: 22),

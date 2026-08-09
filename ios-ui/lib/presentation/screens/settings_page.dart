@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart' show Icons;
 
 import '../../utils/constants.dart';
 
-/// Profile / 「自己」 — Cupertino inset grouped settings.
+/// Profile / 「自己」 — 1:1 WhatsApp iOS settings chrome.
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
 
@@ -51,7 +52,7 @@ class SettingsPage extends StatelessWidget {
               ),
               children: const [
                 _SettingsTile(
-                  icon: CupertinoIcons.lock_shield,
+                  icon: Icons.vpn_key_outlined,
                   title: '账户',
                 ),
                 _SettingsTile(
@@ -88,40 +89,39 @@ class _SettingsChrome extends StatelessWidget {
     return SafeArea(
       bottom: false,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 6, 16, 4),
+        padding: const EdgeInsets.fromLTRB(18, 8, 16, 4),
         child: Row(
           children: [
             CupertinoButton(
               padding: EdgeInsets.zero,
               minSize: 0,
               onPressed: () {},
-              child: Container(
-                width: 34,
-                height: 34,
-                decoration: const BoxDecoration(
-                  color: Color(0xFFE5E5EA),
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  CupertinoIcons.search,
-                  size: 18,
-                  color: textColor,
-                ),
+              child: const Icon(
+                CupertinoIcons.search,
+                size: 24,
+                color: textColor,
               ),
             ),
             const Spacer(),
             Container(
               height: 34,
-              padding: const EdgeInsets.symmetric(horizontal: 4),
+              padding: const EdgeInsets.symmetric(horizontal: 2),
               decoration: BoxDecoration(
-                color: const Color(0xFFE5E5EA),
+                color: CupertinoColors.white,
                 borderRadius: BorderRadius.circular(17),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Color(0x1A000000),
+                    blurRadius: 8,
+                    offset: Offset(0, 1),
+                  ),
+                ],
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   CupertinoButton(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
                     minSize: 0,
                     onPressed: () {},
                     child: const Icon(
@@ -130,8 +130,13 @@ class _SettingsChrome extends StatelessWidget {
                       color: textColor,
                     ),
                   ),
+                  Container(
+                    width: 0.5,
+                    height: 16,
+                    color: const Color(0x4D3C3C43),
+                  ),
                   CupertinoButton(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
                     minSize: 0,
                     onPressed: () {},
                     child: const Icon(
@@ -162,7 +167,7 @@ class _ProfileHero extends StatelessWidget {
           clipBehavior: Clip.none,
           children: [
             const Padding(
-              padding: EdgeInsets.only(top: 18),
+              padding: EdgeInsets.only(top: 20),
               child: SizedBox(
                 width: 96,
                 height: 96,
@@ -183,7 +188,7 @@ class _ProfileHero extends StatelessWidget {
               top: 0,
               child: Container(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    const EdgeInsets.symmetric(horizontal: 11, vertical: 5),
                 decoration: BoxDecoration(
                   color: CupertinoColors.white,
                   borderRadius: BorderRadius.circular(14),

@@ -80,13 +80,13 @@ class Inbox extends StatelessWidget {
                     width: 36,
                     height: 36,
                     decoration: BoxDecoration(
-                      color: const Color(0xCCFFFFFF),
+                      color: const Color(0xF2FFFFFF),
                       shape: BoxShape.circle,
                       border: Border.all(color: const Color(0x33FFFFFF)),
                     ),
                     child: const Icon(
                       CupertinoIcons.chevron_down,
-                      color: textColor,
+                      color: Color(0xFF8E8E93),
                       size: 18,
                     ),
                   ),
@@ -106,6 +106,7 @@ class Inbox extends StatelessWidget {
   }
 }
 
+/// Matches WhatsApp iOS: [<] [avatar] [number …………] [video|phone pill]
 class _FrostedChatHeader extends StatelessWidget {
   const _FrostedChatHeader({required this.user});
 
@@ -118,14 +119,9 @@ class _FrostedChatHeader extends StatelessWidget {
         filter: ImageFilter.blur(sigmaX: 28, sigmaY: 28),
         child: DecoratedBox(
           decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                Color(0xD9F7F7F7),
-                Color(0x99F7F7F7),
-                Color(0x33F7F7F7),
-              ],
+            color: Color(0xE6F7F7F7),
+            border: Border(
+              bottom: BorderSide(color: Color(0x143C3C43), width: 0.33),
             ),
           ),
           child: SafeArea(
@@ -136,7 +132,7 @@ class _FrostedChatHeader extends StatelessWidget {
                 children: [
                   CupertinoButton(
                     key: const Key('ios-chat-back'),
-                    padding: const EdgeInsets.only(left: 4),
+                    padding: const EdgeInsets.only(left: 2, right: 2),
                     minSize: 0,
                     onPressed: () => Navigator.of(context).pop(),
                     child: const Icon(
@@ -145,60 +141,55 @@ class _FrostedChatHeader extends StatelessWidget {
                       color: textColor,
                     ),
                   ),
-                  Expanded(
-                    child: CupertinoButton(
-                      key: const Key('ios-chat-avatar'),
-                      padding: EdgeInsets.zero,
-                      minSize: 0,
-                      onPressed: () => Navigator.of(context)
-                          .pushNamed(RouteNames.contactInfo),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Container(
-                            width: 30,
-                            height: 30,
-                            decoration: const BoxDecoration(
-                              color: Color(0xFFF4E7C9),
-                              shape: BoxShape.circle,
-                            ),
-                            child: const Icon(
-                              CupertinoIcons.person_fill,
-                              color: Color(0xFFB78032),
-                              size: 16,
-                            ),
+                  CupertinoButton(
+                    key: const Key('ios-chat-avatar'),
+                    padding: EdgeInsets.zero,
+                    minSize: 0,
+                    onPressed: () => Navigator.of(context)
+                        .pushNamed(RouteNames.contactInfo),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          width: 34,
+                          height: 34,
+                          decoration: const BoxDecoration(
+                            color: Color(0xFFF4E7C9),
+                            shape: BoxShape.circle,
                           ),
-                          const SizedBox(width: 6),
-                          Flexible(
-                            child: Text(
-                              user.participant,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                color: textColor,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                                letterSpacing: -0.3,
-                              ),
-                            ),
+                          child: const Icon(
+                            CupertinoIcons.person_fill,
+                            color: Color(0xFFB78032),
+                            size: 18,
                           ),
-                        ],
-                      ),
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          user.participant,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            color: textColor,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: -0.3,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
+                  const Spacer(),
                   Container(
                     height: 32,
-                    margin: const EdgeInsets.only(right: 10),
+                    margin: const EdgeInsets.only(right: 12),
                     padding: const EdgeInsets.symmetric(horizontal: 2),
                     decoration: BoxDecoration(
-                      color: const Color(0xF2FFFFFF),
+                      color: CupertinoColors.white,
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: const Color(0x33FFFFFF)),
                       boxShadow: const [
                         BoxShadow(
                           color: Color(0x14000000),
-                          blurRadius: 8,
+                          blurRadius: 6,
                           offset: Offset(0, 1),
                         ),
                       ],
@@ -207,7 +198,7 @@ class _FrostedChatHeader extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         CupertinoButton(
-                          padding: const EdgeInsets.symmetric(horizontal: 9),
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
                           minSize: 0,
                           onPressed: () {},
                           child: const Icon(
@@ -216,13 +207,8 @@ class _FrostedChatHeader extends StatelessWidget {
                             color: textColor,
                           ),
                         ),
-                        Container(
-                          width: 0.5,
-                          height: 16,
-                          color: const Color(0x4D3C3C43),
-                        ),
                         CupertinoButton(
-                          padding: const EdgeInsets.symmetric(horizontal: 9),
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
                           minSize: 0,
                           onPressed: () {},
                           child: const Icon(
