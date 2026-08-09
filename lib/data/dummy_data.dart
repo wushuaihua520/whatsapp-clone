@@ -163,7 +163,7 @@ class KDummyData {
       ),
       Messages(
         id: 7,
-        message: "☕😊",
+        message: "☕",
         sender: "participant",
         date: DateTime(2026, 1, 19, 18, 56),
         seen: true,

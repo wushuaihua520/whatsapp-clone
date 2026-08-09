@@ -173,21 +173,36 @@ class _IosChatNavBar extends StatelessWidget {
                   ),
                 ),
               ),
-              Container(
-                height: 36,
-                padding: EdgeInsets.symmetric(horizontal: 14.w),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFE8E8ED),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Row(
-                  children: [
-                    Icon(CupertinoIcons.videocam_fill,
-                        size: 22.sp, color: Colors.black),
-                    SizedBox(width: 16.w),
-                    Icon(CupertinoIcons.phone_fill,
-                        size: 18.sp, color: Colors.black),
-                  ],
+              Material(
+                color: Colors.transparent,
+                child: Container(
+                  height: 34,
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(17),
+                    border: Border.all(
+                      color: const Color(0xFFD1D1D6),
+                      width: 0.8,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.06),
+                        blurRadius: 6,
+                        offset: const Offset(0, 1),
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(CupertinoIcons.videocam_fill,
+                          size: 22, color: Colors.black.withValues(alpha: 0.85)),
+                      const SizedBox(width: 14),
+                      Icon(CupertinoIcons.phone_fill,
+                          size: 18, color: Colors.black.withValues(alpha: 0.85)),
+                    ],
+                  ),
                 ),
               ),
             ],
