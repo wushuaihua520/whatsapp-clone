@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../utils/constants.dart';
-import '../../utils/k_images.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -12,75 +11,54 @@ class SettingsPage extends StatelessWidget {
       color: iosGroupedBackground,
       child: ListView(
         key: const PageStorageKey('ios-settings-list'),
-        padding: const EdgeInsets.fromLTRB(16, 8, 16, 116),
+        padding: const EdgeInsets.fromLTRB(16, 0, 16, 116),
         children: const [
-          _ProfileCard(),
-          SizedBox(height: 22),
+          _ProfileHero(),
+          SizedBox(height: 15),
           _SettingsSection(
             rows: [
               _SettingsRowData(
-                icon: Icons.star_rounded,
-                iconColor: Color(0xFFFFC107),
-                title: 'Starred Messages',
+                icon: Icons.list_alt_rounded,
+                title: '列表',
               ),
               _SettingsRowData(
-                icon: Icons.devices_rounded,
-                iconColor: Color(0xFF34C759),
-                title: 'Linked Devices',
+                icon: Icons.star_border_rounded,
+                title: '已加星标',
+              ),
+              _SettingsRowData(
+                icon: Icons.campaign_outlined,
+                title: '群发消息',
+              ),
+              _SettingsRowData(
+                icon: Icons.devices_outlined,
+                title: '已关联的设备',
               ),
             ],
           ),
-          SizedBox(height: 22),
+          SizedBox(height: 18),
           _SettingsSection(
             rows: [
               _SettingsRowData(
                 icon: Icons.key_rounded,
-                iconColor: Color(0xFF007AFF),
-                title: 'Account',
+                title: '账户',
               ),
               _SettingsRowData(
-                icon: Icons.lock_rounded,
-                iconColor: Color(0xFF34C759),
-                title: 'Privacy',
+                icon: Icons.lock_outline_rounded,
+                title: '隐私',
               ),
               _SettingsRowData(
-                icon: Icons.chat_bubble_rounded,
-                iconColor: Color(0xFF25D366),
-                title: 'Chats',
+                icon: Icons.chat_bubble_outline_rounded,
+                title: '聊天',
               ),
               _SettingsRowData(
-                icon: Icons.notifications_rounded,
-                iconColor: Color(0xFFFF3B30),
-                title: 'Notifications',
+                icon: Icons.notifications_none_rounded,
+                title: '通知',
               ),
               _SettingsRowData(
-                icon: Icons.data_usage_rounded,
-                iconColor: Color(0xFF34C759),
-                title: 'Storage and Data',
+                icon: Icons.swap_vert_rounded,
+                title: '存储空间和数据',
               ),
             ],
-          ),
-          SizedBox(height: 22),
-          _SettingsSection(
-            rows: [
-              _SettingsRowData(
-                icon: Icons.help_rounded,
-                iconColor: Color(0xFF007AFF),
-                title: 'Help',
-              ),
-              _SettingsRowData(
-                icon: Icons.person_add_alt_1_rounded,
-                iconColor: Color(0xFFFF2D55),
-                title: 'Invite a Friend',
-              ),
-            ],
-          ),
-          SizedBox(height: 28),
-          Center(
-            child: Text(
-              'WhatsApp from Meta',
-              style: TextStyle(color: iosSecondaryLabel, fontSize: 12),
-            ),
           ),
         ],
       ),
@@ -88,57 +66,61 @@ class SettingsPage extends StatelessWidget {
   }
 }
 
-class _ProfileCard extends StatelessWidget {
-  const _ProfileCard();
+class _ProfileHero extends StatelessWidget {
+  const _ProfileHero();
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(15),
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: () {},
-        child: const Padding(
-          padding: EdgeInsets.fromLTRB(12, 12, 10, 12),
-          child: Row(
-            children: [
-              CircleAvatar(
-                radius: 31,
-                backgroundImage: AssetImage(KImages.chatAvatar1),
+    return const Column(
+      children: [
+        DecoratedBox(
+          decoration: BoxDecoration(
+            color: Color(0xFFF0F0F2),
+            borderRadius: BorderRadius.all(Radius.circular(13)),
+          ),
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+            child: Text(
+              '最近动态',
+              style: TextStyle(
+                color: iosSecondaryLabel,
+                fontSize: 11,
               ),
-              SizedBox(width: 13),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Martin Troff',
-                      style: TextStyle(
-                        color: textColor,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
-                        letterSpacing: -0.3,
-                      ),
-                    ),
-                    SizedBox(height: 3),
-                    Text(
-                      'Available',
-                      style: TextStyle(
-                        color: iosSecondaryLabel,
-                        fontSize: 14,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Icon(Icons.qr_code_rounded, color: iosBlue, size: 25),
-              SizedBox(width: 6),
-              Icon(Icons.chevron_right_rounded, color: iosSeparator),
-            ],
+            ),
           ),
         ),
-      ),
+        SizedBox(height: 5),
+        CircleAvatar(
+          radius: 45,
+          backgroundColor: Color(0xFF91DCD6),
+          child: Icon(
+            Icons.person_rounded,
+            color: Color(0xFF137D78),
+            size: 44,
+          ),
+        ),
+        SizedBox(height: 9),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              '心如止水',
+              style: TextStyle(
+                color: textColor,
+                fontSize: 21,
+                fontWeight: FontWeight.w600,
+                letterSpacing: -0.3,
+              ),
+            ),
+            SizedBox(width: 4),
+            Icon(
+              Icons.verified_outlined,
+              color: primaryColor,
+              size: 15,
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
@@ -177,23 +159,22 @@ class _SettingsRow extends StatelessWidget {
     return InkWell(
       onTap: () {},
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
+        padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 12),
         child: Row(
           children: [
-            Container(
-              width: 31,
-              height: 31,
-              decoration: BoxDecoration(
-                color: data.iconColor,
-                borderRadius: BorderRadius.circular(7),
-              ),
-              child: Icon(data.icon, color: Colors.white, size: 20),
+            SizedBox(
+              width: 24,
+              child: Icon(data.icon, color: textColor, size: 18),
             ),
-            const SizedBox(width: 14),
+            const SizedBox(width: 9),
             Expanded(
               child: Text(
                 data.title,
-                style: const TextStyle(color: textColor, fontSize: 16),
+                style: const TextStyle(
+                  color: textColor,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w400,
+                ),
               ),
             ),
             const Icon(
@@ -211,11 +192,9 @@ class _SettingsRow extends StatelessWidget {
 class _SettingsRowData {
   const _SettingsRowData({
     required this.icon,
-    required this.iconColor,
     required this.title,
   });
 
   final IconData icon;
-  final Color iconColor;
   final String title;
 }

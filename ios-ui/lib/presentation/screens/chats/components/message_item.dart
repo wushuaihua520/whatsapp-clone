@@ -17,6 +17,55 @@ class MessageComponent extends StatelessWidget {
     final isMe = element.sender == 'user';
     final width = MediaQuery.of(context).size.width;
 
+    if (element.image != null) {
+      return Align(
+        alignment: Alignment.centerLeft,
+        child: Container(
+          key: Key('message-${element.id}'),
+          width: width * 0.6,
+          margin: const EdgeInsets.only(bottom: 4),
+          padding: const EdgeInsets.all(3),
+          decoration: BoxDecoration(
+            color: senderMessageBg,
+            borderRadius: BorderRadius.circular(14),
+            boxShadow: const [
+              BoxShadow(
+                color: Color(0x18000000),
+                blurRadius: 2,
+                offset: Offset(0, 1),
+              ),
+            ],
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(11),
+            child: AspectRatio(
+              aspectRatio: 0.72,
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  Image.asset(element.image!, fit: BoxFit.cover),
+                  Positioned(
+                    right: 7,
+                    bottom: 6,
+                    child: Text(
+                      DateFormat.Hm().format(element.date),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 10,
+                        shadows: [
+                          Shadow(color: Colors.black87, blurRadius: 5),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
     return Align(
       alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
@@ -60,7 +109,7 @@ class MessageComponent extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  DateFormat.jm().format(element.date),
+                  DateFormat.Hm().format(element.date),
                   style: const TextStyle(
                     color: iosSecondaryLabel,
                     fontSize: 10.5,

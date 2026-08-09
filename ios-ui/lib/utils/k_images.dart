@@ -14,6 +14,7 @@ class KImages {
   static const String defaultWallpaper = "assets/images/default-wallpaper.png";
   static const String communityImg = "assets/images/community.png";
   static const String whatsappWelcome = "assets/images/whatsapp-welcome.png";
+  static const String chatPhoto = "assets/images/chat-photo.jpeg";
 
   // chats profile images
   static const String chatAvatar1 = "assets/images/chat-profile-1.jpeg";

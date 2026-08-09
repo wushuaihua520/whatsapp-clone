@@ -31,41 +31,41 @@ void main() {
       ),
     );
 
-    expect(find.byKey(const Key('ios-Chats-title')), findsOneWidget);
-    expect(find.text('Ask Meta AI or Search'), findsOneWidget);
-    expect(find.byKey(const Key('ios-tab-Updates')), findsOneWidget);
-    expect(find.byKey(const Key('ios-tab-Calls')), findsOneWidget);
-    expect(find.byKey(const Key('ios-tab-Communities')), findsOneWidget);
-    expect(find.byKey(const Key('ios-tab-Chats')), findsOneWidget);
-    expect(find.byKey(const Key('ios-tab-Settings')), findsOneWidget);
+    expect(find.byKey(const Key('ios-聊天-title')), findsOneWidget);
+    expect(find.text('搜索'), findsOneWidget);
+    expect(find.byKey(const Key('ios-tab-动态')), findsOneWidget);
+    expect(find.byKey(const Key('ios-tab-通话')), findsOneWidget);
+    expect(find.byKey(const Key('ios-tab-社区')), findsOneWidget);
+    expect(find.byKey(const Key('ios-tab-聊天')), findsOneWidget);
+    expect(find.byKey(const Key('ios-tab-设置')), findsOneWidget);
     expect(find.byType(GlassSurface), findsWidgets);
 
-    await tester.tap(find.byKey(const Key('filter-Unread')));
+    await tester.tap(find.byKey(const Key('filter-未读')));
     await tester.pump();
-    expect(find.text('Weekend Crew'), findsOneWidget);
-    expect(find.text('Martin Troff'), findsNothing);
+    expect(find.text('+852 5923 9971'), findsOneWidget);
+    expect(find.text('WhatsApp'), findsNothing);
 
-    await tester.tap(find.byKey(const Key('ios-tab-Updates')));
+    await tester.tap(find.byKey(const Key('ios-tab-动态')));
     await tester.pumpAndSettle();
-    expect(find.byKey(const Key('ios-Updates-title')), findsOneWidget);
+    expect(find.byKey(const Key('ios-动态-title')), findsOneWidget);
     expect(find.text('Status'), findsOneWidget);
     expect(find.text('Channels'), findsOneWidget);
 
-    await tester.tap(find.byKey(const Key('ios-tab-Settings')));
+    await tester.tap(find.byKey(const Key('ios-tab-设置')));
     await tester.pumpAndSettle();
-    expect(find.byKey(const Key('ios-Settings-title')), findsOneWidget);
-    expect(find.text('Account'), findsOneWidget);
-    expect(find.text('Privacy'), findsOneWidget);
+    expect(find.text('心如止水'), findsOneWidget);
+    expect(find.text('账户'), findsOneWidget);
+    expect(find.text('隐私'), findsOneWidget);
 
-    await tester.tap(find.byKey(const Key('ios-tab-Chats')));
+    await tester.tap(find.byKey(const Key('ios-tab-聊天')));
     await tester.pumpAndSettle();
-    await tester.tap(find.byTooltip('New chat'));
+    await tester.tap(find.byTooltip('新聊天'));
     await tester.pumpAndSettle();
-    expect(find.text('New Chat'), findsOneWidget);
+    expect(find.text('新聊天'), findsOneWidget);
 
     await tester.tap(find.text('Martin Luther'));
     await tester.pumpAndSettle();
-    expect(find.text('Martin Troff'), findsOneWidget);
-    expect(find.text('Message'), findsOneWidget);
+    expect(find.text('+852 5923 9971'), findsOneWidget);
+    expect(find.text('消息'), findsOneWidget);
   });
 }

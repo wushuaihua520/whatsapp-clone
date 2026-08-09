@@ -44,28 +44,33 @@ class _MainScreenState extends State<MainScreen> {
         index: selectedTab,
         children: [
           _IosTabPage(
-            title: 'Updates',
+            title: '动态',
             actions: [
               GlassCircleButton(
                 icon: Icons.add_rounded,
-                tooltip: 'New update',
+                tooltip: '新动态',
+                size: 38,
+                iconColor: textColor,
                 onPressed: () {},
               ),
               GlassCircleButton(
                 icon: Icons.photo_camera_outlined,
-                tooltip: 'Camera',
+                tooltip: '相机',
+                size: 38,
+                iconColor: textColor,
                 onPressed: () {},
               ),
             ],
             child: _pages[0],
           ),
           _IosTabPage(
-            title: 'Calls',
-            leadingLabel: 'Edit',
+            title: '通话',
             actions: [
               GlassCircleButton(
                 icon: Icons.add_call,
-                tooltip: 'New call',
+                tooltip: '新通话',
+                size: 38,
+                iconColor: textColor,
                 onPressed: () =>
                     Navigator.pushNamed(context, RouteNames.contactPage),
               ),
@@ -73,28 +78,37 @@ class _MainScreenState extends State<MainScreen> {
             child: _pages[1],
           ),
           _IosTabPage(
-            title: 'Communities',
+            title: '社区',
             actions: [
               GlassCircleButton(
                 icon: Icons.add_rounded,
-                tooltip: 'New community',
+                tooltip: '新社区',
+                size: 38,
+                iconColor: textColor,
                 onPressed: () {},
               ),
             ],
             child: _pages[2],
           ),
           _IosTabPage(
-            title: 'Chats',
-            leadingLabel: 'Edit',
+            title: '聊天',
+            leadingAction: GlassCircleButton(
+              icon: Icons.more_horiz_rounded,
+              tooltip: '更多',
+              size: 38,
+              iconColor: textColor,
+              onPressed: () {},
+            ),
             actions: [
               GlassCircleButton(
                 icon: Icons.photo_camera_outlined,
-                tooltip: 'Camera',
+                tooltip: '相机',
+                size: 38,
+                iconColor: textColor,
                 onPressed: () {},
               ),
-              GlassCircleButton(
-                icon: Icons.edit_rounded,
-                tooltip: 'New chat',
+              _GreenCircleButton(
+                tooltip: '新聊天',
                 onPressed: () =>
                     Navigator.pushNamed(context, RouteNames.contactPage),
               ),
@@ -102,12 +116,27 @@ class _MainScreenState extends State<MainScreen> {
             child: _pages[3],
           ),
           _IosTabPage(
-            title: 'Settings',
+            leadingAction: GlassCircleButton(
+              icon: Icons.search_rounded,
+              tooltip: '搜索',
+              size: 38,
+              iconColor: textColor,
+              onPressed: () {},
+            ),
             backgroundColor: iosGroupedBackground,
             actions: [
               GlassCircleButton(
                 icon: Icons.qr_code_rounded,
-                tooltip: 'QR code',
+                tooltip: '二维码',
+                size: 38,
+                iconColor: textColor,
+                onPressed: () {},
+              ),
+              GlassCircleButton(
+                icon: Icons.edit_rounded,
+                tooltip: '编辑',
+                size: 38,
+                iconColor: textColor,
                 onPressed: () {},
               ),
             ],
@@ -125,17 +154,17 @@ class _MainScreenState extends State<MainScreen> {
 
 class _IosTabPage extends StatelessWidget {
   const _IosTabPage({
-    required this.title,
     required this.child,
     this.actions = const [],
-    this.leadingLabel,
+    this.title,
+    this.leadingAction,
     this.backgroundColor = scaffoldBgColor,
   });
 
-  final String title;
+  final String? title;
   final Widget child;
   final List<Widget> actions;
-  final String? leadingLabel;
+  final Widget? leadingAction;
   final Color backgroundColor;
 
   @override
@@ -154,22 +183,7 @@ class _IosTabPage extends StatelessWidget {
                     height: 42,
                     child: Row(
                       children: [
-                        if (leadingLabel != null)
-                          TextButton(
-                            key: Key('ios-$title-leading-action'),
-                            onPressed: () {},
-                            style: TextButton.styleFrom(
-                              foregroundColor: iosBlue,
-                              padding: EdgeInsets.zero,
-                              minimumSize: const Size(44, 38),
-                              alignment: Alignment.centerLeft,
-                              textStyle: const TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                            child: Text(leadingLabel!),
-                          ),
+                        if (leadingAction != null) leadingAction!,
                         const Spacer(),
                         for (var index = 0;
                             index < actions.length;
@@ -181,20 +195,21 @@ class _IosTabPage extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      title,
-                      key: Key('ios-$title-title'),
-                      style: const TextStyle(
-                        color: textColor,
-                        fontSize: 34,
-                        height: 1.05,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: -0.9,
+                  if (title != null)
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        title!,
+                        key: Key('ios-$title-title'),
+                        style: const TextStyle(
+                          color: textColor,
+                          fontSize: 29,
+                          height: 1.08,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: -0.7,
+                        ),
                       ),
                     ),
-                  ),
                 ],
               ),
             ),
@@ -202,6 +217,37 @@ class _IosTabPage extends StatelessWidget {
           const SizedBox(height: 7),
           Expanded(child: child),
         ],
+      ),
+    );
+  }
+}
+
+class _GreenCircleButton extends StatelessWidget {
+  const _GreenCircleButton({
+    required this.onPressed,
+    required this.tooltip,
+  });
+
+  final VoidCallback onPressed;
+  final String tooltip;
+
+  @override
+  Widget build(BuildContext context) {
+    return Tooltip(
+      message: tooltip,
+      child: Material(
+        color: const Color(0xFF20C56D),
+        shape: const CircleBorder(),
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          customBorder: const CircleBorder(),
+          onTap: onPressed,
+          child: const SizedBox(
+            width: 38,
+            height: 38,
+            child: Icon(Icons.add_rounded, color: Colors.white, size: 24),
+          ),
+        ),
       ),
     );
   }
@@ -218,30 +264,32 @@ class _LiquidGlassTabBar extends StatelessWidget {
 
   static const _destinations = [
     _IosTabDestination(
-      label: 'Updates',
+      label: '动态',
       icon: Icons.update_outlined,
       selectedIcon: Icons.update_rounded,
     ),
     _IosTabDestination(
-      label: 'Calls',
+      label: '通话',
       icon: Icons.call_outlined,
       selectedIcon: Icons.call_rounded,
     ),
     _IosTabDestination(
-      label: 'Communities',
+      label: '社区',
       icon: Icons.groups_outlined,
       selectedIcon: Icons.groups_rounded,
     ),
     _IosTabDestination(
-      label: 'Chats',
+      label: '聊天',
       icon: Icons.chat_bubble_outline_rounded,
       selectedIcon: Icons.chat_bubble_rounded,
-      badge: 6,
     ),
     _IosTabDestination(
-      label: 'Settings',
+      label: '设置',
       icon: Icons.settings_outlined,
       selectedIcon: Icons.settings_rounded,
+      badge: 1,
+      badgeColor: selectedNavColor,
+      badgeTextColor: primaryColor,
     ),
   ];
 
@@ -288,7 +336,7 @@ class _IosTabButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = selected ? iosBlue : iosSecondaryLabel;
+    final color = selected ? textColor : iosSecondaryLabel;
     return Semantics(
       selected: selected,
       button: true,
@@ -330,13 +378,13 @@ class _IosTabButton extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(horizontal: 4),
                           alignment: Alignment.center,
                           decoration: const BoxDecoration(
-                            color: Color(0xFFFF3B30),
+                            color: destination.badgeColor,
                             shape: BoxShape.circle,
                           ),
                           child: Text(
                             destination.badge.toString(),
                             style: const TextStyle(
-                              color: Colors.white,
+                              color: destination.badgeTextColor,
                               fontSize: 9,
                               fontWeight: FontWeight.w700,
                             ),
@@ -371,10 +419,14 @@ class _IosTabDestination {
     required this.icon,
     required this.selectedIcon,
     this.badge,
+    this.badgeColor = const Color(0xFFFF3B30),
+    this.badgeTextColor = Colors.white,
   });
 
   final String label;
   final IconData icon;
   final IconData selectedIcon;
   final int? badge;
+  final Color badgeColor;
+  final Color badgeTextColor;
 }

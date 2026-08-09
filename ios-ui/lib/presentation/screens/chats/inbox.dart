@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:grouped_list/grouped_list.dart';
 
 import '../../../data/dummy_data.dart';
 import '../../../data/model/participants_chat_model.dart';
@@ -42,23 +41,18 @@ class Inbox extends StatelessWidget {
                         if (messages.isEmpty) {
                           return const SizedBox();
                         }
-                        return GroupedListView<Messages, DateTime>(
-                          padding: const EdgeInsets.fromLTRB(10, 12, 10, 92),
-                          elements: messages.toList(),
-                          groupBy: (element) => DateTime(
-                            element.date.year,
-                            element.date.month,
-                            element.date.day,
-                          ),
-                          groupSeparatorBuilder: (groupByValue) =>
-                              MessageSeparator(groupByValue: groupByValue),
-                          itemBuilder: (context, element) =>
-                              MessageComponent(element: element),
-                          itemComparator: (item1, item2) =>
-                              item1.date.compareTo(item2.date),
-                          useStickyGroupSeparators: false,
-                          floatingHeader: true,
-                          order: GroupedListOrder.ASC,
+                        final sortedMessages = messages.toList()
+                          ..sort((a, b) => a.date.compareTo(b.date));
+                        return ListView(
+                          padding: const EdgeInsets.fromLTRB(10, 8, 10, 92),
+                          children: [
+                            const _ConversationDate(),
+                            const _EncryptionNotice(),
+                            const SizedBox(height: 8),
+                            ...sortedMessages.map(
+                              (message) => MessageComponent(element: message),
+                            ),
+                          ],
                         );
                       },
                     ),
@@ -91,7 +85,7 @@ class Inbox extends StatelessWidget {
         image: AssetImage(KImages.defaultWallpaper),
         fit: BoxFit.cover,
         colorFilter: ColorFilter.mode(
-          Color(0x3DFFFFFF),
+          Color(0x18FFFFFF),
           BlendMode.srcATop,
         ),
       ),
@@ -114,80 +108,150 @@ class _GlassChatHeader extends StatelessWidget {
       child: SafeArea(
         bottom: false,
         child: SizedBox(
-          height: 62,
+          height: 58,
           child: Row(
             children: [
-              IconButton(
+              const SizedBox(width: 7),
+              GlassCircleButton(
                 key: const Key('ios-chat-back'),
-                tooltip: 'Back',
+                icon: Icons.chevron_left_rounded,
+                tooltip: '返回',
+                size: 38,
+                iconColor: textColor,
                 onPressed: () => Navigator.pop(context),
-                icon: const Icon(
-                  Icons.chevron_left_rounded,
-                  color: iosBlue,
-                  size: 34,
+              ),
+              const SizedBox(width: 7),
+              const CircleAvatar(
+                radius: 18,
+                backgroundColor: Color(0xFFF4E7C9),
+                child: Icon(
+                  Icons.person_rounded,
+                  color: Color(0xFFB78032),
+                  size: 19,
                 ),
               ),
-              CircleAvatar(
-                radius: 19,
-                backgroundImage: AssetImage(user.avatar),
-              ),
-              const SizedBox(width: 9),
+              const SizedBox(width: 7),
               Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      user.participant,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        color: textColor,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        letterSpacing: -0.2,
+                child: Text(
+                  user.participant,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    color: textColor,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: -0.2,
+                  ),
+                ),
+              ),
+              GlassSurface(
+                borderRadius: 22,
+                blur: 20,
+                opacity: 0.65,
+                boxShadow: false,
+                child: SizedBox(
+                  height: 40,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        tooltip: '视频通话',
+                        onPressed: () {},
+                        constraints: const BoxConstraints.tightFor(
+                            width: 42, height: 40),
+                        icon: const Icon(
+                          Icons.videocam_outlined,
+                          color: textColor,
+                          size: 21,
+                        ),
                       ),
-                    ),
-                    Text(
-                      user.status,
-                      style: const TextStyle(
-                        color: iosSecondaryLabel,
-                        fontSize: 11,
+                      IconButton(
+                        tooltip: '语音通话',
+                        onPressed: () {},
+                        constraints: const BoxConstraints.tightFor(
+                            width: 42, height: 40),
+                        icon: const Icon(
+                          Icons.call_outlined,
+                          color: textColor,
+                          size: 19,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-              IconButton(
-                tooltip: 'Video call',
-                onPressed: () {},
-                icon: const Icon(
-                  Icons.videocam_outlined,
-                  color: iosBlue,
-                  size: 23,
-                ),
-              ),
-              IconButton(
-                tooltip: 'Voice call',
-                onPressed: () {},
-                icon: const Icon(
-                  Icons.call_outlined,
-                  color: iosBlue,
-                  size: 21,
-                ),
-              ),
-              IconButton(
-                tooltip: 'More',
-                onPressed: () {},
-                icon: const Icon(
-                  Icons.more_horiz_rounded,
-                  color: iosBlue,
-                  size: 24,
-                ),
-              ),
-              const SizedBox(width: 2),
+              const SizedBox(width: 8),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ConversationDate extends StatelessWidget {
+  const _ConversationDate();
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 5),
+        decoration: BoxDecoration(
+          color: const Color(0xDFFFFFFF),
+          borderRadius: BorderRadius.circular(11),
+          boxShadow: const [
+            BoxShadow(
+              color: Color(0x15000000),
+              blurRadius: 3,
+              offset: Offset(0, 1),
+            ),
+          ],
+        ),
+        child: const Text(
+          '2026年1月14日',
+          style: TextStyle(
+            color: iosSecondaryLabel,
+            fontSize: 11,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _EncryptionNotice extends StatelessWidget {
+  const _EncryptionNotice();
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        constraints: const BoxConstraints(maxWidth: 300),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+        decoration: BoxDecoration(
+          color: const Color(0xE8FFF7DF),
+          borderRadius: BorderRadius.circular(9),
+        ),
+        child: const Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.lock_rounded, color: Color(0xFFB4872C), size: 11),
+            SizedBox(width: 4),
+            Flexible(
+              child: Text(
+                '消息和通话已进行端到端加密，只有此聊天中的成员可以查看、收听或分享。',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Color(0xFF695A37),
+                  fontSize: 8.5,
+                  height: 1.25,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

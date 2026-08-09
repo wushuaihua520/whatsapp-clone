@@ -65,7 +65,7 @@ class _TextEmojiInputFieldState extends State<TextEmojiInputField> {
                         decoration: const InputDecoration(
                           isDense: true,
                           filled: false,
-                          hintText: 'Message',
+                          hintText: '消息',
                           hintStyle: TextStyle(
                             color: iosSecondaryLabel,
                             fontSize: 16,
@@ -78,7 +78,7 @@ class _TextEmojiInputFieldState extends State<TextEmojiInputField> {
                       ),
                     ),
                     IconButton(
-                      tooltip: 'Camera',
+                      tooltip: '相机',
                       onPressed: () {},
                       icon: const Icon(
                         Icons.photo_camera_outlined,
@@ -118,7 +118,7 @@ class _TextEmojiInputFieldState extends State<TextEmojiInputField> {
                 : GlassCircleButton(
                     key: const ValueKey('mic'),
                     icon: Icons.mic_none_rounded,
-                    tooltip: 'Voice message',
+                    tooltip: '语音消息',
                     size: 46,
                     iconColor: iosBlue,
                     onPressed: () {},

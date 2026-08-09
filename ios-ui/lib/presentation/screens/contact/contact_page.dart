@@ -20,14 +20,14 @@ class ContactPage extends StatelessWidget {
             padding: const EdgeInsets.only(left: 10),
           ),
           child: const Text(
-            'Cancel',
+            '取消',
             style: TextStyle(fontSize: 17, fontWeight: FontWeight.w400),
           ),
         ),
-        title: const Text('New Chat'),
+        title: const Text('新聊天'),
         actions: [
           IconButton(
-            tooltip: 'Scan QR code',
+            tooltip: '扫描二维码',
             onPressed: () {},
             icon: const Icon(Icons.qr_code_rounded, color: iosBlue),
           ),
@@ -41,7 +41,7 @@ class ContactPage extends StatelessWidget {
             padding: EdgeInsets.fromLTRB(16, 5, 16, 10),
             child: TextField(
               decoration: InputDecoration(
-                hintText: 'Search name or number',
+                hintText: '搜索姓名或号码',
                 prefixIcon: Icon(
                   Icons.search_rounded,
                   color: iosSecondaryLabel,
@@ -52,11 +52,11 @@ class ContactPage extends StatelessWidget {
           ),
           const NewOption(
             icon: Icons.group_add_rounded,
-            title: 'New group',
+            title: '新建群组',
           ),
           const NewOption(
             icon: Icons.person_add_alt_1_rounded,
-            title: 'New contact',
+            title: '新建联系人',
             trail: Icon(
               Icons.chevron_right_rounded,
               color: iosSeparator,
@@ -65,12 +65,12 @@ class ContactPage extends StatelessWidget {
           ),
           const NewOption(
             icon: Icons.groups_rounded,
-            title: 'New community',
+            title: '新建社区',
           ),
           const Padding(
             padding: EdgeInsets.fromLTRB(20, 18, 20, 7),
             child: Text(
-              'Contacts',
+              '联系人',
               style: TextStyle(
                 color: iosSecondaryLabel,
                 fontSize: 13,
