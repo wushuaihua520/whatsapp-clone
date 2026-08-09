@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:grouped_list/grouped_list.dart';
 
 import '../../../data/dummy_data.dart';
 import '../../../data/model/participants_chat_model.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/k_images.dart';
-import '../../../utils/utils.dart';
 import 'components/appbar_component.dart';
 import 'components/inbox_popup.dart';
 import 'components/input_text_emoji.dart';
@@ -19,7 +16,6 @@ class Inbox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     final user = KDummyData.participantsChat;
 
     return WillPopScope(
@@ -29,22 +25,21 @@ class Inbox extends StatelessWidget {
       },
       child: Scaffold(
         appBar: _buildAppBar(user),
-        body: Container(
-          height: size.height,
-          width: size.width,
+        body: DecoratedBox(
           decoration: _decoration(),
           child: Column(
             children: [
               Expanded(
                 child: StreamBuilder(
                     stream: MessageController.streamData,
+                    initialData: MessageController.list,
                     builder: (context, snapshot) {
-                      if (snapshot.data != null) {
-                        final messageList = snapshot.data!.reversed.toList();
+                      final messages = snapshot.data ?? user.messages;
+                      if (messages.isNotEmpty) {
+                        final messageList = messages.toList();
                         return GroupedListView<Messages, DateTime>(
-                          padding: const EdgeInsets.all(0),
+                          padding: const EdgeInsets.fromLTRB(10, 10, 10, 6),
                           elements: messageList,
-                          // controller: controller,
                           groupBy: (element) => DateTime(
                             element.date.year,
                             element.date.month,
@@ -52,25 +47,19 @@ class Inbox extends StatelessWidget {
                           ),
                           groupSeparatorBuilder: (DateTime groupByValue) =>
                               MessageSeparator(groupByValue: groupByValue),
-
                           itemBuilder: (context, Messages element) =>
                               MessageComponent(element: element),
-
                           itemComparator: (item1, item2) =>
                               item1.date.compareTo(item2.date),
-                          // optional
                           useStickyGroupSeparators: false,
-                          // optional
                           floatingHeader: true,
-                          // optional
-                          order: GroupedListOrder.ASC, // optional
+                          order: GroupedListOrder.ASC,
                         );
                       }
                       return const SizedBox();
                     }),
               ),
-              TextEmojiInputField(),
-              Utils.verticalSpace(size.height * 0.02),
+              const TextEmojiInputField(),
             ],
           ),
         ),
@@ -80,30 +69,39 @@ class Inbox extends StatelessWidget {
 
   AppBar _buildAppBar(ParticipantsChat user) {
     return AppBar(
-      backgroundColor: primaryColor,
-      leadingWidth: 70.w,
+      toolbarHeight: 62,
+      leadingWidth: 88,
       leading: AvatarAndBackNavigate(user: user),
       title: UserAndStatus(user: user),
+      titleSpacing: 4,
       actions: [
-        SvgPicture.asset(
-          KImages.video,
-          height: 24.w,
+        IconButton(
+          tooltip: 'Video call',
+          onPressed: () {},
+          icon: const Icon(Icons.videocam_outlined, color: textColor),
         ),
-        Utils.horizontalSpace(24),
-        SvgPicture.asset(
-          KImages.phone,
-          height: 24.w,
+        IconButton(
+          tooltip: 'Voice call',
+          onPressed: () {},
+          icon: const Icon(Icons.call_outlined, color: textColor),
         ),
-        Utils.horizontalSpace(10),
-        InboxPopup()
+        const InboxPopup(),
+        const SizedBox(width: 2),
       ],
     );
   }
 
   BoxDecoration _decoration() {
-    return BoxDecoration(
+    return const BoxDecoration(
+      color: Color(0xFFEFEAE2),
       image: DecorationImage(
-          image: AssetImage(KImages.defaultWallpaper), fit: BoxFit.cover),
+        image: AssetImage(KImages.defaultWallpaper),
+        fit: BoxFit.cover,
+        colorFilter: ColorFilter.mode(
+          Color(0x24FFFFFF),
+          BlendMode.srcATop,
+        ),
+      ),
     );
   }
 }

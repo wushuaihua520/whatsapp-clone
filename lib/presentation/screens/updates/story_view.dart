@@ -1,14 +1,12 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:story_view/story_view.dart';
+
 import '../../../utils/constants.dart';
 import '../../../utils/k_images.dart';
 
-import '../../../utils/utils.dart';
-
 class MyStoryPage extends StatelessWidget {
+  MyStoryPage({super.key});
+
   final storyController = StoryController();
 
   @override
@@ -29,69 +27,73 @@ class MyStoryPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        leadingWidth: 75.w,
+        foregroundColor: Colors.white,
+        iconTheme: const IconThemeData(color: Colors.white),
+        leadingWidth: 76,
         leading: GestureDetector(
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: Row(
+          onTap: () => Navigator.pop(context),
+          child: const Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Utils.horizontalSpace(6.w),
-              Icon(
-                  Platform.isAndroid ? Icons.arrow_back : Icons.arrow_back_ios),
-              Utils.horizontalSpace(6.w),
-              CircleAvatar(backgroundImage: AssetImage(KImages.chatAvatar1)),
+              SizedBox(width: 8),
+              Icon(Icons.arrow_back_rounded, color: Colors.white),
+              SizedBox(width: 7),
+              CircleAvatar(
+                radius: 17,
+                backgroundImage: AssetImage(KImages.chatAvatar1),
+              ),
             ],
           ),
         ),
-        title: Column(
+        title: const Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               "Martin Luther",
-              style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                  ),
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
+              ),
             ),
-            Utils.verticalSpace(3),
+            SizedBox(height: 2),
             Text(
               "Yesterday, 2:44 PM",
-              style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w300,
-                  ),
+              style: TextStyle(
+                color: Colors.white70,
+                fontSize: 11,
+                fontWeight: FontWeight.w400,
+              ),
             ),
           ],
         ),
         actions: [
-          PopupMenuButton(
-              icon: Icon(Icons.more_vert),
-              offset: Offset(0, 50),
-              color: scaffoldBgColor,
-              elevation: 1,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
+          PopupMenuButton<String>(
+              icon: const Icon(Icons.more_vert_rounded, color: Colors.white),
+              offset: const Offset(0, 50),
               padding: EdgeInsets.zero,
               itemBuilder: (context) {
-                return <PopupMenuEntry>[
-                  PopupMenuItem(
-                    child: Text("Mute"),
+                return const <PopupMenuEntry<String>>[
+                  PopupMenuItem<String>(
+                    value: 'mute',
+                    child: Text('Mute'),
                   ),
-                  PopupMenuItem(
-                    child: Text("Message"),
+                  PopupMenuItem<String>(
+                    value: 'message',
+                    child: Text('Message'),
                   ),
-                  PopupMenuItem(
-                    child: Text("Voice call"),
+                  PopupMenuItem<String>(
+                    value: 'call',
+                    child: Text('Voice call'),
                   ),
-                  PopupMenuItem(
-                    child: Text("View contact"),
+                  PopupMenuItem<String>(
+                    value: 'contact',
+                    child: Text('View contact'),
                   ),
-                  PopupMenuItem(
-                    child: Text("Report"),
+                  PopupMenuItem<String>(
+                    value: 'report',
+                    child: Text('Report'),
                   ),
                 ];
               })

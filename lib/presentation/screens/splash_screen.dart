@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+
 import '../core/routes/routes_name.dart';
 import '../../utils/k_images.dart';
-import '../../utils/utils.dart';
+import '../../utils/constants.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -13,48 +14,78 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
-    Future.delayed(Duration(seconds: 2)).then(
-        (value) => Navigator.popAndPushNamed(context, RouteNames.welcome));
     super.initState();
+    Future<void>.delayed(const Duration(milliseconds: 1500)).then((_) {
+      if (mounted) {
+        Navigator.pushReplacementNamed(context, RouteNames.welcome);
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     return Scaffold(
-      body: SizedBox(
-        height: size.height,
-        width: size.width,
-        child: SafeArea(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Spacer(),
-              Image.asset(KImages.logo),
-              Spacer(),
-              Text(
-                'from',
-                style: TextStyle(
-                  color: Color(0xFF768289),
-                  fontSize: 13,
-                  fontFamily: 'Helvetica',
-                  fontWeight: FontWeight.w700,
+      backgroundColor: scaffoldBgColor,
+      body: SafeArea(
+        child: Stack(
+          children: [
+            Center(
+              child: Container(
+                width: 88,
+                height: 88,
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF0FFF4),
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: actionGreen.withOpacity(0.12),
+                      blurRadius: 24,
+                      spreadRadius: 6,
+                    ),
+                  ],
                 ),
+                child: Image.asset(KImages.logo),
               ),
-              Utils.verticalSpace(12),
-              Text(
-                'FACEBOOK',
-                style: TextStyle(
-                  color: Color(0xFF02B099),
-                  fontSize: 12,
-                  fontFamily: 'Helvetica',
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 2.40,
-                ),
+            ),
+            const Positioned(
+              left: 0,
+              right: 0,
+              bottom: 32,
+              child: Column(
+                children: [
+                  Text(
+                    'from',
+                    style: TextStyle(
+                      color: subTitleTextColor,
+                      fontSize: 12,
+                    ),
+                  ),
+                  SizedBox(height: 5),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.all_inclusive_rounded,
+                        color: primaryColor,
+                        size: 21,
+                      ),
+                      SizedBox(width: 6),
+                      Text(
+                        'Meta',
+                        style: TextStyle(
+                          color: primaryColor,
+                          fontSize: 17,
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: -0.2,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
-              Utils.verticalSpace(size.height * 0.05),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
