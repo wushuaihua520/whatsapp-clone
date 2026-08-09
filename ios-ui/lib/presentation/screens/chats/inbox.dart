@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 import '../../../data/dummy_data.dart';
@@ -29,35 +31,33 @@ class Inbox extends StatelessWidget {
               child: DecoratedBox(decoration: _decoration()),
             ),
             Positioned.fill(
-              child: Column(
-                children: [
-                  SizedBox(height: MediaQuery.of(context).padding.top + 64),
-                  Expanded(
-                    child: StreamBuilder<List<Messages>>(
-                      stream: MessageController.streamData,
-                      initialData: MessageController.list,
-                      builder: (context, snapshot) {
-                        final messages = snapshot.data ?? user.messages;
-                        if (messages.isEmpty) {
-                          return const SizedBox();
-                        }
-                        final sortedMessages = messages.toList()
-                          ..sort((a, b) => a.date.compareTo(b.date));
-                        return ListView(
-                          padding: const EdgeInsets.fromLTRB(10, 8, 10, 92),
-                          children: [
-                            const _ConversationDate(),
-                            const _EncryptionNotice(),
-                            const SizedBox(height: 8),
-                            ...sortedMessages.map(
-                              (message) => MessageComponent(element: message),
-                            ),
-                          ],
-                        );
-                      },
+              child: StreamBuilder<List<Messages>>(
+                stream: MessageController.streamData,
+                initialData: MessageController.list,
+                builder: (context, snapshot) {
+                  final messages = snapshot.data ?? user.messages;
+                  if (messages.isEmpty) {
+                    return const SizedBox();
+                  }
+                  final sortedMessages = messages.toList()
+                    ..sort((a, b) => a.date.compareTo(b.date));
+                  return ListView(
+                    padding: EdgeInsets.fromLTRB(
+                      10,
+                      MediaQuery.of(context).padding.top + 70,
+                      10,
+                      MediaQuery.of(context).padding.bottom + 96,
                     ),
-                  ),
-                ],
+                    children: [
+                      const _ConversationDate(),
+                      const _EncryptionNotice(),
+                      const SizedBox(height: 8),
+                      ...sortedMessages.map(
+                        (message) => MessageComponent(element: message),
+                      ),
+                    ],
+                  );
+                },
               ),
             ),
             Positioned(
@@ -65,6 +65,20 @@ class Inbox extends StatelessWidget {
               left: 0,
               right: 0,
               child: _GlassChatHeader(user: user),
+            ),
+            Positioned(
+              right: 12,
+              bottom: MediaQuery.of(context).padding.bottom + 66,
+              child: GlassCircleButton(
+                key: const Key('ios-jump-to-latest'),
+                icon: Icons.keyboard_arrow_down_rounded,
+                tooltip: '最新消息',
+                size: 36,
+                iconColor: textColor,
+                opacity: 0.46,
+                blur: 34,
+                onPressed: () {},
+              ),
             ),
             const Positioned(
               left: 0,
@@ -85,7 +99,7 @@ class Inbox extends StatelessWidget {
         image: AssetImage(KImages.defaultWallpaper),
         fit: BoxFit.cover,
         colorFilter: ColorFilter.mode(
-          Color(0x18FFFFFF),
+          Color(0x2BFFFFFF),
           BlendMode.srcATop,
         ),
       ),
@@ -100,88 +114,122 @@ class _GlassChatHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GlassSurface(
-      borderRadius: 0,
-      blur: 28,
-      opacity: 0.68,
-      boxShadow: false,
-      child: SafeArea(
-        bottom: false,
-        child: SizedBox(
-          height: 58,
-          child: Row(
-            children: [
-              const SizedBox(width: 7),
-              GlassCircleButton(
-                key: const Key('ios-chat-back'),
-                icon: Icons.chevron_left_rounded,
-                tooltip: '返回',
-                size: 38,
-                iconColor: textColor,
-                onPressed: () => Navigator.pop(context),
-              ),
-              const SizedBox(width: 7),
-              const CircleAvatar(
-                radius: 18,
-                backgroundColor: Color(0xFFF4E7C9),
-                child: Icon(
-                  Icons.person_rounded,
-                  color: Color(0xFFB78032),
-                  size: 19,
-                ),
-              ),
-              const SizedBox(width: 7),
-              Expanded(
-                child: Text(
-                  user.participant,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    color: textColor,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    letterSpacing: -0.2,
+    return ClipRect(
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 22, sigmaY: 22),
+        child: DecoratedBox(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Color(0xB8FFFFFF),
+                Color(0x73FFFFFF),
+                Color(0x14FFFFFF),
+              ],
+              stops: [0, 0.72, 1],
+            ),
+          ),
+          child: SafeArea(
+            bottom: false,
+            child: SizedBox(
+              height: 62,
+              child: Row(
+                children: [
+                  const SizedBox(width: 7),
+                  GlassCircleButton(
+                    key: const Key('ios-chat-back'),
+                    icon: Icons.chevron_left_rounded,
+                    tooltip: '返回',
+                    size: 38,
+                    iconColor: textColor,
+                    opacity: 0.4,
+                    blur: 32,
+                    onPressed: () => Navigator.pop(context),
                   ),
-                ),
-              ),
-              GlassSurface(
-                borderRadius: 22,
-                blur: 20,
-                opacity: 0.65,
-                boxShadow: false,
-                child: SizedBox(
-                  height: 40,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      IconButton(
-                        tooltip: '视频通话',
-                        onPressed: () {},
-                        constraints: const BoxConstraints.tightFor(
-                            width: 42, height: 40),
-                        icon: const Icon(
-                          Icons.videocam_outlined,
-                          color: textColor,
-                          size: 21,
-                        ),
-                      ),
-                      IconButton(
-                        tooltip: '语音通话',
-                        onPressed: () {},
-                        constraints: const BoxConstraints.tightFor(
-                            width: 42, height: 40),
-                        icon: const Icon(
-                          Icons.call_outlined,
-                          color: textColor,
-                          size: 19,
-                        ),
-                      ),
-                    ],
+                  const SizedBox(width: 7),
+                  const CircleAvatar(
+                    radius: 18,
+                    backgroundColor: Color(0xFFF4E7C9),
+                    child: Icon(
+                      Icons.person_rounded,
+                      color: Color(0xFFB78032),
+                      size: 19,
+                    ),
                   ),
-                ),
+                  const SizedBox(width: 7),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          user.participant,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            color: textColor,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: -0.2,
+                          ),
+                        ),
+                        const Text(
+                          '点击此处查看联系人信息',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: iosSecondaryLabel,
+                            fontSize: 9,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  GlassSurface(
+                    borderRadius: 22,
+                    blur: 34,
+                    opacity: 0.42,
+                    boxShadow: false,
+                    child: SizedBox(
+                      height: 40,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            tooltip: '视频通话',
+                            onPressed: () {},
+                            constraints: const BoxConstraints.tightFor(
+                              width: 42,
+                              height: 40,
+                            ),
+                            icon: const Icon(
+                              Icons.videocam_outlined,
+                              color: textColor,
+                              size: 21,
+                            ),
+                          ),
+                          IconButton(
+                            tooltip: '语音通话',
+                            onPressed: () {},
+                            constraints: const BoxConstraints.tightFor(
+                              width: 42,
+                              height: 40,
+                            ),
+                            icon: const Icon(
+                              Icons.call_outlined,
+                              color: textColor,
+                              size: 19,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                ],
               ),
-              const SizedBox(width: 8),
-            ],
+            ),
           ),
         ),
       ),

@@ -31,20 +31,21 @@ class _TextEmojiInputFieldState extends State<TextEmojiInputField> {
         children: [
           GlassCircleButton(
             icon: Icons.add_rounded,
-            tooltip: 'Add attachment',
-            size: 46,
+            tooltip: '添加',
+            size: 42,
             iconColor: textColor,
+            opacity: 0.46,
+            blur: 34,
             onPressed: () {},
           ),
-          const SizedBox(width: 7),
+          const SizedBox(width: 6),
           Expanded(
             child: GlassSurface(
-              borderRadius: 24,
-              blur: 24,
-              opacity: 0.7,
-              boxShadow: false,
+              borderRadius: 23,
+              blur: 36,
+              opacity: 0.46,
               child: ConstrainedBox(
-                constraints: const BoxConstraints(minHeight: 46),
+                constraints: const BoxConstraints(minHeight: 44),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
@@ -73,7 +74,7 @@ class _TextEmojiInputFieldState extends State<TextEmojiInputField> {
                           border: InputBorder.none,
                           enabledBorder: InputBorder.none,
                           focusedBorder: InputBorder.none,
-                          contentPadding: EdgeInsets.fromLTRB(15, 13, 6, 12),
+                          contentPadding: EdgeInsets.fromLTRB(14, 12, 5, 11),
                         ),
                       ),
                     ),
@@ -82,8 +83,8 @@ class _TextEmojiInputFieldState extends State<TextEmojiInputField> {
                       onPressed: () {},
                       icon: const Icon(
                         Icons.photo_camera_outlined,
-                        color: iosBlue,
-                        size: 23,
+                        color: textColor,
+                        size: 22,
                       ),
                     ),
                   ],
@@ -91,13 +92,13 @@ class _TextEmojiInputFieldState extends State<TextEmojiInputField> {
               ),
             ),
           ),
-          const SizedBox(width: 7),
+          const SizedBox(width: 6),
           AnimatedSwitcher(
             duration: const Duration(milliseconds: 180),
             child: isTyping
                 ? Material(
                     key: const ValueKey('send'),
-                    color: iosBlue,
+                    color: const Color(0xFF20C56D),
                     shape: const CircleBorder(),
                     clipBehavior: Clip.antiAlias,
                     child: InkWell(
@@ -105,12 +106,12 @@ class _TextEmojiInputFieldState extends State<TextEmojiInputField> {
                       customBorder: const CircleBorder(),
                       onTap: _handlePrimaryAction,
                       child: const SizedBox(
-                        width: 46,
-                        height: 46,
+                        width: 42,
+                        height: 42,
                         child: Icon(
-                          Icons.arrow_upward_rounded,
+                          Icons.send_rounded,
                           color: Colors.white,
-                          size: 24,
+                          size: 21,
                         ),
                       ),
                     ),
@@ -119,8 +120,10 @@ class _TextEmojiInputFieldState extends State<TextEmojiInputField> {
                     key: const ValueKey('mic'),
                     icon: Icons.mic_none_rounded,
                     tooltip: '语音消息',
-                    size: 46,
-                    iconColor: iosBlue,
+                    size: 42,
+                    iconColor: textColor,
+                    opacity: 0.46,
+                    blur: 34,
                     onPressed: () {},
                   ),
           ),

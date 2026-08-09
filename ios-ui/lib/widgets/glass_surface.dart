@@ -62,13 +62,34 @@ class GlassSurface extends StatelessWidget {
               ),
               borderRadius: radius,
               border: Border.all(
-                color: Colors.white.withOpacity(0.78),
+                color: Colors.white.withOpacity(0.72),
                 width: 0.8,
               ),
             ),
-            child: Padding(
-              padding: padding ?? EdgeInsets.zero,
-              child: child,
+            child: Stack(
+              children: [
+                Positioned(
+                  top: 0,
+                  left: borderRadius * 0.22,
+                  right: borderRadius * 0.22,
+                  child: Container(
+                    height: 1,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          Colors.white.withOpacity(0.12),
+                          Colors.white.withOpacity(0.92),
+                          Colors.white.withOpacity(0.12),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: padding ?? EdgeInsets.zero,
+                  child: child,
+                ),
+              ],
             ),
           ),
         ),
@@ -85,6 +106,9 @@ class GlassCircleButton extends StatelessWidget {
     this.tooltip,
     this.size = 42,
     this.iconColor = iosBlue,
+    this.opacity = 0.66,
+    this.blur = 18,
+    this.boxShadow = true,
   });
 
   final IconData icon;
@@ -92,13 +116,17 @@ class GlassCircleButton extends StatelessWidget {
   final String? tooltip;
   final double size;
   final Color iconColor;
+  final double opacity;
+  final double blur;
+  final bool boxShadow;
 
   @override
   Widget build(BuildContext context) {
     final button = GlassSurface(
       borderRadius: size / 2,
-      blur: 18,
-      opacity: 0.66,
+      blur: blur,
+      opacity: opacity,
+      boxShadow: boxShadow,
       child: Material(
         color: Colors.transparent,
         child: InkWell(
