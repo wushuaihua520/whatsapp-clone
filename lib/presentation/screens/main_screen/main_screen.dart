@@ -33,6 +33,15 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     MessageController.init();
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final tab = Uri.base.queryParameters['tab'];
+      if (tab != null) {
+        final i = int.tryParse(tab);
+        if (i != null && i >= 0 && i < _pages.length) {
+          setState(() => _selectedIndex = i);
+        }
+      }
+    });
   }
 
   @override
