@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../utils/constants.dart';
@@ -17,11 +18,14 @@ class SettingsPage extends StatelessWidget {
           SizedBox(height: 18),
           _SettingsSection(
             rows: [
-              _SettingsRowData(icon: Icons.list_alt_rounded, title: '列表'),
-              _SettingsRowData(icon: Icons.star_border_rounded, title: '已加星标'),
-              _SettingsRowData(icon: Icons.campaign_outlined, title: '群发消息'),
+              _SettingsRowData(icon: CupertinoIcons.list_bullet, title: '列表'),
+              _SettingsRowData(icon: CupertinoIcons.star, title: '已加星标'),
               _SettingsRowData(
-                icon: Icons.devices_outlined,
+                icon: CupertinoIcons.speaker_2,
+                title: '群发消息',
+              ),
+              _SettingsRowData(
+                icon: CupertinoIcons.desktopcomputer,
                 title: '已关联的设备',
               ),
             ],
@@ -29,18 +33,18 @@ class SettingsPage extends StatelessWidget {
           SizedBox(height: 18),
           _SettingsSection(
             rows: [
-              _SettingsRowData(icon: Icons.key_rounded, title: '账户'),
-              _SettingsRowData(icon: Icons.lock_outline_rounded, title: '隐私'),
+              _SettingsRowData(icon: CupertinoIcons.person_crop_circle, title: '账户'),
+              _SettingsRowData(icon: CupertinoIcons.lock, title: '隐私'),
               _SettingsRowData(
-                icon: Icons.chat_bubble_outline_rounded,
+                icon: CupertinoIcons.chat_bubble,
                 title: '聊天',
               ),
               _SettingsRowData(
-                icon: Icons.notifications_none_rounded,
+                icon: CupertinoIcons.bell,
                 title: '通知',
               ),
               _SettingsRowData(
-                icon: Icons.swap_vert_rounded,
+                icon: CupertinoIcons.arrow_up_arrow_down,
                 title: '存储空间和数据',
               ),
             ],
@@ -68,7 +72,7 @@ class _ProfileHero extends StatelessWidget {
                 radius: 48,
                 backgroundColor: Color(0xFF91DCD6),
                 child: Icon(
-                  Icons.person_rounded,
+                  CupertinoIcons.person_fill,
                   color: Color(0xFF3A3A3C),
                   size: 52,
                 ),
@@ -112,12 +116,12 @@ class _ProfileHero extends StatelessWidget {
                 color: textColor,
                 fontSize: 28,
                 fontWeight: FontWeight.w700,
-                letterSpacing: -0.4,
+                letterSpacing: -0.6,
               ),
             ),
             SizedBox(width: 5),
             Icon(
-              Icons.info_outline_rounded,
+              CupertinoIcons.info_circle,
               color: primaryColor,
               size: 18,
             ),
@@ -135,9 +139,11 @@ class _SettingsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(12),
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+      ),
       clipBehavior: Clip.antiAlias,
       child: Column(
         children: [
@@ -159,8 +165,10 @@ class _SettingsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {},
+    return CupertinoButton(
+      padding: EdgeInsets.zero,
+      minSize: 0,
+      onPressed: () {},
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
         child: Row(
@@ -170,17 +178,19 @@ class _SettingsRow extends StatelessWidget {
             Expanded(
               child: Text(
                 data.title,
+                textAlign: TextAlign.left,
                 style: const TextStyle(
                   color: textColor,
                   fontSize: 17,
                   fontWeight: FontWeight.w400,
+                  letterSpacing: -0.4,
                 ),
               ),
             ),
             const Icon(
-              Icons.chevron_right_rounded,
+              CupertinoIcons.chevron_forward,
               color: Color(0xFFC7C7CC),
-              size: 22,
+              size: 18,
             ),
           ],
         ),

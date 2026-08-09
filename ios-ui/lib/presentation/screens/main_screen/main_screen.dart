@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../core/routes/routes_name.dart';
@@ -48,12 +49,12 @@ class _MainScreenState extends State<MainScreen> {
             title: '更新',
             actions: [
               _IosChromeButton(
-                icon: Icons.add_rounded,
+                icon: CupertinoIcons.plus,
                 tooltip: '新动态',
                 onPressed: () {},
               ),
               _IosChromeButton(
-                icon: Icons.photo_camera_outlined,
+                icon: CupertinoIcons.camera,
                 tooltip: '相机',
                 onPressed: () {},
               ),
@@ -64,7 +65,7 @@ class _MainScreenState extends State<MainScreen> {
             title: '通话',
             actions: [
               _IosChromeButton(
-                icon: Icons.add_call,
+                icon: CupertinoIcons.phone_badge_plus,
                 tooltip: '新通话',
                 onPressed: () =>
                     Navigator.pushNamed(context, RouteNames.contactPage),
@@ -76,7 +77,7 @@ class _MainScreenState extends State<MainScreen> {
             title: '社区',
             actions: [
               _IosChromeButton(
-                icon: Icons.add_rounded,
+                icon: CupertinoIcons.plus,
                 tooltip: '新社区',
                 onPressed: () {},
               ),
@@ -86,13 +87,13 @@ class _MainScreenState extends State<MainScreen> {
           _IosTabPage(
             title: '聊天',
             leadingAction: _IosChromeButton(
-              icon: Icons.more_horiz_rounded,
+              icon: CupertinoIcons.ellipsis,
               tooltip: '更多',
               onPressed: () {},
             ),
             actions: [
               _IosChromeButton(
-                icon: Icons.photo_camera_outlined,
+                icon: CupertinoIcons.camera,
                 tooltip: '相机',
                 onPressed: () {},
               ),
@@ -206,44 +207,36 @@ class _IosProfileHeaderPage extends StatelessWidget {
                 child: Row(
                   children: [
                     _IosChromeButton(
-                      icon: Icons.search_rounded,
+                      icon: CupertinoIcons.search,
                       tooltip: '搜索',
                       onPressed: () {},
                     ),
                     const Spacer(),
                     Container(
                       height: 36,
-                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      padding: const EdgeInsets.symmetric(horizontal: 2),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFE8E8ED),
+                        color: const Color(0xFFE5E5EA),
                         borderRadius: BorderRadius.circular(18),
                       ),
                       child: Row(
                         children: [
-                          IconButton(
-                            tooltip: '二维码',
+                          CupertinoButton(
+                            padding: const EdgeInsets.all(8),
+                            minSize: 0,
                             onPressed: () {},
-                            constraints: const BoxConstraints.tightFor(
-                              width: 36,
-                              height: 36,
-                            ),
-                            padding: EdgeInsets.zero,
-                            icon: const Icon(
-                              Icons.qr_code_2_rounded,
+                            child: const Icon(
+                              CupertinoIcons.qrcode,
                               color: textColor,
                               size: 20,
                             ),
                           ),
-                          IconButton(
-                            tooltip: '编辑',
+                          CupertinoButton(
+                            padding: const EdgeInsets.all(8),
+                            minSize: 0,
                             onPressed: () {},
-                            constraints: const BoxConstraints.tightFor(
-                              width: 36,
-                              height: 36,
-                            ),
-                            padding: EdgeInsets.zero,
-                            icon: const Icon(
-                              Icons.edit_outlined,
+                            child: const Icon(
+                              CupertinoIcons.pencil,
                               color: textColor,
                               size: 19,
                             ),
@@ -276,18 +269,18 @@ class _IosChromeButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final button = Material(
-      color: const Color(0xFFE8E8ED),
-      shape: const CircleBorder(),
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        customBorder: const CircleBorder(),
-        onTap: onPressed,
-        child: SizedBox(
-          width: 36,
-          height: 36,
-          child: Icon(icon, color: textColor, size: 20),
+    final button = CupertinoButton(
+      padding: EdgeInsets.zero,
+      minSize: 36,
+      onPressed: onPressed,
+      child: Container(
+        width: 36,
+        height: 36,
+        decoration: const BoxDecoration(
+          color: Color(0xFFE5E5EA),
+          shape: BoxShape.circle,
         ),
+        child: Icon(icon, color: textColor, size: 19),
       ),
     );
     if (tooltip == null) return button;
@@ -308,17 +301,21 @@ class _GreenCircleButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Tooltip(
       message: tooltip,
-      child: Material(
-        color: const Color(0xFF25D366),
-        shape: const CircleBorder(),
-        clipBehavior: Clip.antiAlias,
-        child: InkWell(
-          customBorder: const CircleBorder(),
-          onTap: onPressed,
-          child: const SizedBox(
-            width: 36,
-            height: 36,
-            child: Icon(Icons.add_rounded, color: Colors.white, size: 22),
+      child: CupertinoButton(
+        padding: EdgeInsets.zero,
+        minSize: 36,
+        onPressed: onPressed,
+        child: Container(
+          width: 36,
+          height: 36,
+          decoration: const BoxDecoration(
+            color: Color(0xFF25D366),
+            shape: BoxShape.circle,
+          ),
+          child: const Icon(
+            CupertinoIcons.plus,
+            color: Colors.white,
+            size: 20,
           ),
         ),
       ),
@@ -326,7 +323,7 @@ class _GreenCircleButton extends StatelessWidget {
   }
 }
 
-/// Floating frosted tab bar matching Chinese WhatsApp iOS references.
+/// Floating frosted tab bar — Cupertino icons, iOS Liquid Glass, no Material.
 class _IosWhatsAppTabBar extends StatelessWidget {
   const _IosWhatsAppTabBar({
     required this.selectedIndex,
@@ -339,28 +336,28 @@ class _IosWhatsAppTabBar extends StatelessWidget {
   static const _destinations = [
     _IosTabDestination(
       label: '更新',
-      icon: Icons.donut_large_outlined,
-      selectedIcon: Icons.donut_large,
+      icon: CupertinoIcons.circle,
+      selectedIcon: CupertinoIcons.circle_fill,
     ),
     _IosTabDestination(
       label: '通话',
-      icon: Icons.call_outlined,
-      selectedIcon: Icons.call,
+      icon: CupertinoIcons.phone,
+      selectedIcon: CupertinoIcons.phone_fill,
     ),
     _IosTabDestination(
       label: '社区',
-      icon: Icons.groups_outlined,
-      selectedIcon: Icons.groups_rounded,
+      icon: CupertinoIcons.person_3,
+      selectedIcon: CupertinoIcons.person_3_fill,
     ),
     _IosTabDestination(
       label: '聊天',
-      icon: Icons.chat_bubble_outline_rounded,
-      selectedIcon: Icons.chat_bubble_rounded,
+      icon: CupertinoIcons.chat_bubble,
+      selectedIcon: CupertinoIcons.chat_bubble_fill,
     ),
     _IosTabDestination(
       label: '自己',
-      icon: Icons.person_outline_rounded,
-      selectedIcon: Icons.person_rounded,
+      icon: CupertinoIcons.person,
+      selectedIcon: CupertinoIcons.person_fill,
     ),
   ];
 
@@ -368,26 +365,28 @@ class _IosWhatsAppTabBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       top: false,
-      minimum: const EdgeInsets.fromLTRB(12, 0, 12, 6),
+      minimum: const EdgeInsets.fromLTRB(14, 0, 14, 8),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(28),
+        borderRadius: BorderRadius.circular(26),
         child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 28, sigmaY: 28),
+          filter: ImageFilter.blur(sigmaX: 40, sigmaY: 40),
           child: Container(
-            height: 58,
+            height: 56,
             decoration: BoxDecoration(
-              color: const Color(0xF2F7F7F7),
-              borderRadius: BorderRadius.circular(28),
-              border: Border.all(color: const Color(0x66FFFFFF), width: 0.6),
+              color: const Color(0xCCF7F7F7),
+              borderRadius: BorderRadius.circular(26),
+              border: Border.all(
+                color: const Color(0x80FFFFFF),
+                width: 0.5,
+              ),
               boxShadow: const [
                 BoxShadow(
-                  color: Color(0x1A000000),
-                  blurRadius: 18,
-                  offset: Offset(0, 6),
+                  color: Color(0x14000000),
+                  blurRadius: 24,
+                  offset: Offset(0, 8),
                 ),
               ],
             ),
-            padding: const EdgeInsets.symmetric(horizontal: 4),
             child: Row(
               children: [
                 for (var index = 0; index < _destinations.length; index++)
@@ -422,59 +421,50 @@ class _IosTabButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final isProfile = destination.label == '自己';
     final color = selected
-        ? (isProfile ? primaryColor : textColor)
+        ? (isProfile ? const Color(0xFF00A884) : textColor)
         : const Color(0xFF8E8E93);
 
-    return Semantics(
-      selected: selected,
-      button: true,
-      label: destination.label,
-      child: GestureDetector(
-        key: Key('ios-tab-${destination.label}'),
-        behavior: HitTestBehavior.opaque,
-        onTap: onTap,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 180),
-              curve: Curves.easeOut,
-              padding: EdgeInsets.symmetric(
-                horizontal: selected && !isProfile ? 12 : 8,
-                vertical: 4,
-              ),
-              decoration: BoxDecoration(
-                color: !selected
-                    ? Colors.transparent
-                    : isProfile
-                        ? const Color(0x3325D366)
-                        : const Color(0x1F3C3C43),
-                borderRadius: BorderRadius.circular(isProfile ? 20 : 14),
-              ),
-              child: Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  Icon(
-                    selected ? destination.selectedIcon : destination.icon,
-                    color: color,
-                    size: 22,
-                  ),
-                ],
-              ),
+    return CupertinoButton(
+      key: Key('ios-tab-${destination.label}'),
+      padding: EdgeInsets.zero,
+      minSize: 0,
+      onPressed: onTap,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 180),
+            curve: Curves.easeOut,
+            width: selected ? (isProfile ? 40 : 48) : 40,
+            height: 28,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: !selected
+                  ? Colors.transparent
+                  : isProfile
+                      ? const Color(0x3325D366)
+                      : const Color(0x1A3C3C43),
+              borderRadius: BorderRadius.circular(14),
             ),
-            const SizedBox(height: 2),
-            Text(
-              destination.label,
-              maxLines: 1,
-              style: TextStyle(
-                color: color,
-                fontSize: 10,
-                height: 1,
-                fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
-              ),
+            child: Icon(
+              selected ? destination.selectedIcon : destination.icon,
+              color: color,
+              size: 23,
             ),
-          ],
-        ),
+          ),
+          const SizedBox(height: 1),
+          Text(
+            destination.label,
+            maxLines: 1,
+            style: TextStyle(
+              color: color,
+              fontSize: 10,
+              height: 1.1,
+              fontWeight: FontWeight.w500,
+              letterSpacing: -0.2,
+            ),
+          ),
+        ],
       ),
     );
   }

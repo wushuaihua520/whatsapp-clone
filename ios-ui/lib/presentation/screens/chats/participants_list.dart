@@ -65,13 +65,30 @@ class _ConversationListState extends State<ConversationList> {
         const SizedBox(height: 6),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: _IosSearchField(
+          child: CupertinoSearchTextField(
+            key: const Key('chat-search-field'),
             controller: _searchController,
+            placeholder: '搜索',
+            style: const TextStyle(
+              color: textColor,
+              fontSize: 17,
+              letterSpacing: -0.4,
+            ),
+            placeholderStyle: const TextStyle(
+              color: Color(0xFF8E8E93),
+              fontSize: 17,
+              letterSpacing: -0.4,
+            ),
+            prefixIcon: const Icon(
+              CupertinoIcons.search,
+              color: Color(0xFF8E8E93),
+              size: 18,
+            ),
+            suffixMode: OverlayVisibilityMode.editing,
+            backgroundColor: const Color(0xFFE9E9EB),
+            borderRadius: BorderRadius.circular(10),
+            padding: const EdgeInsetsDirectional.fromSTEB(6, 8, 6, 8),
             onChanged: (_) => setState(() {}),
-            onClear: () {
-              _searchController.clear();
-              setState(() {});
-            },
           ),
         ),
         const SizedBox(height: 12),
@@ -120,86 +137,7 @@ class _ConversationListState extends State<ConversationList> {
   }
 }
 
-/// Cupertino-style search field matching Chinese WhatsApp iOS.
-class _IosSearchField extends StatelessWidget {
-  const _IosSearchField({
-    required this.controller,
-    required this.onChanged,
-    required this.onClear,
-  });
-
-  final TextEditingController controller;
-  final ValueChanged<String> onChanged;
-  final VoidCallback onClear;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      key: const Key('chat-search-field'),
-      height: 36,
-      decoration: BoxDecoration(
-        color: const Color(0xFFE9E9EB),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      alignment: Alignment.center,
-      child: Row(
-        children: [
-          const SizedBox(width: 8),
-          const Icon(
-            CupertinoIcons.search,
-            size: 18,
-            color: Color(0xFF8E8E93),
-          ),
-          const SizedBox(width: 6),
-          Expanded(
-            child: TextField(
-              controller: controller,
-              onChanged: onChanged,
-              textInputAction: TextInputAction.search,
-              cursorColor: iosBlue,
-              style: const TextStyle(
-                color: textColor,
-                fontSize: 17,
-                height: 1.15,
-                letterSpacing: -0.2,
-              ),
-              decoration: const InputDecoration(
-                isDense: true,
-                filled: false,
-                hintText: '搜索',
-                hintStyle: TextStyle(
-                  color: Color(0xFF8E8E93),
-                  fontSize: 17,
-                  fontWeight: FontWeight.w400,
-                  letterSpacing: -0.2,
-                ),
-                border: InputBorder.none,
-                enabledBorder: InputBorder.none,
-                focusedBorder: InputBorder.none,
-                contentPadding: EdgeInsets.symmetric(vertical: 8),
-              ),
-            ),
-          ),
-          if (controller.text.isNotEmpty)
-            GestureDetector(
-              onTap: onClear,
-              child: const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8),
-                child: Icon(
-                  CupertinoIcons.clear_circled_solid,
-                  size: 17,
-                  color: Color(0xFF8E8E93),
-                ),
-              ),
-            )
-          else
-            const SizedBox(width: 8),
-        ],
-      ),
-    );
-  }
-}
-
+/// Cupertino filter chip matching Chinese WhatsApp iOS.
 class _IosFilterChip extends StatelessWidget {
   const _IosFilterChip({
     super.key,
@@ -253,7 +191,7 @@ class _IosFilterAddButton extends StatelessWidget {
           shape: BoxShape.circle,
         ),
         child: const Icon(
-          Icons.add_rounded,
+          CupertinoIcons.plus,
           color: Color(0xFF8E8E93),
           size: 18,
         ),
@@ -298,23 +236,19 @@ class _ContactAccessCard extends StatelessWidget {
           const SizedBox(height: 10),
           SizedBox(
             width: double.infinity,
-            height: 36,
-            child: ElevatedButton(
+            child: CupertinoButton(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              color: const Color(0xFF25D366),
+              borderRadius: BorderRadius.circular(18),
               onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                elevation: 0,
-                padding: EdgeInsets.zero,
-                backgroundColor: const Color(0xFF25D366),
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18),
-                ),
-                textStyle: const TextStyle(
+              child: const Text(
+                '允许访问',
+                style: TextStyle(
+                  color: Colors.white,
                   fontSize: 15,
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              child: const Text('允许访问'),
             ),
           ),
         ],

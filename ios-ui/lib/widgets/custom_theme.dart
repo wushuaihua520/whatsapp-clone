@@ -6,19 +6,32 @@ import '../utils/constants.dart';
 
 class MyTheme {
   static final theme = ThemeData(
-    useMaterial3: true,
+    useMaterial3: false,
     platform: TargetPlatform.iOS,
     brightness: Brightness.light,
     primaryColor: primaryColor,
     scaffoldBackgroundColor: scaffoldBgColor,
-    splashFactory: InkRipple.splashFactory,
+    splashFactory: NoSplash.splashFactory,
+    highlightColor: Colors.transparent,
+    splashColor: Colors.transparent,
+    hoverColor: Colors.transparent,
     visualDensity: VisualDensity.standard,
     cupertinoOverrideTheme: const CupertinoThemeData(
       brightness: Brightness.light,
       primaryColor: iosBlue,
       scaffoldBackgroundColor: scaffoldBgColor,
       barBackgroundColor: iosGlassTint,
+      textTheme: CupertinoTextThemeData(
+        primaryColor: textColor,
+        textStyle: TextStyle(
+          fontFamily: '.SF Pro Text',
+          color: textColor,
+          fontSize: 17,
+          letterSpacing: -0.4,
+        ),
+      ),
     ),
+    fontFamily: '.SF Pro Text',
     colorScheme: const ColorScheme.light(
       primary: primaryColor,
       onPrimary: Colors.white,
